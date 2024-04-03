@@ -11,6 +11,9 @@ const config: Config = {
       backgroundColor: {
         primary: "#FFFAF0",
       },
+      spacing: {
+        'custom-padding': '465px',
+      }
     },
   },
   plugins: [],
