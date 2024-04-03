@@ -10,6 +10,7 @@ import img7 from "./(images)/img7.png";
 import img8 from "./(images)/img8.png";
 import { CardSmall } from "./(components)/CardSmall";
 import { CardLarge } from "./(components)/CardLarge";
+import { FeedbackCard } from "./(components)/feedbackCard";
 
 export default function Home() {
   return (
@@ -103,24 +104,23 @@ export default function Home() {
         </div>
       </div>
       <div className="bg-[#FFE57D] w-screen h-full">
-        <div className="flex gap-[1.302vw] justify-evenly mx-4">
-          <div className="mt-[130px] flex gap-x-[1.302vw]">
-            <CardLarge
-              img={img5}
-              p1={"Mindmaps to the rescue"}
-              p2={
-                "Generate mindmaps with a single prompt and understand concepts like never before. No wonder everyone’s jealous of you"
-              }
-            />
-            <CardLarge
-              img={img6}
-              p1={"Flashcards in a flash"}
-              p2={
-                "Now create flashcards based on a prompt and never worry about forgetting any concept. Yes, you can thank us later :D"
-              }
-            />
-          </div>
+        <div className="pt-[130px] flex gap-x-[1.302vw] items-center justify-center">
+          <CardLarge
+            img={img5}
+            p1={"Mindmaps to the rescue"}
+            p2={
+              "Generate mindmaps with a single prompt and understand concepts like never before. No wonder everyone’s jealous of you"
+            }
+          />
+          <CardLarge
+            img={img6}
+            p1={"Flashcards in a flash"}
+            p2={
+              "Now create flashcards based on a prompt and never worry about forgetting any concept. Yes, you can thank us later :D"
+            }
+          />
         </div>
+
         <div className="flex flex-col mt-[300px] items-center">
           <div className="flex flex-col items-center justify-center max-w-[1000px]">
             <p className="text-7xl text-center text-wrap">
@@ -162,114 +162,12 @@ export default function Home() {
             </p>
           </div>
           <div className="grid grid-cols-3 justify-items-center gap-6">
-            <div className="rounded-xl overflow-hidden shadow-lg max-w-[400px] bg-white px-8 py-6">
-              <div className="flex gap-2 items-center">
-                <Image
-                  src={img2}
-                  alt="img"
-                  height={80}
-                  className="rounded-full border border-grey-950"
-                ></Image>
-                <p className="text-4xl px-4 ">Eric</p>
-              </div>
-              <div className="flex items-center mt-4">
-                <p className="text-lg">
-                  With a personalized dashboard, monitor your progress and know
-                  which steps to take. And which not to. Compete for the top
-                  spot on the leaderboard and show off your ranks.
-                </p>
-              </div>
-            </div>
-            <div className="rounded-xl overflow-hidden shadow-lg max-w-[400px] bg-white px-8 py-6">
-              <div className="flex gap-2 items-center">
-                <Image
-                  src={img2}
-                  alt="img"
-                  height={80}
-                  className="rounded-full border border-grey-950"
-                ></Image>
-                <p className="text-4xl px-4 ">Eric</p>
-              </div>
-              <div className="flex items-center mt-4">
-                <p className="text-lg">
-                  With a personalized dashboard, monitor your progress and know
-                  which steps to take. And which not to. Compete for the top
-                  spot on the leaderboard and show off your ranks.
-                </p>
-              </div>
-            </div>
-            <div className="rounded-xl overflow-hidden shadow-lg max-w-[400px] bg-white px-8 py-6">
-              <div className="flex gap-2 items-center">
-                <Image
-                  src={img2}
-                  alt="img"
-                  height={80}
-                  className="rounded-full border border-grey-950"
-                ></Image>
-                <p className="text-4xl px-4 ">Eric</p>
-              </div>
-              <div className="flex items-center mt-4">
-                <p className="text-lg">
-                  With a personalized dashboard, monitor your progress and know
-                  which steps to take. And which not to. Compete for the top
-                  spot on the leaderboard and show off your ranks.
-                </p>
-              </div>
-            </div>
-            <div className="rounded-xl overflow-hidden shadow-lg max-w-[400px] bg-white px-8 py-6">
-              <div className="flex gap-2 items-center">
-                <Image
-                  src={img2}
-                  alt="img"
-                  height={80}
-                  className="rounded-full border border-grey-950"
-                ></Image>
-                <p className="text-4xl px-4 ">Eric</p>
-              </div>
-              <div className="flex items-center mt-4">
-                <p className="text-lg">
-                  With a personalized dashboard, monitor your progress and know
-                  which steps to take. And which not to. Compete for the top
-                  spot on the leaderboard and show off your ranks.
-                </p>
-              </div>
-            </div>
-            <div className="rounded-xl overflow-hidden shadow-lg max-w-[400px] bg-white px-8 py-6">
-              <div className="flex gap-2 items-center">
-                <Image
-                  src={img2}
-                  alt="img"
-                  height={80}
-                  className="rounded-full border border-grey-950"
-                ></Image>
-                <p className="text-4xl px-4 ">Eric</p>
-              </div>
-              <div className="flex items-center mt-4">
-                <p className="text-lg">
-                  With a personalized dashboard, monitor your progress and know
-                  which steps to take. And which not to. Compete for the top
-                  spot on the leaderboard and show off your ranks.
-                </p>
-              </div>
-            </div>
-            <div className="rounded-xl overflow-hidden shadow-lg max-w-[400px] bg-white px-8 py-6">
-              <div className="flex gap-2 items-center">
-                <Image
-                  src={img2}
-                  alt="img"
-                  height={80}
-                  className="rounded-full border border-grey-950"
-                ></Image>
-                <p className="text-4xl px-4 ">Eric</p>
-              </div>
-              <div className="flex items-center mt-4">
-                <p className="text-lg">
-                  With a personalized dashboard, monitor your progress and know
-                  which steps to take. And which not to. Compete for the top
-                  spot on the leaderboard and show off your ranks.
-                </p>
-              </div>
-            </div>
+            <FeedbackCard />
+            <FeedbackCard />
+            <FeedbackCard />
+            <FeedbackCard />
+            <FeedbackCard />
+            <FeedbackCard />
           </div>
         </div>
         <div className="pt-[250px]"></div>
