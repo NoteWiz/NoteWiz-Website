@@ -68,7 +68,7 @@ export default function Home() {
         className="bg-[#559cd9] w-screen h-screen flex justify-center flex-col items-center"
         id="features"
       >
-        <div className="w-[1000px] h-[200px] mt-[300px] flex justify-center mb-[40px]">
+        <div className="max-w-[62vw] mt-[17vw] flex justify-center mb-[2.2vw]">
           <p className="font-medium text-7xl text-center">
             All the Tools you Will Ever Need in One Place
           </p>
@@ -104,7 +104,7 @@ export default function Home() {
         </div>
       </div>
       <div className="bg-[#FFE57D] w-screen h-full">
-        <div className="pt-[130px] flex gap-x-[1.302vw] items-center justify-center">
+        <div className="pt-[9vw] flex gap-x-[1.302vw] items-center justify-center">
           <CardLarge
             img={img5}
             p1={"Mindmaps to the rescue"}
@@ -121,13 +121,12 @@ export default function Home() {
           />
         </div>
 
-        <div className="flex flex-col mt-[300px] items-center">
+        <div className="flex flex-col mt-[17vw] items-center">
           <div className="flex flex-col items-center justify-center max-w-[1000px]">
             <p className="text-7xl text-center text-wrap">
               Our Own Gamified Community
             </p>
             <p className="py-4 text-2xl text-center text-wrap">
-              {" "}
               Daily challenges that spark curiosity, streaks that turn study
               routines into epic adventures, and leaderboards that showcase your
               skills.
