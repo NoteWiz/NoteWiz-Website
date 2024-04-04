@@ -139,7 +139,7 @@ export default function Home() {
               a glimpse of success
             </p>
           </div>
-          <div className="grid grid-cols-3 justify-items-center gap-6">
+          <div className="grid grid-cols-3 justify-items-center gap-6 pb-16">
             <FeedbackCard />
             <FeedbackCard />
             <FeedbackCard />
@@ -148,9 +148,9 @@ export default function Home() {
             <FeedbackCard />
           </div>
         </div>
-        <div className="pt-[250px]"></div>
+        {/* <div className="pt-[250px]"></div> */}
       </div>
-      <div className="bg-[#0C3464] w-screen h-full ">
+      <div className="bg-[#0C3464] w-screen h-full pt-4">
         <Footer />
       </div>
     </div>

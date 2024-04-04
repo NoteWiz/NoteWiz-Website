@@ -2,14 +2,12 @@ import Link from "next/link";
 export const Header = () => {
   return (
     <div className="flex items-center justify-center pt-8 ">
-      <div className="flex flex-wrap justify-between items-center mx-auto py-[1vw] gap-8 bg-[#FFE57D] rounded-3xl fixed mt-16 z-10">
-        <a href="/" className="flex items-center space-x-1 ml-[70px]">
+      <div className="flex max-w-[70vw] justify-between items-center py-[1vw] md:gap-[vw] lg:gap-[3vw] bg-[#FFE57D] rounded-3xl fixed mt-16 z-10 ">
+        <a href="/" className="flex items-center gap-4 pl-[3vw]">
           <div className="h-[30px] w-[30px] rounded-full bg-black"></div>
-          <span className="self-center text-2xl font-semibold whitespace-nowrap">
-            NoteWiz
-          </span>
+          <span className=" text-2xl font-semibold ">NoteWiz</span>
         </a>
-        <div className="mx-auto flex justify-between space-x-[80px] ">
+        <div className=" flex justify-between gap-16 ">
           <Link href="#features">
             <button className="text-xl">Features</button>
           </Link>
