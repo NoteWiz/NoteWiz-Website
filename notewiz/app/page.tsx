@@ -11,45 +11,24 @@ import img8 from "./(images)/img8.png";
 import { CardSmall } from "./(components)/CardSmall";
 import { CardLarge } from "./(components)/CardLarge";
 import { FeedbackCard } from "./(components)/feedbackCard";
+import { FooterInfo } from "./(components)/FooterInfo";
+import { Header } from "./(components)/Header";
+import { Footer } from "./(components)/Footer";
 
 export default function Home() {
   return (
     <div>
       <div className="bg-[#559cd9] w-screen h-screen">
-        <nav className="bg-[#FFE57D] w-[1000px] h-[90px] rounded-3xl  ml-[230px] mt-[50px] fixed top-0 z-10">
-          <div className="flex flex-wrap justify-between items-center mx-auto py-[25px]">
-            <a href="/" className="flex items-center space-x-1 ml-[70px]">
-              <div className="h-[30px] w-[30px] rounded-full bg-black"></div>
-              <span className="self-center text-2xl font-semibold whitespace-nowrap">
-                NoteWiz
-              </span>
-            </a>
-            <div className="mx-auto flex justify-between space-x-[80px] ">
-              <Link href="#features">
-                <button className="text-xl">Features</button>
-              </Link>
-              <Link href="/">
-                <button className="text-xl">Resources</button>
-              </Link>
-              <Link href="/">
-                <button className="text-xl">Pricing</button>
-              </Link>
-            </div>
-
-            <button className="bg-black rounded-3xl font-medium text-large text-white  px-[50px] py-3 mr-[30px]">
-              Get started
-            </button>
-          </div>
-        </nav>
-        <div className="absolute mt-[300px] ml-[80px]  flex space-x-[300px]">
+        <Header />
+        <div className="absolute mt-[17vw] ml-[80px]  flex space-x-[300px]">
           <div className="items-center flex flex-col justify-center space-y-[40px]">
             <div>
-              <p className="text-6xl text-left">
+              <p className="text-6xl text-left flex">
                 Experience Learning Like Never Before
               </p>
             </div>
             <div className="w-full">
-              <p className="font-medium text-left text-2xl ">
+              <p className="font-medium text-left text-2xl flex">
                 Ace you courses without a sweat
               </p>
             </div>
@@ -65,7 +44,7 @@ export default function Home() {
         </div>
       </div>
       <div
-        className="bg-[#559cd9] w-screen h-screen flex justify-center flex-col items-center"
+        className="bg-[#559cd9] w-screen h-full flex justify-center flex-col items-center"
         id="features"
       >
         <div className="max-w-[62vw] mt-[17vw] flex justify-center mb-[2.2vw]">
@@ -73,8 +52,8 @@ export default function Home() {
             All the Tools you Will Ever Need in One Place
           </p>
         </div>
-        <div className="flex gap-[1.302vw] justify-evenly mx-4 mt-[40px]">
-          <div className="flex flex-col items-center justify-center bg-white space-y-[5px] rounded-2xl px-10">
+        <div className="flex gap-[1.302vw] justify-evenly  mt-[3vw] pb-[1vw]">
+          <div className="flex flex-col items-center justify-center bg-white rounded-2xl px-12">
             <CardSmall
               img={img2}
               p1={"Deeper Insights"}
@@ -83,7 +62,7 @@ export default function Home() {
               }
             />
           </div>
-          <div className="flex  items-center justify-center bg-white space-y-[20px] rounded-2xl">
+          <div className="flex  items-center justify-center bg-white rounded-2xl">
             <CardLarge
               img={img3}
               p1={"Chat with all your pdfs"}
@@ -104,7 +83,7 @@ export default function Home() {
         </div>
       </div>
       <div className="bg-[#FFE57D] w-screen h-full">
-        <div className="pt-[9vw] flex gap-x-[1.302vw] items-center justify-center">
+        <div className="pt-[1vw] flex gap-x-[1.302vw] items-center justify-center">
           <CardLarge
             img={img5}
             p1={"Mindmaps to the rescue"}
@@ -171,80 +150,8 @@ export default function Home() {
         </div>
         <div className="pt-[250px]"></div>
       </div>
-      <div className="bg-[#FFE57D] w-full h-screen ">
-        <div className="bg-[#FFE57D] w-full h-[50%]"></div>
-        <div className="bg-[#0C3464] w-full h-[50%]">
-          <footer className="">
-            <div className="flex gap-[350px]">
-              <div className="flex flex-col">
-                <a
-                  href="/"
-                  className="flex items-center space-x-1 ml-[70px] mt-[200px]"
-                >
-                  <div className="h-[30px] w-[30px] rounded-full bg-white"></div>
-                  <span className="self-center text-2xl text-white font-semibold whitespace-nowrap">
-                    NoteWiz
-                  </span>
-                </a>
-                <div className="flex gap-4">
-                  <label className="relative block">
-                    <span className="sr-only">Search</span>
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-2"></span>
-                    <input
-                      className="placeholder:italic placeholder:text-slate-400 block bg-white  border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm ml-[60px] mt-[20px]"
-                      placeholder="enter your email"
-                      type="email"
-                      name="search"
-                    />
-                  </label>
-                  <div className="flex items-center">
-                    <button className="bg-[#FFE57D] rounded-xl px-10 py-2 mt-4">
-                      Submit
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="flex gap-[180px] mt-[220px]">
-                <div className="flex flex-col ">
-                  <p className="text-3xl text-white font-semibold">
-                    Quick Links
-                  </p>
-                  <div className="pt-4 flex flex-col gap-2">
-                    <a
-                      href="/"
-                      className="text-white underline decoration-solid hover:text-black"
-                    >
-                      Terms and conditions
-                    </a>
-                    <a
-                      href="/"
-                      className="text-white underline decoration-solid hover:text-black"
-                    >
-                      Terms and conditions
-                    </a>
-                  </div>
-                </div>
-                <div className="flex flex-col ">
-                  <p className="text-3xl text-white font-semibold">Contacts</p>
-                  <div className="pt-4 flex flex-col gap-2">
-                    <a
-                      href="/"
-                      className="text-white underline decoration-solid hover:text-black"
-                    >
-                      info@noteWiz.com
-                    </a>
-                    <a
-                      href="/"
-                      className="text-white underline decoration-solid hover:text-black"
-                    >
-                      If you made it this far drop a follow :)
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </footer>
-        </div>
+      <div className="bg-[#0C3464] w-screen h-full ">
+        <Footer />
       </div>
     </div>
   );
