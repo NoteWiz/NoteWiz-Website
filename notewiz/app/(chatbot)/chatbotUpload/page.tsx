@@ -1,3 +1,5 @@
+import { permanentRedirect } from "next/navigation";
+
 export default function page() {
   return (
     <div className="w-screen h-screen justify-center items-center bg-black flex">
