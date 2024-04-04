@@ -150,9 +150,8 @@ export default function Home() {
         </div>
         {/* <div className="pt-[250px]"></div> */}
       </div>
-      <div className="bg-[#0C3464] w-screen h-full pt-4">
-        <Footer />
-      </div>
+
+      <Footer />
     </div>
   );
 }

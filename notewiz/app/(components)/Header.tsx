@@ -2,8 +2,8 @@ import Link from "next/link";
 export const Header = () => {
   return (
     <div className="flex items-center justify-center pt-8 ">
-      <div className="flex max-w-[70vw] justify-evenly items-center py-[1vw] md:gap-[vw] lg:gap-[3vw] bg-[#FFE57D] rounded-3xl fixed mt-16 z-10 ">
-        <a href="/" className="flex items-center gap-4 pl-[3vw]">
+      <div className="flex justify-evenly items-center py-[1vw] md:gap-[1vw] lg:gap-[3vw] bg-[#FFE57D] rounded-3xl fixed mt-16 z-10 px-4">
+        <a href="/" className="flex items-center gap-4 ">
           <div className="h-[30px] w-[30px] rounded-full bg-black"></div>
           <span className=" text-2xl font-semibold ">NoteWiz</span>
         </a>
@@ -19,7 +19,7 @@ export const Header = () => {
           </Link>
         </div>
 
-        <button className="bg-black rounded-3xl font-medium text-large text-white  px-[50px] py-3 mr-[30px]">
+        <button className="flex items-center justify-center bg-black rounded-3xl font-medium text-large text-white  px-[20px] py-3 ">
           Get started
         </button>
       </div>
