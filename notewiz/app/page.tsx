@@ -18,9 +18,9 @@ import { Footer } from "./(components)/Footer";
 export default function Home() {
   return (
     <div>
-      <div className="bg-[#559cd9] w-screen h-screen">
+      <div className="bg-[#559cd9] w-screen h-full">
         <Header />
-        <div className="absolute mt-[17vw] ml-[80px]  flex space-x-[300px]">
+        <div className=" mt-[17vw] flex items-center px-10 gap-4 justify-center">
           <div className="items-center flex flex-col justify-center space-y-[40px]">
             <div>
               <p className="text-6xl text-left flex">
@@ -82,8 +82,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="bg-[#FFE57D] w-screen h-full">
-        <div className="pt-[1vw] flex gap-x-[1.302vw] items-center justify-center">
+      <div className="bg-[#FFE57D] w-screen h-full ">
+        <div className="pt-[1vw] flex gap-x-[1.302vw] items-center justify-evenly px-[2vw]">
           <CardLarge
             img={img5}
             p1={"Mindmaps to the rescue"}

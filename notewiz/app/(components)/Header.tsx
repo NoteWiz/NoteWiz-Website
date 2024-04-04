@@ -2,7 +2,7 @@ import Link from "next/link";
 export const Header = () => {
   return (
     <div className="flex items-center justify-center pt-8 ">
-      <div className="flex max-w-[70vw] justify-between items-center py-[1vw] md:gap-[vw] lg:gap-[3vw] bg-[#FFE57D] rounded-3xl fixed mt-16 z-10 ">
+      <div className="flex max-w-[70vw] justify-evenly items-center py-[1vw] md:gap-[vw] lg:gap-[3vw] bg-[#FFE57D] rounded-3xl fixed mt-16 z-10 ">
         <a href="/" className="flex items-center gap-4 pl-[3vw]">
           <div className="h-[30px] w-[30px] rounded-full bg-black"></div>
           <span className=" text-2xl font-semibold ">NoteWiz</span>

@@ -2,7 +2,7 @@ import { FooterInfo } from "./FooterInfo";
 
 export const Footer = () => {
   return (
-    <footer className="flex flex gap-[18.5vw]">
+    <footer className="flex flex gap-[24vw]">
       <div className="flex flex-col max-w-[30vw] ">
         <a href="/" className="flex items-center ml-[5vw] mt-[8vw] gap-3">
           <div className="h-[30px] w-[30px] rounded-full bg-white flex"></div>
@@ -27,9 +27,17 @@ export const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="flex gap-[180px] items-center mt-[10vw] max-w-[40vw]">
-        <FooterInfo info="Terms and conditions" info2="Terms and conditions" />
-        <FooterInfo info="Terms and conditions" info2="Terms and conditions" />
+      <div className="flex items-end justify-end w-full pr-8">
+        <div className="flex gap-[180px] items-end justify-end mt-[10vw] ">
+          <FooterInfo
+            info="Terms and conditions"
+            info2="Terms and conditions"
+          />
+          <FooterInfo
+            info="Terms and conditions"
+            info2="Terms and conditions"
+          />
+        </div>
       </div>
     </footer>
   );
