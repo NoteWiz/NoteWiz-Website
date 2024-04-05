@@ -104,7 +104,7 @@ export default function Home() {
         </div>
       </div>
       <div className="bg-[#FFE57D] w-screen h-full">
-        <div className="pt-[130px] flex gap-x-[1.302vw] items-center justify-center">
+        <div className="pt-[12vw] flex gap-x-[1.302vw] items-center justify-center">
           <CardLarge
             img={img5}
             p1={"Mindmaps to the rescue"}
@@ -121,7 +121,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="flex flex-col mt-[300px] items-center">
+        <div className="flex flex-col mt-[16vw] items-center">
           <div className="flex flex-col items-center justify-center max-w-[1000px]">
             <p className="text-7xl text-center text-wrap">
               Our Own Gamified Community
