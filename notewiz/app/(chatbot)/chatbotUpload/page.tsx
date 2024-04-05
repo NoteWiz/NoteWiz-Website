@@ -1,6 +1,5 @@
 import Upload from "@/components/FileDrag/Drag-Drop";
 import SmallSidebar from "@/components/Sidebar/smallSidebar";
-import { permanentRedirect } from "next/navigation";
 export default function page() {
   return (
     <div>
