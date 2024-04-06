@@ -60,7 +60,7 @@ const SignInComponent = () => {
             <button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-lg py-3">Sign in</button>
           </form>
           <div className="mt-4 text-center">
-            <p className="text-sm text-gray-700 dark:text-gray-400">Don't have an account yet? <a href="#" className="text-pink-400 hover:underline font-bold">Sign up</a></p>
+            <p className="text-sm text-gray-700 dark:text-gray-400">Don't have an account yet? <Link href="/dashboard" className="text-pink-400 hover:underline font-bold">Sign up</Link></p>
           </div>
         </div>
       </section>
