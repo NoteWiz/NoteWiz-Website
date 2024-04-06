@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 export const CardLarge = (props: { img: any; p1: string; p2: string }) => {
   return (
     <div className="flex  items-center justify-center bg-white gap-4 rounded-2xl">
