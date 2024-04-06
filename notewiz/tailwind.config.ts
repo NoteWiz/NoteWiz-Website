@@ -10,6 +10,9 @@ const config: Config = {
     extend: {
       backgroundColor: {
         primary: "#FFFAF0",
+        purple: '#F07CF2',
+        secondary: '#55ACEE',
+
       },
       spacing: {
         'custom-padding': '465px',
