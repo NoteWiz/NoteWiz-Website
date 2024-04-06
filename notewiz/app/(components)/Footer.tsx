@@ -2,7 +2,7 @@ import { FooterInfo } from "./FooterInfo";
 
 export const Footer = () => {
   return (
-    <footer className="bg-[#0C3464] ">
+    <footer className="bg-[#0C3464] w-full">
       <div className="mx-auto  max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
