@@ -14,9 +14,9 @@ const config: Config = {
         secondary: '#55ACEE',
 
       },
-      // spacing: {
-      //   'custom-spacing': '40px',
-      // }
+      spacing: {
+        'custom-padding': '465px',
+      }
     },
   },
   plugins: [],
