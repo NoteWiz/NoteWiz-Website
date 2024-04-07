@@ -38,9 +38,9 @@ const OnboardingPage = () => {
   };
 
   return (
-    <div className='bg-blue-400 min-h-screen'>
+    <div className='flex flex-col items-center justify-center min-h-screen bg-secondary dark:bg-gray-800'>
       {/* Navbar */}
-      <nav className="bg-[#FFE57D] py-4 fixed w-full z-10 top-16 left-0 right-0 rounded-full mx-auto max-w-4xl">
+      <nav className="bg-[#FFE57D] py-4 fixed w-full z-10 top-12 rounded-3xl mx-auto max-w-4xl">
         <div className="container mx-auto flex justify-between items-center px-4 md:px-6">
           <div className='flex items-center'>
             <Link href='/'>
@@ -58,20 +58,20 @@ const OnboardingPage = () => {
       </nav>
 
       {/* Onboarding content */}
-      <div className="container mx-auto max-w-md py-8 mt-20 overflow-y-auto fixed left-0 right-0 bottom-0 top-[calc(12vh+1rem)]"> {/* Add mt-20 to create space between navbar and card */}
-        <h1 className="text-2xl font-bold mb-4">Welcome Onboard!</h1>
+      <div className="container mx-auto max-w-md py-8 mt-14 overflow-y-auto fixed left-0 right-0 bottom-0 top-[calc(12vh+1rem)]">
+        <h1 className="text-2xl font-bold mb-16 text-center">Welcome Onboard!</h1>
         {step === 1 && (
-          <div className="bg-white p-6 rounded-md shadow-md">
-            <h2 className="text-lg font-semibold mb-4">Step 1: Select Stream and Semester</h2>
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-lg font-semibold mb-4 text-left">Step 1: Select Stream and Semester</h2>
             <div className="mb-4">
-              <label htmlFor="stream" className="block font-medium mb-1">
+              <label htmlFor="stream" className="block font-medium mb-2">
                 Stream:
               </label>
               <select
                 id="stream"
                 value={stream}
                 onChange={handleStreamChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Select Stream</option>
                 {streams.map((s) => (
@@ -82,14 +82,14 @@ const OnboardingPage = () => {
               </select>
             </div>
             <div className="mb-4">
-              <label htmlFor="semester" className="block font-medium mb-1">
+              <label htmlFor="semester" className="block font-medium mb-2">
                 Semester:
               </label>
               <select
                 id="semester"
                 value={semester}
                 onChange={handleSemesterChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Select Semester</option>
                 {semesters.map((s) => (
@@ -102,17 +102,17 @@ const OnboardingPage = () => {
             <button
               onClick={handleNextStep}
               disabled={!stream || !semester}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700"
+              className="px-8 py-3 mt-6 bg-blue-500 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700 w-full transition-colors duration-300"
             >
               Next
             </button>
           </div>
         )}
         {step === 2 && (
-          <div className="bg-white p-6 rounded-md shadow-md">
-            <h2 className="text-lg font-semibold mb-4">Step 2: Select Subjects</h2>
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-lg font-semibold mb-4 text-left">Step 2: Select Subjects</h2>
             <div className="mb-4">
-              <label htmlFor="subjects" className="block font-medium mb-1">
+              <label htmlFor="subjects" className="block font-medium mb-2">
                 Subjects:
               </label>
               <select
@@ -120,24 +120,27 @@ const OnboardingPage = () => {
                 multiple
                 value={selectedSubjects}
                 onChange={handleSubjectChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="w-full h-48 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="Subject 1">Subject 1</option>
                 <option value="Subject 2">Subject 2</option>
                 <option value="Subject 3">Subject 3</option>
+                <option value="Subject 4">Subject 4</option>
+                <option value="Subject 5">Subject 5</option>
+                <option value="Subject 6">Subject 6</option>
                 {/* Add more options if needed */}
               </select>
             </div>
             <div className="flex justify-between">
               <button
                 onClick={handleBackStep}
-                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700"
+                className="px-6 py-3 bg-gray-500 text-white rounded-md hover:bg-gray-700 transition-colors duration-300"
               >
                 Back
               </button>
               <button
                 onClick={handleNextStep}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition-colors duration-300"
               >
                 Next
               </button>
@@ -145,29 +148,29 @@ const OnboardingPage = () => {
           </div>
         )}
         {step === 3 && (
-          <div className="bg-white p-6 rounded-md shadow-md">
-            <h2 className="text-lg font-semibold mb-4">Step 3: Review and Submit</h2>
-            <div className="mb-4">
-              <p className="mb-2"><span className="font-semibold">Stream:</span> {stream}</p>
-              <p className="mb-2"><span className="font-semibold">Semester:</span> {semester}</p>
-              <p className="mb-2"><span className="font-semibold">Selected Subjects:</span> {selectedSubjects.join(', ')}</p>
-            </div>
-            <div className="flex justify-end">
-              <button
-                onClick={handleBackStep}
-                className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2 hover:bg-gray-700"
-              >
-                Back
-              </button>
-              <button
-                onClick={handleSubmit}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        )}
+  <div className="bg-white p-6 rounded-lg shadow-md">
+    <h2 className="text-lg font-semibold mb-4 text-left">Step 3: Review and Submit</h2>
+    <div className="mb-6">
+      <p className="mb-2"><span className="font-semibold">Stream:</span> {stream}</p>
+      <p className="mb-2"><span className="font-semibold">Semester:</span> {semester}</p>
+      <p className="mb-2"><span className="font-semibold">Selected Subjects:</span> {selectedSubjects.join(', ')}</p>
+    </div>
+    <div className="flex justify-end">
+      <button
+        onClick={handleBackStep}
+        className="px-6 py-3 bg-gray-500 text-white rounded-md mr-4 hover:bg-gray-700 transition-colors duration-300"
+      >
+        Back
+      </button>
+      <button
+        onClick={handleSubmit}
+        className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition-colors duration-300"
+      >
+        Submit
+      </button>
+    </div>
+  </div>
+)}
       </div>
     </div>
   );
