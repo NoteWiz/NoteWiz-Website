@@ -28,6 +28,7 @@ const SignInComponent = () => {
       {/* Sign-in */}
       <section className="flex flex-col items-center justify-center mt-32">
         <div className="bg-white rounded-lg shadow-lg p-10 md:p-14 lg:p-18 w-fit dark:bg-gray-700">
+        <h3 className='mb-6 font-semibold text-xl text-black'>Sign into your account:</h3>
           <button
             type="button"
             className="w-full flex items-center justify-center border border-gray-400 bg-white text-blue-600 font-medium rounded-lg py-4 px-32 shadow-md hover:bg-gray-100 mb-6 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
