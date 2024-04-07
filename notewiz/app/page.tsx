@@ -17,7 +17,7 @@ import { Footer } from "./(components)/Footer";
 
 export default function Home() {
   return (
-    <div>
+    <div className="flex flex-col justify-center items-center">
       <div className="bg-[#559cd9] w-screen h-full">
         <Header />
         <div className=" mt-[17vw] flex items-center px-10 gap-4 justify-center">
