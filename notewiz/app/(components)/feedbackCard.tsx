@@ -3,8 +3,8 @@ import img2 from "../(images)/img2.png";
 
 export const FeedbackCard = () => {
   return (
-    <div className="rounded-xl overflow-hidden shadow-lg max-w-[400px] bg-white px-8 py-6">
-      <div className="flex gap-2 items-center">
+    <div className="rounded-xl overflow-hidden shadow-lg max-w-[400px] bg-white px-8 py-6 flex flex-col mx-auto">
+      <div className="flex flex-col md:gap-x-2 items-center md:flex-row  ">
         <Image
           src={img2}
           alt="img"
