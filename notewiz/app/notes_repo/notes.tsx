@@ -15,10 +15,10 @@ const Notes = () => {
               <a href="https://drive.google.com/file/d/1W4NgPhXxUswRY0tb7RmJeForB6OGuwfP/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">
                 <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2 mb-2 w-full">Unit 1-5 notes</button>
               </a>
-              <a href="#" target="_blank" rel="noopener noreferrer">
+              <a href="#">
                 <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2 mb-2 w-full">Practice Questions</button>
               </a>
-              <a href="#" target="_blank" rel="noopener noreferrer">
+              <a href="#">
                 <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-2 w-full">Take a Test</button>
               </a>
             </div>
@@ -34,10 +34,10 @@ const Notes = () => {
               <a href="https://drive.google.com/file/d/1MT14ANYtgYWi41xi3nz0EMtLSKGOgK_4/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">
                 <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2 mb-2 w-full">Unit 1-5 notes</button>
               </a>
-              <a href="#" target="_blank" rel="noopener noreferrer">
+              <a href="#">
                 <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2 mb-2 w-full">Practice Questions</button>
               </a>
-              <a href="#" target="_blank" rel="noopener noreferrer">
+              <a href="#">
                 <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-2 w-full">Take a Test</button>
               </a>
             </div>
@@ -53,10 +53,10 @@ const Notes = () => {
               <a href="https://drive.google.com/file/d/1diBTI3-JMupsofhyFRZwON9oj4-q4Rjo/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">
                 <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2 mb-2 w-full">Unit 1-5 notes</button>
               </a>
-              <a href="#" target="_blank" rel="noopener noreferrer">
+              <a href="#">
                 <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-2 w-full">Practice Questions</button>
               </a>
-              <a href="#" target="_blank" rel="noopener noreferrer">
+              <a href="#">
                 <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-2 w-full">Take a Test</button>
               </a>
             </div>
