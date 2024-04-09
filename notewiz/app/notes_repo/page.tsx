@@ -1,10 +1,9 @@
-import Practice from "@/app/practice/practiceQuestions";
+import Notes from "@/app/notes_repo/notes"
 
 export default function page() {
     return (
       <div>
-        <Practice/>
+        <Notes/>
       </div>
     );
   }
-  
