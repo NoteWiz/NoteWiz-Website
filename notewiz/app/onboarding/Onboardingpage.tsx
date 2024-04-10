@@ -38,7 +38,7 @@ const OnboardingPage = () => {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-secondary dark:bg-gray-800'>
+    <div className='flex flex-col items-center justify-center min-h-screen bg-blue-400 dark:bg-gray-800'>
       {/* Navbar */}
       <nav className="bg-[#FFE57D] py-4 fixed w-full z-10 top-12 rounded-3xl mx-auto max-w-4xl">
         <div className="container mx-auto flex justify-between items-center px-4 md:px-6">
@@ -58,7 +58,7 @@ const OnboardingPage = () => {
       </nav>
 
       {/* Onboarding content */}
-      <div className="container mx-auto max-w-md py-8 mt-14 overflow-y-auto fixed left-0 right-0 bottom-0 top-[calc(12vh+1rem)]">
+      <div className="container mx-auto max-w-4xl max-h-max py-8 mt-14 overflow-y-auto fixed left-0 right-0 bottom-0 top-[calc(12vh+1rem)]">
         <h1 className="text-2xl font-bold mb-16 text-center">Welcome Onboard!</h1>
         {step === 1 && (
           <div className="bg-white p-6 rounded-lg shadow-md">

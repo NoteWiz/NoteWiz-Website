@@ -2,8 +2,10 @@ import React from 'react';
 
 const Notes = () => {
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="text-3xl font-bold mt-6 mb-4">MY SUBJECTS:</h1>
+    <div className='bg-yellow-200 min-h-screen'>
+
+    <div className="container mx-auto px-6">
+      <h1 className="text-3xl font-bold pt-6 mb-4">MY SUBJECTS:</h1>
       <div className="flex flex-wrap">
         <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-4">
           <div className="bg-white rounded-lg shadow-md p-6 mb-4 flex flex-col justify-between h-full">
@@ -64,6 +66,9 @@ const Notes = () => {
         </div>
       </div>
     </div>
+
+    </div>
+    
   );
 };
 

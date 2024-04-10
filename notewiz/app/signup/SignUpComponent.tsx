@@ -6,7 +6,7 @@ import Link from 'next/link';
 const SignUpComponent = () => {
 
   return (
-    <div className="flex flex-col min-h-screen justify-center items-center bg-secondary">
+    <div className="flex flex-col min-h-screen justify-center items-center bg-blue-400">
       {/* Navbar */}
       <nav className="bg-[#FFE57D] py-4 fixed w-full z-10 top-12 rounded-3xl mx-auto max-w-4xl">
         <div className="container mx-auto flex justify-between items-center px-4 md:px-6">
