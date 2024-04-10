@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import Image from "next/image";
 import Link from "next/link";
 import { sideBarLinks } from "@/app/constants/index";
@@ -6,7 +6,7 @@ import { sideBarLinks } from "@/app/constants/index";
 const smallSidebar = () => {
   return (
     <div>
-      <div className="bg-[#FFDC4D] border-black border-r-2 w-[200px] h-full fixed top-0 left-0 rounded-r-md  transition-transform -translate-x-full sm:translate-x-0">
+      <div className="bg-[#FFDC4D] border-black border-r-2 w-[200px] h-full fixed top-0 left-0 rounded-r-md  transition-transform -translate-x-full sm:translate-x-0 overflow-auto">
         <div className="flex flex-col w-full gap-6 px-6">
           {sideBarLinks.map((links) => (
             <Link
