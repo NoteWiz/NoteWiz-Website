@@ -8,31 +8,39 @@ const SignInComponent = () => {
 
   return (
 
-    <div className="flex flex-col items-center justify-center min-h-screen bg-blue-400 dark:bg-gray-800">
+    <div className="flex flex-col min-h-screen justify-center items-center bg-blue-400">
       {/* Navbar */}
-      <nav className="bg-[#FFE57D] py-4 fixed w-full z-10 top-12 rounded-full mx-auto max-w-4xl">
+      <nav className="bg-[#FFE57D] py-4 fixed w-full z-10 top-12 rounded-3xl mx-auto max-w-4xl">
         <div className="container mx-auto flex justify-between items-center px-4 md:px-6">
-          <div className='flex items-center'>
-            <Link href='/'>
+          <div className="flex items-center">
+            <Link href="/">
               <div className="flex items-center">
-                <Image src={Logo} alt='Logo' width={30} height={30} />
-                <span className="text-2xl font-semibold ml-2 hover:underline">NoteWiz</span>
+                <Image src={Logo} alt="Logo" width={30} height={30} />
+                <span className="text-2xl font-semibold ml-2 hover:underline">
+                  NoteWiz
+                </span>
               </div>
             </Link>
           </div>
-          <Link href="#" className="text-lg hover:underline">Link 1</Link>
-          <Link href="#" className="text-lg hover:underline">Link 2</Link>
-          <Link href="#" className="text-lg hover:underline">Link 3</Link>
-          <button className="bg-black hover:bg-white hover:text-black text-white rounded-full font-medium py-2 px-6">Call to Action</button>
+          <Link href="#" className="text-lg hover:underline">
+            Link 1
+          </Link>
+          <Link href="#" className="text-lg hover:underline">
+            Link 2
+          </Link>
+          <Link href="#" className="text-lg hover:underline">
+            Link 3
+          </Link>
+          <button className="bg-black hover:bg-white hover:text-black text-white rounded-full font-medium py-2 px-6">
+            Call to Action
+          </button>
         </div>
       </nav>
 
-      {/* Logo */}
-      <div className="mt-40 text-4xl font-bold">LOGO</div>
 
       {/* Sign-in */}
-      <section className="flex-grow flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-lg p-8 md:p-12 lg:p-16">
+      <section className="flex flex-col items-center justify-center mt-32">
+        <div className="bg-white rounded-lg shadow-lg p-12 md:p-16 lg:p-20">
           <button type="button" className="w-full flex items-center justify-center border border-gray-300 bg-white text-blue-600 font-medium rounded-lg py-3 shadow-md hover:bg-gray-100 mb-4">
             <Image src={GoogleIcon} alt='Google Icon' width={24} height={24} />
             <span className="ml-2">Sign in with Google</span>
