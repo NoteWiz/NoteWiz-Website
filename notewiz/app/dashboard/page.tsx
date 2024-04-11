@@ -12,7 +12,7 @@ export default function page() {
       <ACard/>
       <ACard/>
       <ACard/>
-      <h1 className="text-xl flex justify-start pl-custom-padding"> Statistics</h1>
+      <h1 className="text-xl flex my-5 justify-start pl-custom-padding"> Statistics</h1>
       <SCard/>
     </div>
   );

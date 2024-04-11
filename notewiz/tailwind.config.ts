@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      spacing:{
+        'custom-padding':'460px'
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
