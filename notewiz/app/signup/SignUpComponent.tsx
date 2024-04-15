@@ -1,9 +1,42 @@
-import React from "react";
+"use client";
 import Image from "next/image";
 import Logo from "./notewiz logo.png";
 import Link from "next/link";
+import { useState } from "react";
 
 const SignUpComponent = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const changeHandler = (e: any) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  let SignUp = async (e: any) => {
+    console.log("Sign in complete", formData);
+    e.preventDefault();
+    let responseData: any = await fetch("http://localhost:4000/signup", {
+      method: "POST",
+      headers: {
+        Accept: "application/form-data",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    // .then((response) => response.json())
+    // .then((data) => (responseData = data));
+    let data = await responseData.json();
+    if (data.success) {
+      console.log("data fetched", data);
+      localStorage.setItem("auth-token", data.token);
+      window.location.replace("/login");
+    } else {
+      alert(data.errors);
+    }
+  };
   return (
     <div className="flex flex-col min-h-screen justify-center items-center bg-blue-400">
       {/* Navbar */}
@@ -50,8 +83,10 @@ const SignUpComponent = () => {
               </label>
               <input
                 type="text"
-                name="name"
+                name="username"
                 id="name"
+                value={formData.username}
+                onChange={changeHandler}
                 className="w-full py-3 px-4 rounded border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="John Doe"
                 required
@@ -68,6 +103,8 @@ const SignUpComponent = () => {
                 type="email"
                 name="email"
                 id="email"
+                value={formData.email}
+                onChange={changeHandler}
                 className="w-full py-3 px-4 rounded border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@gmail.com"
                 required
@@ -84,6 +121,8 @@ const SignUpComponent = () => {
                 type="password"
                 name="password"
                 id="password"
+                value={formData.password}
+                onChange={changeHandler}
                 className="w-full py-3 px-4 rounded border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="••••••••"
                 required
@@ -92,6 +131,7 @@ const SignUpComponent = () => {
             <button
               type="submit"
               className="w-full shadow-md bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-lg py-3"
+              onClick={SignUp}
             >
               Sign up
             </button>
