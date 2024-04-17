@@ -1,0 +1,19 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("mongodb+srv://Juwairia:070898@cluster0.pghgbgz.mongodb.net/registered_users")
+}
+ 
+generator client {
+  provider = "prisma-client-js"
+}
+ 
+model User {
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?         @unique
+  emailVerified DateTime?
+  image         String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
