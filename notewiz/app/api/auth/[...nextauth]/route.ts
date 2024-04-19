@@ -56,6 +56,7 @@ export const authOptions: any = {
             await newUser.save();
             return true;
           }
+
           return true;
         } catch (err) {
           console.log("Error saving user", err);
