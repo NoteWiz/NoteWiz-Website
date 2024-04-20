@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     "models/User.js",
     "lib/Mongodb.js"
-  ],
+, "app/cb/cb.tsx"  ],
   "exclude": ["node_modules"]
 }
