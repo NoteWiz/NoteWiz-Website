@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const API_KEY = "sk-proj-WX9zZdjETZzJCTjqPEZaT3BlbkFJOPVa7kmOMzxc5HjGGiox";
+const API_KEY = process.env.API_KEY;
 
 app.post('/connections', async (req, res) => {
 
