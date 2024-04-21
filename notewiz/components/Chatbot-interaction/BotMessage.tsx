@@ -1,6 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-export const BotMessage = () => {
+export const BotMessage = (props: any) => {
   return (
+
+    
     <div className="flex flex-col gap-2 ">
       <div>
         <Avatar>
@@ -10,9 +12,7 @@ export const BotMessage = () => {
       </div>
       <div className="flex items-center justify-center bg-[#FFDC4D] rounded-lg p-2">
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut nec elit
-          sit amet mauris pretium interdum. Fusce sodales ipsum non ullamcorper
-          ullamcorper.
+          I'm great!
         </p>
       </div>
     </div>

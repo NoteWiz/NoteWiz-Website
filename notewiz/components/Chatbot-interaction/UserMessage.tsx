@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-export const UserMessage = () => {
+export const UserMessage = (props: any) => {
   return (
     <div className="flex flex-col items-end gap-2">
       <div>
@@ -10,9 +10,7 @@ export const UserMessage = () => {
       </div>
       <div className="flex items-center justify-center bg-[#FFDC4D] rounded-lg p-2">
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut nec elit
-          sit amet mauris pretium interdum. Fusce sodales ipsum non ullamcorper
-          ullamcorper.
+          How are you?
         </p>
       </div>
     </div>

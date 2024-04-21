@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const API_KEY = process.env.API_KEY; 
+const API_KEY = "sk-proj-ir6Fv5qx1QhEhORmKpnrT3BlbkFJwC24vzB0deSbouwLp3cT"; 
 
 app.post('/connections', async (req, res) => {
 
@@ -29,6 +29,7 @@ app.post('/connections', async (req, res) => {
     try {
         const response = await fetch('https://api.openai.com/v1/chat/completions', options)
         const data = await response.json()
+        console.log(data)
         res.send(data)
     } catch (error) {
         console.log(error);
