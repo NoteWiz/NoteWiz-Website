@@ -1,8 +1,10 @@
-"use client";
+"use client"
 import React, { useState, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
+const API_KEY = 'sk-proj-L7lUhXh2ZthwV27ebxXkT3BlbkFJvwS1m9crm1ymRbMSzM0S';
 
 // Define ChatMessage interface
 interface ChatMessage {
@@ -17,9 +19,8 @@ const cb = () => {
     const [message, setMessage] = useState<{ role: string; content: string } | null>(null);
     const [previousChats, setPreviousChats] = useState<ChatMessage[]>([]);
     const [currentTitle, setCurrentTitle] = useState("");
-
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-
+    
     // Ref for the chat feed container
     const feedContainerRef = useRef<HTMLDivElement>(null);
 
@@ -43,6 +44,7 @@ const cb = () => {
             method: "POST",
             body: JSON.stringify({
                 message: value,
+                file:uploadedFiles,
             }),
             headers: {
                 "Content-Type": "application/json",
@@ -66,7 +68,7 @@ const cb = () => {
         }
         if (currentTitle && value && message) {
             setPreviousChats(prevChats => ([
-                ...previousChats,
+                ...prevChats,
                 {
                     title: currentTitle,
                     role: "user",
@@ -79,7 +81,7 @@ const cb = () => {
                 },
             ]));
             // Update the message state to null after processing
-            setMessage(null); //very imp
+            setMessage(null);
         }
     }, [message, currentTitle, value]);
 
@@ -91,10 +93,29 @@ const cb = () => {
     const uniqueTitles = Array.from(new Set(previousChats.map((previousChat) => previousChat.title)));
 
     // Function to handle file upload
-    const onDrop = (acceptedFiles: File[]) => {
+    // Function to handle file upload
+    const onDrop = async (acceptedFiles: File[]) => {
+    const formData = new FormData();
+    setUploadedFiles(acceptedFiles);
+  
+    try {
+      const response = await fetch('http://localhost:4000/upload', {
+        method: 'POST',
+        body: formData
+      });
+  
+      if (response.ok) {
+        const data = await response.text(); // Response is text, not JSON
+        console.log(data);
         setUploadedFiles(acceptedFiles);
-    };
-
+      } else {
+        throw new Error('Failed to upload files');
+      }
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
+  };
+  
     // UseDropzone hook configuration
     const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
