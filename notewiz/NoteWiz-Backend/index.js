@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const API_KEY = "sk-proj-ir6Fv5qx1QhEhORmKpnrT3BlbkFJwC24vzB0deSbouwLp3cT"; 
+const API_KEY = "sk-proj-Sv5Zao4g9ci9oPh2m1MsT3BlbkFJ9VMcfOSznouqSlGOTiMq"; 
 
 app.post('/connections', async (req, res) => {
 
