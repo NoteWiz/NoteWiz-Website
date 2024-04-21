@@ -1,32 +1,37 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+// Define ChatMessage interface
 interface ChatMessage {
     title: string;
     role: string;
     content: string;
 }
 
-const cb: React.FC = () => {
+const cb = () => {
     // State variables
-    const [value, setValue] = useState<string>("");
+    const [value, setValue] = useState("");
     const [message, setMessage] = useState<{ role: string; content: string } | null>(null);
     const [previousChats, setPreviousChats] = useState<ChatMessage[]>([]);
-    const [currentTitle, setCurrentTitle] = useState<string | null>(null);
+    const [currentTitle, setCurrentTitle] = useState("");
+
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+
+    // Ref for the chat feed container
+    const feedContainerRef = useRef<HTMLDivElement>(null);
 
     // Function to reset chat state
     const createNewChat = () => {
         setMessage(null);
         setValue("");
-        setCurrentTitle(null);
+        setCurrentTitle("");
     };
 
     // Function to define new chat
-    const handleClick = (uniqueTitle: string) => {
+    const handleClick = (uniqueTitle: any) => {
         setCurrentTitle(uniqueTitle);
         setMessage(null);
         setValue("");
@@ -47,19 +52,20 @@ const cb: React.FC = () => {
         try {
             const response = await fetch("http://localhost:4000/connections", options);
             const data = await response.json();
+            
             setMessage(data.choices[0].message);
         } catch (error) {
             console.log(error);
         }
     };
 
-    // Effect hook to handle new messages
+    // Effect hook to handle new messages and assign titles
     useEffect(() => {
         if (!currentTitle && value && message) {
             setCurrentTitle(value);
         }
         if (currentTitle && value && message) {
-            setPreviousChats(previousChats => ([
+            setPreviousChats(prevChats => ([
                 ...previousChats,
                 {
                     title: currentTitle,
@@ -72,6 +78,8 @@ const cb: React.FC = () => {
                     content: message.content,
                 },
             ]));
+            // Update the message state to null after processing
+            setMessage(null); //very imp
         }
     }, [message, currentTitle, value]);
 
@@ -79,6 +87,7 @@ const cb: React.FC = () => {
     const currentChat = previousChats.filter(
         (previousChat) => previousChat.title === currentTitle
     );
+    
     const uniqueTitles = Array.from(new Set(previousChats.map((previousChat) => previousChat.title)));
 
     // Function to handle file upload
@@ -88,6 +97,13 @@ const cb: React.FC = () => {
 
     // UseDropzone hook configuration
     const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
+    // Scroll the chat feed container to the bottom
+    useEffect(() => {
+        if (feedContainerRef.current) {
+            feedContainerRef.current.scrollTop = feedContainerRef.current.scrollHeight;
+        }
+    }, [previousChats]);
 
     return (
         <div className="flex h-screen font-roboto">
@@ -160,11 +176,11 @@ const cb: React.FC = () => {
 
                 {/* Chat Feed and User Input */}
                 <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 overflow-y-auto flex flex-col justify-between">
-                    <div className="feed max-h-[300px] overflow-y-auto">
-                        <ul className="feed p-0">
+                    <div ref={feedContainerRef} className="feed max-h-[300px] overflow-y-auto">
+                        <ul className="feed p-0 w-full"> 
                             {currentChat?.map((chatMessage, index) => (
-                                <li className="flex bg-gray-400 w-full p-4 my-4" key={index}>
-                                    <p className="w-32 font-semibold">{chatMessage.role}</p>
+                                <li className="flex bg-gray-200 w-full p-4 my-4" key={index}>
+                                    <p className="role w-32 font-semibold">{chatMessage.role}</p>
                                     <p className="flex-grow">{chatMessage.content}</p>
                                 </li>
                             ))}
