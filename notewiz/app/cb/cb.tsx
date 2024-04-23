@@ -12,6 +12,7 @@ interface ChatMessage {
 }
 
 const cb = () => {
+  let clicked = false;
   // State variables
   const [value, setValue] = useState("");
   const [message, setMessage] = useState<{
@@ -42,22 +43,20 @@ const cb = () => {
 
   // Function to fetch messages
   const getMessages = async () => {
+    const formData = new FormData();
+    formData.append("message", value);
+    console.log(formData);
     const options = {
       method: "POST",
-      body: JSON.stringify({
-        message: value,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      body: formData,
     };
 
     try {
       const response = await fetch("http://localhost:4000/upload", options);
-      const data = await response.json();
-      console.log(data);
+      //   const data = await response.json();
+      console.log(response);
 
-      setMessage(data.choices[0].message);
+      //   setMessage(data.choices[0].message);
     } catch (error) {
       console.log(error);
     }
@@ -100,15 +99,17 @@ const cb = () => {
   const onDrop = async (acceptedFiles: File[]) => {
     setUploadedFiles(acceptedFiles);
     const formData = new FormData();
-    formData.append("file", acceptedFiles[0]); // Assuming only one file is uploaded
     // formData.append("userInput", value);
-    // console.log(formData);
+    formData.append("file", acceptedFiles[0]); // Assuming only one file is uploaded
+    console.log(formData);
+
     try {
       const response = await fetch("http://localhost:4000/upload", {
         method: "POST",
         body: formData,
       });
       console.log("file uploaded");
+      console.log(response.json());
       // Handle response as needed
     } catch (error) {
       console.error("Error uploading file:", error);
