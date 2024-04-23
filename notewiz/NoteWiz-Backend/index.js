@@ -24,8 +24,6 @@ app.use(cors());
 app.use(fileUpload());
 app.use("/upload", cors());
 
-const API_KEY = "sk-proj-QXvDMcXyKYvi7S3YFwfqT3BlbkFJb3MRit1lZ0l398aLUPBm";
-
 app.post("/connections", async (req, res) => {
   const options = {
     method: "POST",
