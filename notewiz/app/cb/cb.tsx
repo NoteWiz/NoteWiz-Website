@@ -13,6 +13,7 @@ interface ChatMessage {
 
 const cb = () => {
   let clicked = false;
+  const [fileId, setFileId] = useState<string | null>(null);
   // State variables
   const [value, setValue] = useState("");
   const [message, setMessage] = useState<{
@@ -45,7 +46,9 @@ const cb = () => {
   const getMessages = async () => {
     const formData = new FormData();
     formData.append("message", value);
-    console.log(formData);
+    // if (fileId) {
+    //   formData.append("file_id", fileId); // Send file ID if available
+    // }
     const options = {
       method: "POST",
       body: formData,
@@ -53,10 +56,10 @@ const cb = () => {
 
     try {
       const response = await fetch("http://localhost:4000/upload", options);
-      //   const data = await response.json();
-      console.log(response);
+      const data = await response.json();
+      console.log(data.messages);
 
-      //   setMessage(data.choices[0].message);
+      setMessage({ role: "Assistant", content: data.messages });
     } catch (error) {
       console.log(error);
     }
@@ -108,8 +111,10 @@ const cb = () => {
         method: "POST",
         body: formData,
       });
+      const data = await response.json();
       console.log("file uploaded");
-      console.log(response.json());
+      // setFileId(data.fileId);
+      // console.log(response.json());
       // Handle response as needed
     } catch (error) {
       console.error("Error uploading file:", error);
