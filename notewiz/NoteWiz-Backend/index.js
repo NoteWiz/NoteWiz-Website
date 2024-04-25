@@ -24,7 +24,7 @@ app.use(fileUpload());
 app.use("/upload", cors());
 const assistantCache = new NodeCache();
 
-const API_KEY = "sk-proj-qMnGA6kdxqdupWhzCTX9T3BlbkFJY7aMe3CtAtWrFWuqJI8L";
+const API_KEY = "";
 
 app.post("/connections", async (req, res) => {
   const options = {

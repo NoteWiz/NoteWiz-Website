@@ -12,8 +12,11 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 // Import styles of default layout plugin
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
-// Define ChatMessage interface
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+
+// Define ChatMessage interface
 interface ChatMessage {
   title: string;
   role: string;
@@ -38,6 +41,8 @@ const cb = () => {
   const feedContainerRef = useRef<HTMLDivElement>(null);
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
+  //Toast function
+  const notify = () => toast.success("File Uploading!");
   // Function to reset chat state
   const createNewChat = () => {
     setMessage(null);
@@ -175,25 +180,31 @@ const cb = () => {
       </div>
 
       <div className="flex-1 p-8 flex justify-between overflow-auto">
-        <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 mr-4 overflow-y-auto">
+        <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 mr-4 overflow-y-auto" >
           {pdfFile ? (
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
               <Viewer
                 fileUrl={pdfFile}
                 plugins={[defaultLayoutPluginInstance]}
+              
               />
             </Worker>
-          ) : (
+          ): (
             <>
               <h2 className="text-2xl font-semibold mb-4">
                 Chat with Document
               </h2>
-
+              
               <div
-                className="border-4 border-dashed border-purple-500 rounded-lg p-8 text-center"
+                className="border-4 border-dashed border-purple-500 rounded-lg p-8 text-center cursor-pointer"
+                // onClick={notify}
                 {...getRootProps()}
+
+                
               >
-                <input {...getInputProps()} />
+                
+                <input {...getInputProps()} onClick={notify} />
+                
                 <div className="flex justify-center mb-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -203,6 +214,8 @@ const cb = () => {
                     stroke="currentColor"
                   >
                     <path
+
+                    className=" cursor-pointer"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
@@ -214,8 +227,20 @@ const cb = () => {
                   Click to Upload or Drop PDF/DOC here
                 </p>
 
-                <div className="flex justify-center space-x-4">
+                <div className="flex justify-center space-x-4 ">
                   <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg">
+                  <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="dark"
+                    />
                     <i className="fas fa-upload mr-2"></i>
                     Upload Files
                   </button>
