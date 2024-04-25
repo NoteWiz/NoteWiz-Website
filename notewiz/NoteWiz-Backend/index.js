@@ -1,74 +1,232 @@
+const port = 4000;
 import express from "express";
-const app = express();
-import mongoose from "mongoose";
-app.use(express.json());
+import fetch from "node-fetch";
 import cors from "cors";
-app.use(cors());
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
-
-app.use("/files", express.static("files"));
-import path from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename)
-//mongodb connection----------------------------------------------
-const mongoUrl =
-  "mongodb+srv://waqasfaraz75:KmxRIfxuR58AP225@cluster0.wawtxh6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-
-mongoose
-  .connect(mongoUrl, {
-    useNewUrlParser: true,
-  })
-  .then(() => {
-    console.log("Connected to database");
-  })
-  .catch((e) => console.log(e));
-//multer------------------------------------------------------------
-import multer from "multer";
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./files");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now();
-    cb(null, uniqueSuffix + file.originalname);
-  },
+import dotenv from "dotenv";
+import OpenAI from "openai";
+import fileUpload from "express-fileupload";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import NodeCache from "node-cache";
+import { createInterface } from "readline";
+const readline = createInterface({
+  input: process.stdin,
+  output: process.stdout,
 });
 
-import "./pdfDetails.js";
-const PdfSchema = mongoose.model("PdfDetails");
-const upload = multer({ storage: storage });
+dotenv.config();
 
-app.post("/upload-files", upload.single("file"), async (req, res) => {
-  console.log(req.file);
-  const title = req.body.title;
-  const fileName = req.file.filename;
+const app = express();
+app.use(express.json());
+app.use(cors());
+app.use(fileUpload());
+app.use("/upload", cors());
+const assistantCache = new NodeCache();
+
+const API_KEY = "sk-proj-qMnGA6kdxqdupWhzCTX9T3BlbkFJY7aMe3CtAtWrFWuqJI8L";
+
+app.post("/connections", async (req, res) => {
+  const options = {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: req.body.message }],
+      max_tokens: 100,
+    }),
+  };
   try {
-    await PdfSchema.create({ title: title, pdf: fileName });
-    res.send({ status: "ok" });
+    const response = await fetch(
+      "https://api.openai.com/v1/chat/completions",
+      options
+    );
+    const data = await response.json();
+    console.log(data);
+    res.send(data);
   } catch (error) {
-    res.json({ status: error });
+    console.log(error);
   }
 });
 
-app.get("/get-files", async (req, res) => {
-  try {
-    PdfSchema.find({}).then((data) => {
-      res.send({ status: "ok", data: data });
+app.post("/upload", async (req, res) => {
+  let myAssistant1 = assistantCache.get("myAssistant");
+  let userInput = req.body.message;
+  let fileId = req.body.fileId;
+  console.log(userInput);
+  const secretKey = API_KEY;
+  const openai = new OpenAI({
+    apiKey: secretKey,
+  });
+  var file;
+  var fileID;
+
+  if (!myAssistant1) {
+    myAssistant1 = await openai.beta.assistants.create({
+      instructions: "just do whatever the user says",
+      name: "Math Tutor",
+      model: "gpt-4-turbo",
     });
-  } catch (error) {}
+    assistantCache.set("myAssistant", myAssistant1);
+  } else {
+    console.log("assistant already created");
+  }
+  console.log("assistant 1", myAssistant1);
+  if (req.files) {
+    const __filename = fileURLToPath(import.meta.url);
+
+    // Get the directory path of the current file
+    const __dirname = path.dirname(__filename);
+
+    const uploadsDir = path.join(__dirname, "uploads");
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+
+    let uploadedFile = req.files.file;
+    console.log("file has been uploaded");
+    console.log(uploadedFile);
+
+    const fileExtension = path.extname(uploadedFile.name);
+
+    // Generate a unique filename
+    const fileName = `${Date.now()}_${Math.random()
+      .toString(36)
+      .substring(2, 15)}${fileExtension}`;
+
+    // Save the file to the uploads directory
+    const filePath = path.join(uploadsDir, fileName);
+    await uploadedFile.mv(filePath);
+
+    console.log(filePath);
+    //   Upload the file
+    file = await openai.files.create({
+      file: fs.createReadStream(filePath),
+      purpose: "assistants",
+    });
+    console.log(file);
+    var vectorStore = await openai.beta.vectorStores.create({
+      name: "NoteWiz",
+    });
+    console.log(vectorStore);
+    var myVectorStoreFile = await openai.beta.vectorStores.files.create(
+      vectorStore.id,
+      {
+        file_id: file.id,
+      }
+    );
+    console.log(myVectorStoreFile);
+    fileID = file.id;
+
+    // Fallback if no file is uploaded, create a generic assistant without file search tools
+    myAssistant1 = await openai.beta.assistants.update(myAssistant1.id, {
+      instructions: "just do whatever the user says",
+      name: "Math Tutor",
+      tools: [{ type: "file_search" }],
+      tool_resources: {
+        file_search: {
+          vector_store_ids: [vectorStore.id],
+        },
+      },
+      model: "gpt-4-turbo",
+    });
+    assistantCache.set("myAssistant", myAssistant1);
+    // }
+  }
+  if (userInput) {
+    let thread = await openai.beta.threads.create({
+      messages: [
+        {
+          role: "user",
+          content: userInput,
+          attachments: fileID
+            ? [{ file_id: fileID, tools: [{ type: "file_search" }] }]
+            : [],
+        },
+      ],
+    });
+    console.log("thread created", thread);
+
+    const stream = await openai.beta.threads.runs.create(thread.id, {
+      assistant_id: myAssistant1.id,
+      stream: true,
+    });
+    function cleanResponseText(text) {
+      return text.replace(/【\d+:\d+†source】/g, "");
+    }
+    for await (const event of stream) {
+      if (event.data && event.data.content) {
+        // Loop through each content item (assuming each content item follows the shown structure)
+        event.data.content.forEach((contentItem) => {
+          if (contentItem.text && contentItem.text.value) {
+            const cleanedText = cleanResponseText(contentItem.text.value);
+            console.log(cleanedText); // Now logging without the source marks
+            res.json({ messages: cleanedText });
+          }
+        });
+      } else {
+        console.log("Waiting for more data...");
+      }
+    }
+  } else {
+    console.log("error entering if block");
+  }
+});
+app.post("/chat", async (req, res) => {
+  const secretKey = API_KEY;
+  const openai = new OpenAI({
+    apiKey: secretKey,
+  });
+  let input = req.body.message;
+  console.log(input);
+
+  var myAssistant = await openai.beta.assistants.create({
+    instructions: "just do whatever the user says",
+    name: "Math Tutor",
+    tools: [{ type: "file_search" }],
+    model: "gpt-4-turbo",
+  });
+  console.log(myAssistant);
+  let thread = await openai.beta.threads.create({
+    messages: [
+      {
+        role: "user",
+        content: input,
+      },
+    ],
+  });
+  console.log("thread created", thread);
+
+  const stream = await openai.beta.threads.runs.create(thread.id, {
+    assistant_id: myAssistant.id,
+    stream: true,
+  });
+
+  for await (const event of stream) {
+    if (event.data && event.data.content) {
+      // Loop through each content item (assuming each content item follows the shown structure)
+      event.data.content.forEach((contentItem) => {
+        if (contentItem.text && contentItem.text.value) {
+          console.log(contentItem.text.value); // Log the value property
+          res.json({ messages: contentItem.text.value });
+        }
+      });
+    } else {
+      console.log("Waiting for more data...");
+    }
+  }
+});
+app.get("/", (req, res) => {
+  res.send("Connection established");
 });
 
-app.use('/components', express.static(path.join(__dirname, 'components')));
-
-
-//apis----------------------------------------------------------------
-app.get("/", async (req, res) => {
-  res.send("Success!!!!!!");
-});
-
-app.listen(4000, () => {
-  console.log("Server Started");
+app.listen(port, (error) => {
+  if (!error) {
+    console.log(`server running on port ${port}`);
+  } else {
+    console.log(error);
+  }
 });

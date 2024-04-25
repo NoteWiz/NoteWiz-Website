@@ -12,10 +12,8 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 // Import styles of default layout plugin
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
-
-const API_KEY = "sk-proj-L7lUhXh2ZthwV27ebxXkT3BlbkFJvwS1m9crm1ymRbMSzM0S";
-
 // Define ChatMessage interface
+
 interface ChatMessage {
   title: string;
   role: string;
@@ -23,6 +21,8 @@ interface ChatMessage {
 }
 
 const cb = () => {
+  let clicked = false;
+  const [fileId, setFileId] = useState<string | null>(null);
   // State variables
   const [value, setValue] = useState("");
   const [message, setMessage] = useState<{
@@ -31,28 +31,12 @@ const cb = () => {
   } | null>(null);
   const [previousChats, setPreviousChats] = useState<ChatMessage[]>([]);
   const [currentTitle, setCurrentTitle] = useState("");
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [uploadStatus, setuploadStatus] = useState<String>("");
-  const [Files, setFiles] = useState<File | null>(null);
-  const [allImage, setAllImage] = useState("");
-  // pdf file onChange state
   const [pdfFile, setPdfFile] = useState<string | null>(null);
-
-  // pdf file error state
-  const [pdfError, setPdfError] = useState("");
-
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
-
-  // handle file onChange event
- 
-  
-
-  // useEffect(()=>{
-  //   getPdf()
-  // },[])
-
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [render, setRender] = useState(false);
   // Ref for the chat feed container
   const feedContainerRef = useRef<HTMLDivElement>(null);
+  const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   // Function to reset chat state
   const createNewChat = () => {
@@ -70,25 +54,20 @@ const cb = () => {
 
   // Function to fetch messages
   const getMessages = async () => {
+    const formData = new FormData();
+    formData.append("message", value);
+
     const options = {
       method: "POST",
-      body: JSON.stringify({
-        message: value,
-        file: uploadedFiles,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      body: formData,
     };
 
     try {
-      const response = await fetch(
-        "http://localhost:4000/connections",
-        options
-      );
+      const response = await fetch("http://localhost:4000/upload", options);
       const data = await response.json();
+      console.log(data.messages);
 
-      setMessage(data.choices[0].message);
+      setMessage({ role: "Assistant", content: data.messages });
     } catch (error) {
       console.log(error);
     }
@@ -101,7 +80,7 @@ const cb = () => {
     }
     if (currentTitle && value && message) {
       setPreviousChats((prevChats) => [
-        ...prevChats,
+        ...previousChats,
         {
           title: currentTitle,
           role: "user",
@@ -114,7 +93,7 @@ const cb = () => {
         },
       ]);
       // Update the message state to null after processing
-      setMessage(null);
+      setMessage(null); //very imp
     }
   }, [message, currentTitle, value]);
 
@@ -127,48 +106,24 @@ const cb = () => {
     new Set(previousChats.map((previousChat) => previousChat.title))
   );
 
-  const submitImage = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData();
-    // formData.append("file", Files);
-
-    try {
-      const result = await fetch("http://localhost:4000/upload-files", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (result.ok) {
-        const data = await result.json();
-        console.log(data);
-      } else {
-        console.log("File upload failed:", result.status, result.statusText);
-      }
-    } catch (error) {
-      console.error("Error during file upload:", error);
-    }
-  };
-
-  const getPdf = async () => {
-    try {
-      const response = await fetch("http://localhost:4000/files");
-      if (!response.ok) {
-        throw new Error("Failed to fetch PDF files");
-      }
-      const data = await response.json();
-      console.log(data.data);
-      setAllImage(data.data);
-    } catch (error) {
-      console.error("Error fetching PDF files:", error);
-    }
-  };
+  // Function to handle file upload
 
   const onDrop = async (acceptedFiles: File[]) => {
     setUploadedFiles(acceptedFiles);
     const formData = new FormData();
-    // formData.append("userInput", value);
     formData.append("file", acceptedFiles[0]); // Assuming only one file is uploaded
     console.log(formData);
+    if (acceptedFiles) {
+      let reader = new FileReader();
+      reader.readAsDataURL(acceptedFiles[0]);
+      reader.onload = (e) => {
+        setPdfFile((e.target?.result as string) || null);
+        console.log("fucking finally");
+        console.log(acceptedFiles[0]);
+      };
+    } else {
+      console.log("please select another pdf");
+    }
 
     try {
       const response = await fetch("http://localhost:4000/upload", {
@@ -177,8 +132,6 @@ const cb = () => {
       });
       const data = await response.json();
       console.log("file uploaded");
-      // setFileId(data.fileId);
-      // console.log(response.json());
       // Handle response as needed
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -188,33 +141,6 @@ const cb = () => {
   // UseDropzone hook configuration
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
-  //   // Function to handle file upload
-  //   const formData = new FormData();
-  //   formData.append("pdf", selectedFiles);
-
-  //   try {
-  //     const response = await fetch("http://localhost:4000/upload", {
-  //       method: "POST",
-  //       body: formData,
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //     });
-
-  //     if (response.ok) {
-  //       const data = await response.text();
-  //       setuploadStatus(data);
-  //     } else {
-  //       throw new Error("failed to upload");
-  //     }
-  //   } catch (error) {
-  //     console.log("error uploading pdf", error);
-  //   }
-  // };
-
-  // UseDropzone hook configuration
-  // const { getRootProps, getInputProps } = useDropzone({ onDrop });
-
   // Scroll the chat feed container to the bottom
   useEffect(() => {
     if (feedContainerRef.current) {
@@ -223,35 +149,9 @@ const cb = () => {
     }
   }, [previousChats]);
 
-
-
-
-
-
-  const handleFile=(e:any)=>{
-    let selectedFiles = e.target.files[0]
-    console.log(selectedFiles.type)
-    if(selectedFiles)
-      {
-        let reader = new FileReader();
-        reader.readAsDataURL(selectedFiles)
-        reader.onload=(e)=>{
-          setPdfFile(e.target?.result as string|| null)
-          console.log("fucking finally")
-        }
-      }
-      else{
-        console.log('please select another pdf')
-      }
-  }
-
-
-
-
   return (
     <div className="flex h-screen font-roboto">
-      {/* Sidebar */}
-      <div className="bg-gray-800 text-white p-6 w-1/9 transition-transform -translate-x-full sm:translate-x-0">
+      <div className="bg-gray-800 text-white p-6 w-1/6 transition-transform -translate-x-full sm:translate-x-0">
         <button
           onClick={createNewChat}
           className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded mb-6 w-full"
@@ -274,128 +174,124 @@ const cb = () => {
         </nav>
       </div>
 
-      {/* Main Content */}
       <div className="flex-1 p-8 flex justify-between overflow-auto">
-        {/* Document Upload Section */}
-        <div className="bg-white rounded-lg shadow-lg p-4 w-90">
-          <h2 className="text-2xl font-semibold mb-4">Chat with Document</h2>
-          {/* <div className="border-4 border-dashed border-purple-500 rounded-lg p-8 text-center" {...getRootProps()}> */}
-          {/* <input {...getInputProps()} /> */}
-          <div className="flex justify-center mb-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-8 w-8 text-purple-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+        <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 mr-4 overflow-y-auto">
+          {pdfFile ? (
+            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+              <Viewer
+                fileUrl={pdfFile}
+                plugins={[defaultLayoutPluginInstance]}
               />
-            </svg>
-          </div>
-          <p className="text-gray-600 mb-4">
-            Click to Upload or Drop PDF/DOC here
-          </p>
-          <div className="flex justify-center space-x-4">
-            <form
-              // action="/upload-files"
-              // onSubmit={submitImage}
-              // method="post"
-              // encType="multipart/form-data"
-            >
-              {/* input feild */}
-              <input
-                type="file"
-                onChange={handleFile}
-                accept="application/pdf"
-                // onChange={(e)=>setFiles(e.target.files?.[0] || null)}
-                name="file"
-                className=" border-none text-purple-600"
-              />
+            </Worker>
+          ) : (
+            <>
+              <h2 className="text-2xl font-semibold mb-4">
+                Chat with Document
+              </h2>
 
-              {/* submit button */}
-              <button
-                className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg"
-                // onClick={handleUpload}
-                // onClick={(e)=>{
-                //   handleFile
-                //   e.preventDefault()
-                // }}
-                type="submit"
+              <div
+                className="border-4 border-dashed border-purple-500 rounded-lg p-8 text-center"
+                {...getRootProps()}
               >
-                <i className="fas fa-upload mr-2"></i>
-                Upload Files
-              </button>
-              {/* <button className="bg-black" onClick={()=>showPdf(allImage)}>Show PDF</button> */}
-            </form>
+                <input {...getInputProps()} />
+                <div className="flex justify-center mb-4">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-8 w-8 text-purple-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                    />
+                  </svg>
+                </div>
+                <p className="text-gray-600 mb-4">
+                  Click to Upload or Drop PDF/DOC here
+                </p>
 
-          </div>
-            <div>
-              {pdfFile && (
-                <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                <Viewer fileUrl={pdfFile}
-                plugins={[defaultLayoutPluginInstance]}></Viewer>
-              </Worker>
-              )}
+                <div className="flex justify-center space-x-4">
+                  <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg">
+                    <i className="fas fa-upload mr-2"></i>
+                    Upload Files
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+
+          {uploadedFiles.length > 0 && (
+            <div className="mt-4">
+              <h4 className="text-lg font-bold">Uploaded Files</h4>
+              <ul className="list-disc list-inside">
+                {uploadedFiles.map((file, index) => (
+                  <li key={index}>
+                    {file.name} - {file.size} bytes
+                  </li>
+                ))}
+              </ul>
             </div>
+          )}
         </div>
-        {uploadedFiles.length > 0 && (
-          <div className="mt-4">
-            <h4 className="text-lg font-bold">Uploaded Files</h4>
-            <ul className="list-disc list-inside">
-              {uploadedFiles.map((file, index) => (
-                <li key={index}>
-                  {file.name} - {file.size} bytes
+
+        <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 overflow-y-auto flex flex-col justify-between">
+          <div
+            ref={feedContainerRef}
+            className="feed h-[80vh] overflow-y-auto rounded-lg bg-gray-100 p-4"
+          >
+            <ul className="feed p-0 w-full">
+              {currentChat?.map((chatMessage, index) => (
+                <li
+                  className={`flex w-full my-2 ${
+                    chatMessage.role === "user"
+                      ? "justify-end"
+                      : "justify-start"
+                  }`}
+                  key={index}
+                >
+                  <div
+                    className={`rounded-lg px-4 py-2 max-w-[70%] ${
+                      chatMessage.role === "user"
+                        ? "bg-purple-100 text-purple-800"
+                        : "bg-gray-200 text-gray-800"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2 mb-1">
+                      <span
+                        className={`font-bold ${
+                          chatMessage.role === "user"
+                            ? "text-purple-600"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        {chatMessage.role === "user" ? "You" : "Assistant"}
+                      </span>
+                    </div>
+                    <p>{chatMessage.content}</p>
+                  </div>
                 </li>
               ))}
             </ul>
           </div>
-        )}
-      </div>
 
-      {/* Chat Feed and User Input */}
-      <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 overflow-y-auto flex flex-col justify-between">
-        <div
-          ref={feedContainerRef}
-          className="feed max-h-[300px] overflow-y-auto"
-        >
-          <ul className="feed p-0 w-full">
-            {currentChat?.map((chatMessage, index) => (
-              <li className="flex bg-gray-200 w-full p-4 my-4" key={index}>
-                <p className="role w-32 font-semibold">{chatMessage.role}</p>
-                <p className="flex-grow">{chatMessage.content}</p>
-              </li>
-            ))}
-          </ul>
+          <div className="flex w-full items-center space-x-2 justify-between p-2 mt-4 bg-gray-100 rounded-lg">
+            <Input
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="Enter prompt"
+              className="flex-grow"
+            />
+            <Button type="submit" onClick={getMessages}>
+              Enter
+            </Button>
+          </div>
         </div>
-
-        {/* User Input */}
-        <div className="flex w-full items-center space-x-2 justify-between p-2 shadow-xl">
-          <Input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="Enter prompt"
-          />
-          <Button type="submit" onClick={getMessages}>
-            Enter
-          </Button>
-        </div>
-      {/* <button className="bg-black">Display pdf</button> */}
-      {/* {pdfFile&&(
-      <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.12/build/pdf.worker.min.js">
-        <Viewer
-          // fileUrl={pdfFile}
-          plugins={[defaultLayoutPluginInstance]}
-        ></Viewer>
-      </Worker>
-      )} */}
       </div>
     </div>
-    // </div>
   );
 };
 
