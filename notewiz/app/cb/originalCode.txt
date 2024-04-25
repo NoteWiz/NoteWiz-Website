@@ -1,0 +1,46 @@
+
+
+
+next js verison code----------------------------------------------------------------
+
+ const allowedFiles = ['application/pdf'];
+
+  const handleFile = (e: any) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      if (allowedFiles.includes(selectedFile.type)) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          if (event.target && event.target.result) {
+            const result = event.target.result;
+            let pdfData: File | null = null;
+  
+            if (result instanceof ArrayBuffer) {
+              // Convert ArrayBuffer to Blob
+              const blob = new Blob([result], { type: 'application/pdf' });
+              // Create a File object from the Blob
+              pdfData = new File([blob], selectedFile.name, { type: 'application/pdf' });
+  
+              console.log("File data:", pdfData);
+              setPdfFile(pdfData);
+              setPdfError('');
+            } else {
+              console.error('Invalid result type:', typeof result);
+              setPdfError('Invalid result type. Please select a valid PDF file.');
+            }
+          } else {
+            console.error('No result in event:', event);
+            setPdfError('No result found in event. Please try again.');
+          }
+        };
+        reader.readAsArrayBuffer(selectedFile);
+      } else {
+        // Handle invalid file type
+        console.error('Invalid file type:', selectedFile.type);
+        setPdfError('Invalid file type. Please select a PDF file.');
+      }
+    } else {
+      console.error('No file selected');
+      setPdfError('No file selected. Please choose a PDF file.');
+    }
+  };
