@@ -10,7 +10,7 @@ const items = [
   {
     src: MessagesSquare,
     label: "Chat Now",
-    route: "/FuncSidebar",
+    route: "/cb",
   },
   {
     src: LayoutDashboard,
@@ -25,7 +25,7 @@ const items = [
   {
     src: Brain,
     label: "Mindmaps",
-    route: "/mindmaps",
+    route: "/",
   },
   {
     src: Layers3,
@@ -35,12 +35,12 @@ const items = [
   {
     src: Settings,
     label: "Settings",
-    route: "/history",
+    route: "/dashboard",
   },
   {
     src: CircleUserRound,
     label: "Account",
-    route: "/account",
+    route: "/onboarding",
   },
 ];
 
