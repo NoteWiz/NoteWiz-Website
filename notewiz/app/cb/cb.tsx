@@ -42,7 +42,7 @@ const cb = () => {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   //Toast function
-  const notify = () => toast.success("File Uploading!");
+  const notify = () => toast.success("File Uploading!",{theme:'colored'});
   // Function to reset chat state
   const createNewChat = () => {
     setMessage(null);
