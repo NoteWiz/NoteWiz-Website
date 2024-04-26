@@ -16,7 +16,7 @@ const S = () => {
     <div className="w-[250px] h-screen top-0 right-0">
       <div
         className={`w-full h-screen bg-[#042039] flex flex-col text-white rounded-tr-xl ${
-          collapse ? "w-[90px]" : ""
+          collapse ? "w-[100px]" : ""
         }`}
       >
         <div className="flex px-6 gap-6 flex-col w-full mt-[60px]">
@@ -51,13 +51,7 @@ const S = () => {
                 collapse ? "justify-center w-[60px] mx-[-9px]  " : ""
               }`}
             >
-              <Image
-                src={item.src}
-                alt=""
-                height={22}
-                width={22}
-                className=""
-              />
+               {React.createElement(eval(item.src),{color:"white",size:22})}
               <p className={`text-white ${collapse ? "hidden" : " "}`}>
                 {item.label}
               </p>
@@ -65,11 +59,7 @@ const S = () => {
           ))}
         </div>
       </div>
-      <div className="w-1/4">
-        <button className="bg-red-500 border-none " onClick={handleClick}>
-          Collapse
-        </button>
-      </div>
+     
     </div>
   );
 };
