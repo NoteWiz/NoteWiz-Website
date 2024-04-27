@@ -1,3 +1,4 @@
+import { DM_Sans, Bricolage_Grotesque} from "next/font/google"
 import type { Config } from "tailwindcss"
 
 const config = {
@@ -20,6 +21,10 @@ const config = {
     extend: {
       spacing:{
         'custom-padding':'460px'
+      },
+      fontFamily:{
+        DM_Sans:['DM Sans','sans-serif'],
+        Bricolage_Grotesque:['Bricolage Grotesque','sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
