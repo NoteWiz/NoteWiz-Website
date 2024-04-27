@@ -1,0 +1,6 @@
+paassword is : WrRFMHZXfMxPk0i!
+
+mongodb password : KmxRIfxuR58AP225
+mongodb username : waqasfaraz75
+
+mongodb+srv://waqasfaraz75:KmxRIfxuR58AP225@cluster0.wawtxh6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0

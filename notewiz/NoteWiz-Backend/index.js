@@ -8,8 +8,7 @@ import fileUpload from "express-fileupload";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-// import { ReadLine } from "readline";
-// import { promises as fs, createReadStream } from "fs";
+import NodeCache from "node-cache";
 import { createInterface } from "readline";
 const readline = createInterface({
   input: process.stdin,
@@ -22,8 +21,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(fileUpload());
+app.use("/upload", cors());
+const assistantCache = new NodeCache();
 
-const API_KEY = "sk-proj-QXvDMcXyKYvi7S3YFwfqT3BlbkFJb3MRit1lZ0l398aLUPBm";
+const API_KEY = "sk-proj-vCipiD9ttKmrlYrLzRc2T3BlbkFJ9VmGOW42qcL9JDnBObxU";
 
 app.post("/connections", async (req, res) => {
   const options = {
@@ -50,66 +51,78 @@ app.post("/connections", async (req, res) => {
     console.log(error);
   }
 });
+
 app.post("/upload", async (req, res) => {
+  let myAssistant1 = assistantCache.get("myAssistant");
   let userInput = req.body.message;
+  let fileId = req.body.fileId;
   console.log(userInput);
-  const __filename = fileURLToPath(import.meta.url);
-
-  // Get the directory path of the current file
-  const __dirname = path.dirname(__filename);
-
-  const uploadsDir = path.join(__dirname, "uploads");
-
-  // Create the uploads directory if it doesn't exist
-  if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
-  }
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send("No files were uploaded.");
-  }
-
-  const uploadedFile = req.files.file;
-  console.log("file has been uploaded");
-  console.log(uploadedFile);
-
-  const fileExtension = path.extname(uploadedFile.name);
-
-  // Generate a unique filename
-  const fileName = `${Date.now()}_${Math.random()
-    .toString(36)
-    .substring(2, 15)}${fileExtension}`;
-
-  // Save the file to the uploads directory
-  const filePath = path.join(uploadsDir, fileName);
-  await uploadedFile.mv(filePath);
-
-  console.log(filePath);
-  // Create a OpenAI connection
   const secretKey = API_KEY;
   const openai = new OpenAI({
     apiKey: secretKey,
   });
+  var file;
+  var fileID;
 
-  async function main() {
-    let fileName = "./assistant.txt";
+  if (!myAssistant1) {
+    myAssistant1 = await openai.beta.assistants.create({
+      instructions: "just do whatever the user says",
+      name: "Math Tutor",
+      model: "gpt-4-turbo",
+    });
+    assistantCache.set("myAssistant", myAssistant1);
+  } else {
+    console.log("assistant already created");
+  }
+  console.log("assistant 1", myAssistant1);
+  if (req.files) {
+    const __filename = fileURLToPath(import.meta.url);
+
+    // Get the directory path of the current file
+    const __dirname = path.dirname(__filename);
+
+    const uploadsDir = path.join(__dirname, "uploads");
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+
+    let uploadedFile = req.files.file;
+    console.log("file has been uploaded");
+    console.log(uploadedFile);
+
+    const fileExtension = path.extname(uploadedFile.name);
+
+    // Generate a unique filename
+    const fileName = `${Date.now()}_${Math.random()
+      .toString(36)
+      .substring(2, 15)}${fileExtension}`;
+
+    // Save the file to the uploads directory
+    const filePath = path.join(uploadsDir, fileName);
+    await uploadedFile.mv(filePath);
+
+    console.log(filePath);
     //   Upload the file
-    let file = await openai.files.create({
+    file = await openai.files.create({
       file: fs.createReadStream(filePath),
       purpose: "assistants",
     });
     console.log(file);
-    const vectorStore = await openai.beta.vectorStores.create({
+    var vectorStore = await openai.beta.vectorStores.create({
       name: "NoteWiz",
     });
     console.log(vectorStore);
-    const myVectorStoreFile = await openai.beta.vectorStores.files.create(
+    var myVectorStoreFile = await openai.beta.vectorStores.files.create(
       vectorStore.id,
       {
         file_id: file.id,
       }
     );
     console.log(myVectorStoreFile);
-    let myAssistant = await openai.beta.assistants.create({
+    fileID = file.id;
+
+    // Fallback if no file is uploaded, create a generic assistant without file search tools
+    myAssistant1 = await openai.beta.assistants.update(myAssistant1.id, {
       instructions: "just do whatever the user says",
       name: "Math Tutor",
       tools: [{ type: "file_search" }],
@@ -120,126 +133,91 @@ app.post("/upload", async (req, res) => {
       },
       model: "gpt-4-turbo",
     });
+    assistantCache.set("myAssistant", myAssistant1);
+    // }
+  }
+  if (userInput) {
+    let thread = await openai.beta.threads.create({
+      messages: [
+        {
+          role: "user",
+          content: userInput,
+          attachments: fileID
+            ? [{ file_id: fileID, tools: [{ type: "file_search" }] }]
+            : [],
+        },
+      ],
+    });
+    console.log("thread created", thread);
 
-    console.log(myAssistant);
-
-    // let fileContent = await openai.files.content(file.id);
-    // console.log(fileContent);
-    //   });
-    //   const fileContent = await openai.files.content(file.id);
-    //   console.log(fileContent);
-
-    // let thread = await openai.beta.threads.create({
-    //   messages: [
-    //     {
-    //       role: "user",
-    //       content: "2+2 is equal to?",
-    //       // Attach the new file to the message.
-    //       attachments: [{ file_id: file.id, tools: [{ type: "file_search" }] }],
-    //     },
-    //   ],
-    // });
-    // console.log(thread.tool_resources?.file_search);
-    // readline.setPrompt("You > ");
-    // readline.prompt();
-
-    let thread;
-
-    // readline.on("line", async (userInput) => {
-    if (!thread) {
-      thread = await openai.beta.threads.create({
-        messages: [
-          {
-            //   role: "system",
-            //   content: uploadedFile.data.toString("utf-8"),
-            //   attachments: [
-            //     {
-            //       file_id: file.id,
-            //       tools: [{ type: "file_search" }],
-            //     },
-            //   ],
-            role: "user",
-            content: userInput,
-            attachments: [
-              {
-                file_id: file.id,
-                tools: [{ type: "file_search" }],
-              },
-            ],
-          },
-        ],
-      });
-    } else {
-      await openai.beta.threads.messages.create(thread.id, {
-        role: "user",
-        content: userInput,
-      });
+    const stream = await openai.beta.threads.runs.create(thread.id, {
+      assistant_id: myAssistant1.id,
+      stream: true,
+    });
+    function cleanResponseText(text) {
+      return text.replace(/【\d+:\d+†source】/g, "");
     }
-
-    //   const run = openai.beta.threads.runs
-    //     .stream(thread.id, {
-    //       assistant_id: myAssistant.id,
-    //     })
-    //     .on("textCreated", (text) => process.stdout.write("\nassistant > "))
-    //     .on("textDelta", (textDelta, snapshot) =>
-    //       process.stdout.write(textDelta.value)
-    //     )
-    //     .on("toolCallCreated", (toolCall) =>
-    //       process.stdout.write(`\nassistant > ${toolCall.type}\n\n`)
-    //     )
-    //     .on("toolCallDelta", (toolCallDelta, snapshot) => {
-    //       if (toolCallDelta.type === "file_search") {
-    //         if (toolCallDelta.file_search) {
-    //           process.stdout.write(toolCallDelta.file_search.file.id);
-    //         }
-    //         if (toolCallDelta.file_search) {
-    //           process.stdout.write("\noutput >\n");
-    //           toolCallDelta.file_search.forEach((output) => {
-    //             if (output.type === "logs") {
-    //               process.stdout.write(`\n${output.logs}\n`);
-    //             }
-    //           });
-    //         }
-    //       }
-    //     });
-    const stream = openai.beta.threads.runs
-      .stream(thread.id, {
-        assistant_id: myAssistant.id,
-      })
-      .on("textCreated", () => console.log("assistant >"))
-      .on("toolCallCreated", (event) => console.log("assistant " + event.type))
-      .on("messageDone", async (event) => {
-        if (event.content[0].type === "text") {
-          const { text } = event.content[0];
-          const { annotations } = text;
-          const citations = [];
-          const data = await annotation.text.json();
-          res.send(data);
-          let index = 0;
-          for (let annotation of annotations) {
-            text.value = text.value.replace(annotation.text, "[" + index + "]");
-            const { file_citation } = annotation;
-            if (true) {
-              const citedFile = await openai.files.retrieve(file.id);
-              citations.push("[" + index + "]" + citedFile.filename);
-            }
-            index++;
+    for await (const event of stream) {
+      if (event.data && event.data.content) {
+        // Loop through each content item (assuming each content item follows the shown structure)
+        event.data.content.forEach((contentItem) => {
+          if (contentItem.text && contentItem.text.value) {
+            const cleanedText = cleanResponseText(contentItem.text.value);
+            console.log(cleanedText); // Now logging without the source marks
+            res.json({ messages: cleanedText });
           }
+        });
+      } else {
+        console.log("Waiting for more data...");
+      }
+    }
+  } else {
+    console.log("error entering if block");
+  }
+});
+app.post("/chat", async (req, res) => {
+  const secretKey = API_KEY;
+  const openai = new OpenAI({
+    apiKey: secretKey,
+  });
+  let input = req.body.message;
+  console.log(input);
 
-          // console.log(text.value);
-          // console.log(citations.join("\n"));
+  var myAssistant = await openai.beta.assistants.create({
+    instructions: "just do whatever the user says",
+    name: "Math Tutor",
+    tools: [{ type: "file_search" }],
+    model: "gpt-4-turbo",
+  });
+  console.log(myAssistant);
+  let thread = await openai.beta.threads.create({
+    messages: [
+      {
+        role: "user",
+        content: input,
+      },
+    ],
+  });
+  console.log("thread created", thread);
+
+  const stream = await openai.beta.threads.runs.create(thread.id, {
+    assistant_id: myAssistant.id,
+    stream: true,
+  });
+
+  for await (const event of stream) {
+    if (event.data && event.data.content) {
+      // Loop through each content item (assuming each content item follows the shown structure)
+      event.data.content.forEach((contentItem) => {
+        if (contentItem.text && contentItem.text.value) {
+          console.log(contentItem.text.value); // Log the value property
+          res.json({ messages: contentItem.text.value });
         }
       });
-
-    //   readline.prompt();
-    // });
-
-    readline.on("close", () => {
-      console.log("Exiting...");
-      process.exit(0);
-    });
+    } else {
+      console.log("Waiting for more data...");
+    }
   }
-  main().catch(console.error);
 });
 app.get("/", (req, res) => {
   res.send("Connection established");
