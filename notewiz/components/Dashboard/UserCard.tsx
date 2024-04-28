@@ -14,6 +14,8 @@ const UserCard = () => {
 
   if (session) {
     return (
+      <div>
+        
       <div className="pl-custom-padding mb-10 mt-10">
         <div className="grid grid-cols-2">
           <div className=" items-center">
@@ -28,6 +30,7 @@ const UserCard = () => {
             </button>
           </div>
         </div>
+      </div>
       </div>
     );
   }
