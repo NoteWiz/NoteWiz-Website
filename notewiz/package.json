@@ -11,6 +11,9 @@
   "dependencies": {
     "-": "^0.0.1",
     "@auth/prisma-adapter": "^1.6.0",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.15",
     "@prisma/client": "^5.12.1",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-scroll-area": "^1.0.5",
@@ -25,16 +28,23 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "dotenv": "^16.4.5",
+    "express-fileupload": "^1.5.0",
+    "fs": "^0.0.1-security",
     "lucide-react": "^0.365.0",
     "mongodb": "^6.5.0",
     "mongoose": "^8.3.2",
     "next": "14.1.4",
     "next-auth": "^4.24.7",
+<<<<<<< HEAD
     "prettier-plugin-tailwindcss": "^0.5.14",
+=======
+    "openai": "^4.38.2",
+>>>>>>> 3c208b21b5e869c2cf35518f916b3d6b048f055a
     "react": "^18.2.0",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-pdf": "^7.7.1",
+    "react-pdf-viewer": "^0.1.0",
     "react-responsive": "^10.0.0",
     "react-scrollbars-custom": "^4.1.1",
     "react-toastify": "^10.0.5",

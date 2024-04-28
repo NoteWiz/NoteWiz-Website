@@ -10,6 +10,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import NodeCache from "node-cache";
 import { createInterface } from "readline";
+import bodyParser from "body-parser";
 const readline = createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -22,35 +23,10 @@ app.use(express.json());
 app.use(cors());
 app.use(fileUpload());
 app.use("/upload", cors());
+app.use(bodyParser.json());
 const assistantCache = new NodeCache();
 
 const API_KEY = "";
-
-app.post("/connections", async (req, res) => {
-  const options = {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: req.body.message }],
-      max_tokens: 100,
-    }),
-  };
-  try {
-    const response = await fetch(
-      "https://api.openai.com/v1/chat/completions",
-      options
-    );
-    const data = await response.json();
-    console.log(data);
-    res.send(data);
-  } catch (error) {
-    console.log(error);
-  }
-});
 
 app.post("/upload", async (req, res) => {
   let myAssistant1 = assistantCache.get("myAssistant");
@@ -175,49 +151,65 @@ app.post("/upload", async (req, res) => {
     console.log("error entering if block");
   }
 });
-app.post("/chat", async (req, res) => {
+app.post("/flashcard", async (req, res) => {
+  let myAssistant1 = assistantCache.get("myAssistant");
+  let userInput = req.body.message;
+  let flashcards = [];
   const secretKey = API_KEY;
   const openai = new OpenAI({
     apiKey: secretKey,
   });
-  let input = req.body.message;
-  console.log(input);
 
-  var myAssistant = await openai.beta.assistants.create({
-    instructions: "just do whatever the user says",
-    name: "Math Tutor",
-    tools: [{ type: "file_search" }],
-    model: "gpt-4-turbo",
-  });
-  console.log(myAssistant);
-  let thread = await openai.beta.threads.create({
-    messages: [
-      {
-        role: "user",
-        content: input,
-      },
-    ],
-  });
-  console.log("thread created", thread);
+  console.log(userInput);
 
-  const stream = await openai.beta.threads.runs.create(thread.id, {
-    assistant_id: myAssistant.id,
-    stream: true,
-  });
-
-  for await (const event of stream) {
-    if (event.data && event.data.content) {
-      // Loop through each content item (assuming each content item follows the shown structure)
-      event.data.content.forEach((contentItem) => {
-        if (contentItem.text && contentItem.text.value) {
-          console.log(contentItem.text.value); // Log the value property
-          res.json({ messages: contentItem.text.value });
-        }
-      });
-    } else {
-      console.log("Waiting for more data...");
-    }
+  if (!myAssistant1) {
+    myAssistant1 = await openai.beta.assistants.create({
+      instructions:
+        "you are a flashcard generator, that generates flashcard in the format of front and back based on the text entered by the user, the front should not be in the form of question and send the response in the form of an array of json objects with keys as front and back and not in the form of string so that the user can access the values by tapping into the keys of the array",
+      name: "flashcard generator",
+      model: "gpt-4-turbo",
+    });
+    assistantCache.set("myAssistant", myAssistant1);
+  } else {
+    console.log("assistant already created");
   }
+  let thread;
+  console.log(myAssistant1);
+  if (userInput) {
+    thread = await openai.beta.threads.create({
+      messages: [
+        {
+          role: "user",
+          content: userInput,
+        },
+      ],
+    });
+
+    console.log("thread created", thread);
+
+    const stream = await openai.beta.threads.runs.create(thread.id, {
+      assistant_id: myAssistant1.id,
+      stream: true,
+    });
+
+    for await (const event of stream) {
+      if (event.data && event.data.content) {
+        // Loop through each content item (assuming each content item follows the shown structure)
+        event.data.content.forEach((contentItem) => {
+          if (contentItem.text && contentItem.text.value) {
+            console.log(contentItem.text.value); // Log the value property
+            const flashCard = JSON.parse(contentItem.text.value);
+            flashcards.push(flashCard);
+          }
+        });
+      } else {
+        console.log("Waiting for more data...");
+      }
+    }
+  } else {
+    console.log("error entering if block");
+  }
+  res.json(flashcards);
 });
 app.get("/", (req, res) => {
   res.send("Connection established");

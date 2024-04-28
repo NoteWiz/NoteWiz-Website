@@ -11,8 +11,14 @@ import { useRouter } from "next/navigation";
 const UserCard = () => {
   const { data: session, status: sessionStatus } = useSession();
   const router = useRouter();
+  if (sessionStatus === "loading") {
+    return <div>Loading...</div>; // Show a loading state while session is being loaded
+  }
+  if (sessionStatus === "unauthenticated") {
+    return <div>Please sign in to view your account.</div>; // Show a message or redirect to sign-in page
+  }
 
-  if (session) {
+  if (sessionStatus === "authenticated") {
     return (
       <div>
         
@@ -34,6 +40,7 @@ const UserCard = () => {
       </div>
     );
   }
+  return null;
 };
 
 export default UserCard;
