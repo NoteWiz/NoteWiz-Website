@@ -24,7 +24,7 @@ const config = {
       },
       fontFamily:{
         DM_Sans:['DM Sans','sans-serif'],
-        Bricolage_Grotesque:['Bricolage Grotesque','sans-serif'],
+        grotesk:['--font-grotesque']
       },
       colors: {
         border: "hsl(var(--border))",
@@ -82,7 +82,7 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), "prettier-plugin-tailwindcss"],
 } satisfies Config
 
 export default config

@@ -13,28 +13,28 @@ const S = () => {
     setCollapse(!collapse);
   };
   return (
-    <div className="w-[250px] h-screen top-0 right-0">
+    <div className={`w-[250px] h-screen top-0 left-0 fixed transition-all duration-300 ease-in-out font-regular ${
+      collapse ? "w-[100px]" : ""
+    }`}>
       <div
-        className={`w-full h-screen bg-[#042039] flex flex-col text-white rounded-tr-xl ${
-          collapse ? "w-[100px]" : ""
-        }`}
+        className={`w-full h-screen bg-[#0074D9] flex flex-col text-white rounded-tr-xl transition-all duration-300 ease-in-out`}
       >
-        <div className="flex px-6 gap-6 flex-col w-full mt-[60px]">
+        <div className={`flex px-6 gap-6 flex-col mt-[60px] `}>
           <div
-            className={` relative align-middle justify-between items-center  pl-4   text-lg rounded-xl  flex ${
+            className={` relative align-middle justify-between items-center  pl-4   text-lg rounded-xl  flex${
               collapse ? "w-[200px]" : ""
             }`}
           >
             <p
-              className={` font-bold cursor-pointer ${
+              className={` font-bold text-2xl cursor-pointer ${
                 collapse ? "hidden" : ""
               }`}
             >
               NoteWiz
             </p>
-            <div className="relative">
+            <div className="relative transition-all duration-300 ease-in-out">
               <button
-                className={` bg-green-500 p-1.5 relative -right-8 top-[-15px]  rounded-full`}
+                className={` bg-[#FFC700] p-1.5 relative -right-8 top-[-15px]  rounded-full`}
                 onClick={handleClick}
               >
                 {collapse ? <ChevronLast color="white" className=""/> : <ChevronFirst color="white"/>}
@@ -47,7 +47,7 @@ const S = () => {
             <Link
               href={item.route}
               key={item.label}
-              className={`flex gap-3 my-[-7px] pl-4 pr-4 hover:bg-[#011527] py-4 rounded-xl ${
+              className={`flex gap-3 my-[-7px] pl-4 pr-4 hover:bg-[#005EB0] py-4 rounded-xl ${
                 collapse ? "justify-center w-[60px] mx-[-9px]  " : ""
               }`}
             >

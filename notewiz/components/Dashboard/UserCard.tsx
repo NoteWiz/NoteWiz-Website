@@ -7,6 +7,7 @@ import Followers from "@/app/(images)/Followers.png";
 import UserProfile from "@/app/(images)/UserProfile.png";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Avatar from "@/assets/icons/big.png"
 
 const UserCard = () => {
   const { data: session, status: sessionStatus } = useSession();
@@ -20,17 +21,17 @@ const UserCard = () => {
 
   if (sessionStatus === "authenticated") {
     return (
-      <div className="pl-custom-padding mb-10 mt-10">
-        <div className="grid grid-cols-2">
-          <div className=" items-center">
-            <h1 className="text-xl font-bold"> Account Name</h1>
+      <div className="pl-custom-padding mb-10 mt-10 ">
+        <div className="flex flex-row justify-between w-[60%] ">
+          <div>
+            <h1 className="text-2xl font-bold "> Account Name</h1>
             <p className="mb-5">Username</p>
             <p> Joining Date </p>
             <p> Followers </p>
           </div>
           <div>
             <button onClick={() => signOut({ callbackUrl: "/login" })}>
-              <Image src={UserProfile} alt="" width={90}></Image>
+              <Image src={Avatar} alt="" width={150} height={90}></Image>
             </button>
           </div>
         </div>
