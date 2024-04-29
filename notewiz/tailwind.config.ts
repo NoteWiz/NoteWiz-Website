@@ -1,3 +1,4 @@
+import { DM_Sans, Bricolage_Grotesque} from "next/font/google"
 import type { Config } from "tailwindcss"
 
 const config = {
@@ -20,6 +21,10 @@ const config = {
     extend: {
       spacing:{
         'custom-padding':'460px'
+      },
+      fontFamily:{
+        DM_Sans:['DM Sans','sans-serif'],
+        grotesk:['--font-grotesque']
       },
       colors: {
         border: "hsl(var(--border))",
@@ -77,7 +82,7 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), "prettier-plugin-tailwindcss"],
 } satisfies Config
 
 export default config
