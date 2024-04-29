@@ -211,6 +211,219 @@ app.post("/flashcard", async (req, res) => {
   }
   res.json(flashcards);
 });
+
+app.post("/generate", async (req, res) => {
+  let info = false;
+  console.log("in backend");
+  // const binaryStr = req.body.fileData; // Access file data from the request body
+  try {
+    var file;
+    var fileID;
+    let myAssistant1 = assistantCache.get("myAssistant");
+    const secretKey = API_KEY;
+    const openai = new OpenAI({
+      apiKey: secretKey,
+    });
+    if (!myAssistant1) {
+      myAssistant1 = await openai.beta.assistants.create({
+        instructions: "just do whatever the user says",
+        name: "Math Tutor",
+        model: "gpt-4-turbo",
+      });
+      assistantCache.set("myAssistant", myAssistant1);
+    } else {
+      console.log("assistant already created");
+    }
+    if (req.files) {
+      const __filename = fileURLToPath(import.meta.url);
+
+      // Get the directory path of the current file
+      const __dirname = path.dirname(__filename);
+
+      const uploadsDir = path.join(__dirname, "QuizUploads");
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
+      }
+
+      let uploadedFile = req.files.file;
+      console.log("file has been uploaded");
+      console.log(uploadedFile);
+
+      const fileExtension = path.extname(uploadedFile.name);
+
+      // Generate a unique filename
+      const fileName = `${Date.now()}_${Math.random()
+        .toString(36)
+        .substring(2, 15)}${fileExtension}`;
+
+      // Save the file to the uploads directory
+      const filePath = path.join(uploadsDir, fileName);
+      await uploadedFile.mv(filePath);
+
+      console.log(filePath);
+      //   Upload the file
+      file = await openai.files.create({
+        file: fs.createReadStream(filePath),
+        purpose: "assistants",
+      });
+      console.log(file);
+      var vectorStore = await openai.beta.vectorStores.create({
+        name: "NoteWiz",
+      });
+      console.log(vectorStore);
+      var myVectorStoreFile = await openai.beta.vectorStores.files.create(
+        vectorStore.id,
+        {
+          file_id: file.id,
+        }
+      );
+      console.log(myVectorStoreFile);
+      fileID = file.id;
+
+      // Fallback if no file is uploaded, create a generic assistant without file search tools
+      myAssistant1 = await openai.beta.assistants.update(myAssistant1.id, {
+        instructions: "just do whatever the user says",
+        name: "Question generator",
+        tools: [{ type: "file_search" }],
+        tool_resources: {
+          file_search: {
+            vector_store_ids: [vectorStore.id],
+          },
+        },
+        model: "gpt-4-turbo",
+      });
+      assistantCache.set("myAssistant", myAssistant1);
+      // }
+    }
+    console.log("Request received");
+    let myAssistant;
+    let { textValue, topicValue, questionType, difficulty, numQuestions } =
+      req.body;
+    console.log(questionType);
+    const quizQuestions = [];
+
+    // const openai = new OpenAI({
+    //   apiKey: API_KEY,
+    // });
+
+    let userPrompt;
+    if (questionType && difficulty && numQuestions) {
+      if (textValue) {
+        if (questionType === "Multiple Choice") {
+          userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user and send the response in the form of an array of JSON objects`;
+        } else if (questionType === "True/False") {
+          userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user. Each question should have a statement, and the answer should be either True or False. Send the response in the form of an array of JSON objects with the following format: {"question": "statement", "answer": "True/False"}`;
+        } else if (questionType === "Open Ended") {
+          userPrompt = `Generate ${numQuestions} ${difficulty} questions based on the text entered by the user. Send the response in the form of an array of JSON objects with the following format: {"question": "prompt", "answer": "response with max length of 15 words"}`;
+        } else {
+          return res.status(400).json({ error: "Something went wrong" });
+        }
+      } else if (topicValue) {
+        if (questionType === "Multiple Choice") {
+          userPrompt = `Generate ${numQuestions} ${questionType} questions based on the topic entered by the user and send the response in the form of an array of JSON objects`;
+        } else if (questionType === "True/False") {
+          userPrompt = `Generate ${numQuestions} ${questionType} questions based on the topic entered by the user. Each question should have a statement, and the answer should be either True or False. Send the response in the form of an array of JSON objects with the following format: {"question": "statement", "answer": "True/False"}`;
+        } else if (questionType === "Open Ended") {
+          userPrompt = `Generate ${numQuestions} ${questionType} questions based on the topic entered by the user. Each question should have a prompt, and the answer should be a descriptive response with a maximum length of 15 words. Send the response in the form of an array of JSON objects with the following format: {"question": "prompt", "answer": "response with max length of 15 words"}`;
+        } else {
+          return res.status(400).json({ error: "Something went wrong" });
+        }
+      } else {
+        if (questionType === "Multiple Choice") {
+          userPrompt = `Generate ${numQuestions} ${questionType} questions based on the file content provided by the user and send the response in the form of an array with JSON objects and keys as the question and answer, do not send the response in the form of string.`;
+        } else if (questionType === "True/False") {
+          userPrompt = `Generate ${numQuestions} ${questionType} questions based on the file content provided by the user. Each question should have a statement, and the answer should be either True or False. Send the response in the form of an array of JSON objects and keys as the question, options as true and false and answer, do not send the response in the form of string.`;
+        } else if (questionType === "Open Ended") {
+          userPrompt = `Generate ${numQuestions} ${questionType} questions based on the file content provided by the user. Each question should have a prompt, and the answer should be a descriptive response with a maximum length of 15 words. Send the response in the form of an array of JSON objects and keys as the question and answer, do not send the response in the form of string.`;
+        } else {
+          return res.status(400).json({ error: "Something went wrong" });
+        }
+      }
+
+      // if (
+      //   questionType &&
+      //   difficulty &&
+      //   numQuestions
+
+      // ) {
+      // if (!myAssistant) {
+      //   myAssistant = await openai.beta.assistants.create({
+      //     instructions: userPrompt,
+      //     name: "Quiz Generator",
+      //     model: "gpt-4-turbo",
+      //   });
+      // } else {
+      //   console.log("assistant already created");
+      // }
+      myAssistant1 = await openai.beta.assistants.update(myAssistant1.id, {
+        instructions: userPrompt,
+        name: "Question generator",
+        model: "gpt-4-turbo",
+      });
+      assistantCache.set("myAssistant", myAssistant1);
+      console.log(myAssistant1);
+
+      let thread;
+
+      // if (textValue || topicValue || file) {
+      let content;
+
+      if (textValue) {
+        content = textValue;
+      } else if (topicValue) {
+        content = topicValue;
+      } else {
+        content = "null";
+      }
+
+      thread = await openai.beta.threads.create({
+        messages: [
+          {
+            role: "user",
+            content: content,
+          },
+        ],
+      });
+
+      console.log("thread created", thread);
+
+      const stream = await openai.beta.threads.runs.create(thread.id, {
+        assistant_id: myAssistant1.id,
+        stream: true,
+      });
+
+      for await (const event of stream) {
+        if (event.data && event.data.content) {
+          event.data.content.forEach((contentItem) => {
+            if (contentItem.text && contentItem.text.value) {
+              console.log(contentItem.text.value);
+              const quiz = JSON.parse(contentItem.text.value);
+              quizQuestions.push(quiz);
+            }
+          });
+        } else {
+          console.log("Waiting for more data...");
+        }
+      }
+      // }
+      // } else {
+      //   return res
+      //     .status(400)
+      //     .json({ error: "Please provide text, topic, or a file." });
+      // }
+
+      res.json(quizQuestions);
+      const response = await openai.beta.assistants.del(myAssistant1.id);
+      assistantCache.del("myAssistant");
+
+      console.log(response);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.get("/", (req, res) => {
   res.send("Connection established");
 });

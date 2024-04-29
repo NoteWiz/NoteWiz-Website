@@ -22,7 +22,7 @@ export default function page() {
         {flashCards.length === 0 ? (
           <InputField setFlashCards={setFlashCards} />
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 w-screen">
             <FlashCardList flashCards={flashCards} />
             <NewFlashcard resetFlashCards={resetFlashCards} />
           </div>

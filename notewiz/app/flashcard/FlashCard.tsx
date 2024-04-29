@@ -11,7 +11,7 @@ export const FlashCard: React.FC<FlashCardProps> = ({ front, back }) => {
     setShowFront(!showFront);
   };
   return (
-    <div className="w-[30vw] h-[30vh] rounded-lg border-solid border-2 border-[#ccc] p-4 flex flex-col justify-between shadow">
+    <div className="w-[30vw] h-[30vh] rounded-lg border-solid border-2 border-[#ccc] p-4 flex flex-col justify-between shadow bg-gray-200">
       <div
         className="flex flex-1 items-center justify-center text-2xl cursor-pointer"
         onClick={toggleSide}
