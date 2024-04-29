@@ -14,7 +14,7 @@ const S = () => {
   };
   return (
     <div className={`w-[250px] h-screen top-0 left-0 fixed transition-all duration-300 ease-in-out font-regular ${
-      collapse ? "w-[100px]" : ""
+      collapse ? "w-[90px]" : ""
     }`}>
       <div
         className={`w-full h-screen bg-[#0074D9] flex flex-col text-white rounded-tr-xl transition-all duration-300 ease-in-out`}

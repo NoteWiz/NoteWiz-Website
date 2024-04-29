@@ -2,11 +2,10 @@
 import ACard from "@/components/Dashboard/ACard";
 import SCard from "@/components/Dashboard/SCard";
 import UserCard from "@/components/Dashboard/UserCard";
-// import Sidebar from "@/components/Sidebar/Sidebar";
 import { Router } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Sidebar from "../FuncSidebar/S";
+import Sidebar from "../../components/FuncSidebar/S";
 export default function page() {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
