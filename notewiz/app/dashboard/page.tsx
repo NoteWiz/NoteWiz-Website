@@ -2,10 +2,10 @@
 import ACard from "@/components/Dashboard/ACard";
 import SCard from "@/components/Dashboard/SCard";
 import UserCard from "@/components/Dashboard/UserCard";
-import Sidebar from "@/components/Sidebar/Sidebar";
 import { Router } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Sidebar from "../../components/FuncSidebar/S";
 export default function page() {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
@@ -21,19 +21,17 @@ export default function page() {
       <div>
         <Sidebar />
         <UserCard />
-        <h1 className="text-xl my-5  flex justify-start pl-custom-padding">
+        <h1 className="text-xl flex my-3 justify-start pl-custom-padding font-bold ">
+          Statistics
+        </h1>
+        <SCard />
+        <h1 className="text-xl my-2  flex justify-start pl-custom-padding font-bold ">
           {" "}
           Achievements
         </h1>
         <ACard />
         <ACard />
         <ACard />
-        <ACard />
-        <h1 className="text-xl flex my-5 justify-start pl-custom-padding">
-          {" "}
-          Statistics
-        </h1>
-        <SCard />
       </div>
     );
   }
