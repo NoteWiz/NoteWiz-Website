@@ -26,7 +26,7 @@ app.use("/upload", cors());
 app.use(bodyParser.json());
 const assistantCache = new NodeCache();
 
-const API_KEY = "sk-proj-slGFDFglcGsHsEx5pfDIT3BlbkFJFeM5IfFPM8viCcDAttei";
+const API_KEY = "sk-proj-gYQ0oNvxz0FcU1gW7wKRT3BlbkFJCtREk9Xq0NxRUKTYYoXa";
 
 app.post("/upload", async (req, res) => {
   let myAssistant1 = assistantCache.get("myAssistant");
@@ -152,7 +152,7 @@ app.post("/upload", async (req, res) => {
   }
 });
 app.post("/flashcard", async (req, res) => {
-  let myAssistant1 = assistantCache.get("myAssistant");
+  let myAssistant1 = assistantCache.get("myAssistant1");
   let userInput = req.body.message;
   let flashcards = [];
   const secretKey = API_KEY;
@@ -169,7 +169,7 @@ app.post("/flashcard", async (req, res) => {
       name: "flashcard generator",
       model: "gpt-4-turbo",
     });
-    assistantCache.set("myAssistant", myAssistant1);
+    assistantCache.set("myAssistant1", myAssistant1);
   } else {
     console.log("assistant already created");
   }
@@ -210,6 +210,9 @@ app.post("/flashcard", async (req, res) => {
     console.log("error entering if block");
   }
   res.json(flashcards);
+  const response = await openai.beta.assistants.del(myAssistant1.id);
+  assistantCache.del("myAssistant1");
+  console.log(response);
 });
 
 app.post("/generate", async (req, res) => {
@@ -219,7 +222,7 @@ app.post("/generate", async (req, res) => {
   try {
     var file;
     var fileID;
-    let myAssistant1 = assistantCache.get("myAssistant");
+    let myAssistant1 = assistantCache.get("myAssistant1");
     const secretKey = API_KEY;
     const openai = new OpenAI({
       apiKey: secretKey,
@@ -230,7 +233,7 @@ app.post("/generate", async (req, res) => {
         name: "Math Tutor",
         model: "gpt-4-turbo",
       });
-      assistantCache.set("myAssistant", myAssistant1);
+      assistantCache.set("myAssistant1", myAssistant1);
     } else {
       console.log("assistant already created");
     }
@@ -292,7 +295,7 @@ app.post("/generate", async (req, res) => {
         },
         model: "gpt-4-turbo",
       });
-      assistantCache.set("myAssistant", myAssistant1);
+      assistantCache.set("myAssistant1", myAssistant1);
       // }
     }
     console.log("Request received");
@@ -360,7 +363,7 @@ app.post("/generate", async (req, res) => {
         name: "Question generator",
         model: "gpt-4-turbo",
       });
-      assistantCache.set("myAssistant", myAssistant1);
+      assistantCache.set("myAssistant1", myAssistant1);
       console.log(myAssistant1);
 
       let thread;
@@ -414,7 +417,7 @@ app.post("/generate", async (req, res) => {
 
       res.json(quizQuestions);
       const response = await openai.beta.assistants.del(myAssistant1.id);
-      assistantCache.del("myAssistant");
+      assistantCache.del("myAssistant1");
 
       console.log(response);
     }
