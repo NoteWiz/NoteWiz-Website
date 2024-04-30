@@ -60,14 +60,19 @@ export const InputField = ({ setFlashCards }: any) => {
     }
   };
   return (
-    <div className="grid w-screen gap-2">
+    <div className="grid w-[50vw] h-[50vh] gap-2">
       <Textarea
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="Type your message here."
         required
       />
-      <Button onClick={handleSubmit}>Send message</Button>
+      <Button
+        onClick={handleSubmit}
+        className="bg-[#FFF67A] text-black hover:bg-[#ffea00] py-6 text-xl"
+      >
+        Send message
+      </Button>
       {empty ? <ToastContainer /> : null}
       {loading ? (
         <div className="flex justify-center pt-4">
