@@ -14,6 +14,14 @@ import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { PiCards } from "react-icons/pi";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { MdOutlineAccountCircle } from "react-icons/md";
+import { MdHomeMax } from "react-icons/md";
+import { MdOutlineQuiz } from "react-icons/md";
+import { useRouter } from "next/navigation";
+import { Loading } from "react-loading-dot";
+import { FaArrowUp } from "react-icons/fa6";
 
 // Define ChatMessage interface
 interface ChatMessage {
@@ -23,6 +31,12 @@ interface ChatMessage {
 }
 
 const cb = () => {
+  const router = useRouter();
+  const [isTyping, setIsTyping] = useState(false);
+
+  const handleClickSidebar = (route: string) => {
+    router.push(route);
+  };
   let clicked = false;
   const [fileId, setFileId] = useState<string | null>(null);
   // State variables
@@ -59,6 +73,7 @@ const cb = () => {
 
   // Function to fetch messages
   const getMessages = async () => {
+    setIsTyping(true);
     const formData = new FormData();
     formData.append("message", value);
 
@@ -73,8 +88,10 @@ const cb = () => {
       console.log(data.messages);
 
       setMessage({ role: "Assistant", content: data.messages });
+      setIsTyping(false);
     } catch (error) {
       console.log(error);
+      setIsTyping(false);
     }
   };
 
@@ -179,27 +196,76 @@ const cb = () => {
         pauseOnHover
         theme="dark"
       />
-      <div className="bg-gray-800 text-white p-6 w-1/6 transition-transform -translate-x-full sm:translate-x-0">
-        <button
-          onClick={createNewChat}
-          className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded mb-6 w-full"
-        >
-          <i className="fas fa-comment-dots mr-2"></i>
-          New Chat
-        </button>
-        <nav>
-          <ul className="history">
-            {uniqueTitles?.map((uniqueTitle, index) => (
-              <li
-                key={index}
-                onClick={() => handleClick(uniqueTitle)}
-                className="py-2 px-4 rounded hover:bg-gray-700 cursor-pointer transition-colors duration-200"
-              >
-                {uniqueTitle}
-              </li>
-            ))}
-          </ul>
-        </nav>
+      <div className="bg-[#0074D9] text-white p-6 w-1/6 transition-transform -translate-x-full sm:translate-x-0 flex flex-col justify-between">
+        <div>
+          <button
+            onClick={createNewChat}
+            className="bg-[#FFF67A] hover:bg-[#ffea00] text-black font-bold py-2 px-4 rounded mb-6 w-full"
+          >
+            <i className="fas fa-comment-dots mr-2"></i>
+            New Chat
+          </button>
+          <nav>
+            <ul className="history">
+              {uniqueTitles?.map((uniqueTitle, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleClick(uniqueTitle)}
+                  className="py-2 px-4 rounded hover:bg-[#FFF67A] hover:text-black cursor-pointer transition-colors duration-200"
+                >
+                  {uniqueTitle}
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+        <div className="flex flex-col gap-4">
+          <button
+            className="bg-inherit hover:bg-[#ffea00] text-white hover:text-black font-bold py-2 px-4 rounded mb-2 w-full flex items-center gap-4"
+            onClick={() => handleClickSidebar("/practice")}
+          >
+            <div className="flex flex-col items-center">
+              <MdOutlineQuiz className="h-6 w-6" />
+            </div>
+            <div className="flex flex-col ">Quiz</div>
+          </button>
+          <button
+            className="bg-inherit hover:bg-[#ffea00] text-white hover:text-black font-bold py-2 px-4 rounded mb-2 w-full flex items-center gap-4"
+            onClick={() => handleClickSidebar("/flashcard")}
+          >
+            <div className="flex flex-col items-center">
+              <PiCards className="h-6 w-6" />
+            </div>
+            <div className="flex flex-col">Flashcards</div>
+          </button>
+          <button
+            className="bg-inherit hover:bg-[#ffea00] text-white hover:text-black font-bold py-2 px-4 rounded mb-2 w-full flex items-center gap-4"
+            onClick={() => handleClickSidebar("/dashboard")}
+          >
+            <div className="flex flex-col items-center">
+              <MdOutlineSpaceDashboard className="h-6 w-6" />
+            </div>
+            <div className="flex flex-col">Dashboard</div>
+          </button>
+          <button
+            className="bg-inherit hover:bg-[#ffea00] text-white hover:text-black font-bold py-2 px-4 rounded mb-2 w-full flex items-center gap-4"
+            onClick={() => handleClickSidebar("/home")}
+          >
+            <div className="flex flex-col items-center">
+              <MdHomeMax className="h-6 w-6" />
+            </div>
+            <div className="flex flex-col">Home</div>
+          </button>
+          <button
+            className="bg-inherit hover:bg-[#ffea00] text-white hover:text-black font-bold py-2 px-4 rounded mb-2 w-full flex items-center gap-4"
+            onClick={() => handleClickSidebar("/dashboard")}
+          >
+            <div className="flex flex-col items-center">
+              <MdOutlineAccountCircle className="h-6 w-6" />
+            </div>
+            <div className="flex flex-col">Account</div>
+          </button>
+        </div>
       </div>
 
       <div className="flex-1 p-8 flex justify-between overflow-auto">
@@ -207,7 +273,7 @@ const cb = () => {
           {pdfFile ? (
             <div {...getRootProps()}>
               <input {...getInputProps()} onClick={notify} />
-              <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg">
+              <button className="bg-[#FFF67A] hover:bg-[#ffea00] text-black font-bold py-3 px-6 rounded-lg">
                 <i className="fas fa-upload mr-2"></i>
                 Upload Files
               </button>
@@ -225,7 +291,7 @@ const cb = () => {
               </h2>
 
               <div
-                className="border-4 border-dashed border-purple-500 rounded-lg p-8 text-center cursor-pointer"
+                className="border-4 border-dashed border-[#0074D9] rounded-lg p-8 text-center cursor-pointer"
                 // onClick={notify}
                 {...getRootProps()}
               >
@@ -234,7 +300,7 @@ const cb = () => {
                 <div className="flex justify-center mb-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8 text-purple-600"
+                    className="h-8 w-8 text-[#ffea00]"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -253,7 +319,7 @@ const cb = () => {
                 </p>
 
                 <div className="flex justify-center space-x-4 ">
-                  <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg">
+                  <button className="bg-[#FFF67A] hover:bg-[#ffea00] text-black font-bold py-3 px-6 rounded-lg">
                     <i className="fas fa-upload mr-2"></i>
                     Upload Files
                   </button>
@@ -276,12 +342,18 @@ const cb = () => {
           )}
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 overflow-y-auto flex flex-col justify-between">
+        <div className="bg-[#80C4FF] rounded-lg shadow-lg p-4 w-1/2 overflow-y-auto flex flex-col justify-between">
           <div
             ref={feedContainerRef}
-            className="feed h-[80vh] overflow-y-auto rounded-lg bg-gray-100 p-4"
+            className="feed h-[80vh] overflow-y-auto rounded-lg bg-white p-4"
           >
             <ul className="feed p-0 w-full">
+              {isTyping && (
+                <li className="flex w-full my-2 justify-start">
+                  <Loading background={"#0074D9"} />
+                  {/* or your custom typing indicator component */}
+                </li>
+              )}
               {currentChat?.map((chatMessage, index) => (
                 <li
                   className={`flex w-full my-2 ${
@@ -294,16 +366,16 @@ const cb = () => {
                   <div
                     className={`rounded-lg px-4 py-2 max-w-[70%] ${
                       chatMessage.role === "user"
-                        ? "bg-purple-100 text-purple-800"
-                        : "bg-gray-200 text-gray-800"
+                        ? "bg-[#e6f3ff] text-[#0074D9]"
+                        : "bg-[#fffccc] text-black"
                     }`}
                   >
                     <div className="flex items-center space-x-2 mb-1">
                       <span
                         className={`font-bold ${
                           chatMessage.role === "user"
-                            ? "text-purple-600"
-                            : "text-gray-600"
+                            ? "text-[#0074D9]"
+                            : "text-black"
                         }`}
                       >
                         {chatMessage.role === "user" ? "You" : "Assistant"}
@@ -323,8 +395,12 @@ const cb = () => {
               placeholder="Enter prompt"
               className="flex-grow"
             />
-            <Button type="submit" onClick={getMessages}>
-              Enter
+            <Button
+              type="submit"
+              onClick={getMessages}
+              className="bg-[#FFF67A] text-black hover:bg-[#ffea00]"
+            >
+              <FaArrowUp />
             </Button>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { InputField } from "./inputField";
 import { useState } from "react";
 import { FlashCardList } from "./FlashCardList";
 import { NewFlashcard } from "./NewFlashcard";
+import S from "@/components/FuncSidebar/S";
 
 export default function page() {
   const [flashCards, setFlashCards] = useState([]);
@@ -12,21 +13,26 @@ export default function page() {
     setFlashCards([]);
   };
   return (
-    <div className="bg-black h-screen w-screen flex flex-col">
+    <div className="flex h-screen">
       <div className="flex-none">
-        <h1 className="text-white flex justify-center text-5xl">
-          Flash card Generator
-        </h1>
+        <S />
       </div>
-      <div className="flex-1 flex items-center justify-center">
-        {flashCards.length === 0 ? (
-          <InputField setFlashCards={setFlashCards} />
-        ) : (
-          <div className="flex flex-col gap-4 w-screen">
-            <FlashCardList flashCards={flashCards} />
-            <NewFlashcard resetFlashCards={resetFlashCards} />
-          </div>
-        )}
+      <div className="flex-1 bg-[#80C4FF]  flex flex-col pl-[250px]">
+        <div className="flex-none">
+          <p className="text-black pt-8 flex justify-center text-5xl ">
+            Flash Card Generator
+          </p>
+        </div>
+        <div className="flex-1 flex items-center justify-center overflow-auto">
+          {flashCards.length === 0 ? (
+            <InputField setFlashCards={setFlashCards} />
+          ) : (
+            <div className="flex flex-col gap-4 w-full">
+              <FlashCardList flashCards={flashCards} />
+              <NewFlashcard resetFlashCards={resetFlashCards} />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import landing_page from "./(images)/landing_page.png";
@@ -14,8 +15,13 @@ import { FeedbackCard } from "./(components)/feedbackCard";
 import { FooterInfo } from "./(components)/FooterInfo";
 import { Header } from "./(components)/Header";
 import { Footer } from "./(components)/Footer";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+  const handleClick = (route: string) => {
+    router.push(route);
+  };
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="bg-[#559cd9] w-screen h-full">
@@ -33,7 +39,10 @@ export default function Home() {
               </p>
             </div>
             <div className="w-full flex justify-start">
-              <button className="bg-[#FFE57D] rounded-3xl font-medium text-2xl text-black  px-[50px] py-3 mr-[30px] ">
+              <button
+                className="bg-[#FFE57D] rounded-3xl font-medium text-2xl text-black  px-[50px] py-3 mr-[30px] animate-pulse"
+                onClick={() => handleClick("/signup")}
+              >
                 Start
               </button>
             </div>
@@ -53,7 +62,7 @@ export default function Home() {
           </p>
         </div>
         <div className="flex gap-[1.302vw] justify-evenly  mt-[3vw] pb-[1vw]">
-          <div className="flex flex-col items-center justify-center bg-white rounded-2xl px-12">
+          <div className="flex flex-col items-center justify-center bg-white rounded-2xl px-12 animate-pulse hover:animate-none">
             <CardSmall
               img={img2}
               p1={"Deeper Insights"}
@@ -62,7 +71,7 @@ export default function Home() {
               }
             />
           </div>
-          <div className="flex  items-center justify-center bg-white rounded-2xl">
+          <div className="flex  items-center justify-center bg-white rounded-2xl animate-pulse hover:animate-none">
             <CardLarge
               img={img3}
               p1={"Chat with all your pdfs"}
@@ -71,7 +80,7 @@ export default function Home() {
               }
             />
           </div>
-          <div className="flex flex-col flex-col-reverse items-center justify-center bg-white space-y-[5px] rounded-2xl px-10">
+          <div className="flex flex-col flex-col-reverse items-center justify-center bg-white space-y-[5px] rounded-2xl px-10 animate-pulse hover:animate-none">
             <CardSmall
               img={img4}
               p1={"Lots of practice"}
@@ -83,7 +92,7 @@ export default function Home() {
         </div>
       </div>
       <div className="bg-[#FFE57D] w-screen h-full ">
-        <div className="pt-[1vw] flex gap-x-[1.302vw] items-center justify-evenly px-[2vw]">
+        <div className="pt-[1vw] flex gap-x-[1.302vw] items-center justify-evenly px-[2vw] animate-pulse hover:animate-none">
           <CardLarge
             img={img5}
             p1={"Mindmaps to the rescue"}

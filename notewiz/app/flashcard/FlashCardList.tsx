@@ -1,6 +1,8 @@
 "use client";
 import { FlashCard } from "./FlashCard";
 import { useState } from "react";
+import { FaArrowRight } from "react-icons/fa6";
+import { FaArrowLeft } from "react-icons/fa6";
 
 interface FlashCardData {
   front: string;
@@ -31,21 +33,27 @@ export const FlashCardList: React.FC<FlashCardListProps> = ({ flashCards }) => {
       {Array.isArray(flashCards) && flashCards.length > 0 ? (
         <>
           <div className="flex items-center justify-center w-full mb-4">
-            <span className="text-white">
+            <span className="text-[#0074D9]">
               {currentIndex + 1} / {flashCards.length}
             </span>
           </div>
           <div className="flex items-center justify-between w-full ">
-            <button className="mr-2 text-white" onClick={handlePrevious}>
-              Previous
+            <button
+              className="ml-2 text-black rounded-full  bg-white p-6 hover:bg-[#0074D9]"
+              onClick={handlePrevious}
+            >
+              <FaArrowLeft />
             </button>
             <FlashCard
               key={currentIndex}
               front={flashCards[currentIndex].front}
               back={flashCards[currentIndex].back}
             />
-            <button className="ml-2 text-white" onClick={handleNext}>
-              Next
+            <button
+              className="ml-2 text-black rounded-full bg-white p-6 hover:bg-[#0074D9]"
+              onClick={handleNext}
+            >
+              <FaArrowRight />
             </button>
           </div>
         </>

@@ -165,7 +165,7 @@ app.post("/flashcard", async (req, res) => {
   if (!myAssistant1) {
     myAssistant1 = await openai.beta.assistants.create({
       instructions:
-        "you are a flashcard generator, that generates flashcard in the format of front and back based on the text entered by the user, the front should not be in the form of question and send the response in the form of an array of json objects with keys as front and back and not in the form of string so that the user can access the values by tapping into the keys of the array",
+        "you are a flashcard generator, that generates flashcard in the format of front and back based on the text entered by the user, the front should not be in the form of question and send the response in the form of an array of json objects with keys as front and back and not in the form of string.",
       name: "flashcard generator",
       model: "gpt-4-turbo",
     });
