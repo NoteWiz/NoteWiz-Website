@@ -11,9 +11,12 @@ export const NewFlashcard: React.FC<NewFlashcardProps> = ({
     resetFlashCards();
   };
   return (
-    <div className="flex bg-white rounded-xl items-center">
-      <button className="rounded-lg p-4 w-full" onClick={handleSubmit}>
-        Make new flash cards.
+    <div className="flex  items-center justify-center">
+      <button
+        className="rounded-lg bg-[#FFF67A] p-4 w-[70vw] text-black text-xl"
+        onClick={handleSubmit}
+      >
+        Make new flash cards
       </button>
     </div>
   );
