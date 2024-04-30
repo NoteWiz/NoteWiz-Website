@@ -26,7 +26,7 @@ app.use("/upload", cors());
 app.use(bodyParser.json());
 const assistantCache = new NodeCache();
 
-const API_KEY = "sk-proj-gYQ0oNvxz0FcU1gW7wKRT3BlbkFJCtREk9Xq0NxRUKTYYoXa";
+const API_KEY = "sk-proj-nSsjxxEYqciS1YYb8IOIT3BlbkFJEvLLXWQxkWVPyGw7WWbs";
 
 app.post("/upload", async (req, res) => {
   let myAssistant1 = assistantCache.get("myAssistant");
@@ -218,11 +218,10 @@ app.post("/flashcard", async (req, res) => {
 app.post("/generate", async (req, res) => {
   let info = false;
   console.log("in backend");
-  // const binaryStr = req.body.fileData; // Access file data from the request body
   try {
     var file;
     var fileID;
-    let myAssistant1 = assistantCache.get("myAssistant1");
+    let myAssistant1 = assistantCache.get("myAssistant");
     const secretKey = API_KEY;
     const openai = new OpenAI({
       apiKey: secretKey,
@@ -233,7 +232,7 @@ app.post("/generate", async (req, res) => {
         name: "Math Tutor",
         model: "gpt-4-turbo",
       });
-      assistantCache.set("myAssistant1", myAssistant1);
+      assistantCache.set("myAssistant", myAssistant1);
     } else {
       console.log("assistant already created");
     }
@@ -295,7 +294,7 @@ app.post("/generate", async (req, res) => {
         },
         model: "gpt-4-turbo",
       });
-      assistantCache.set("myAssistant1", myAssistant1);
+      assistantCache.set("myAssistant", myAssistant1);
       // }
     }
     console.log("Request received");
@@ -305,70 +304,90 @@ app.post("/generate", async (req, res) => {
     console.log(questionType);
     const quizQuestions = [];
 
-    // const openai = new OpenAI({
-    //   apiKey: API_KEY,
-    // });
 
     let userPrompt;
     if (questionType && difficulty && numQuestions) {
       if (textValue) {
         if (questionType === "Multiple Choice") {
-          userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user and send the response in the form of an array of JSON objects`;
+          userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user and send the response in the form of an array of JSON objects, store the answer in any one of the options randomly,  like 
+          {
+            question: "question",
+            answer: "answer with max length of 15 words",
+            option1: "option1 with max length of 15 words",
+            option2: "option2 with max length of 15 words",
+            option3: "option3 with max length of 15 words",
+            option4: "option4 with max length of 15 words",
+          }`;
         } else if (questionType === "True/False") {
-          userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user. Each question should have a statement, and the answer should be either True or False. Send the response in the form of an array of JSON objects with the following format: {"question": "statement", "answer": "True/False"}`;
-        } else if (questionType === "Open Ended") {
-          userPrompt = `Generate ${numQuestions} ${difficulty} questions based on the text entered by the user. Send the response in the form of an array of JSON objects with the following format: {"question": "prompt", "answer": "response with max length of 15 words"}`;
-        } else {
+          userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user. Send the response in the form of an array of JSON objects with the following format: 
+          {
+            question: "question",
+            answer: "True/False",
+            option1: "True",
+            option2: "False",
+          }`;
+        } 
+        else {
           return res.status(400).json({ error: "Something went wrong" });
         }
       } else if (topicValue) {
         if (questionType === "Multiple Choice") {
-          userPrompt = `Generate ${numQuestions} ${questionType} questions based on the topic entered by the user and send the response in the form of an array of JSON objects`;
+          userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user and send the response in the form of an array of JSON objects, store the answer in any one of the options randomly,  like 
+          {
+            question: "question",
+            answer: "answer with max length of 15 words",
+            option1: "option1 with max length of 15 words",
+            option2: "option2 with max length of 15 words",
+            option3: "option3 with max length of 15 words",
+            option4: "option4 with max length of 15 words",
+          }`;
         } else if (questionType === "True/False") {
-          userPrompt = `Generate ${numQuestions} ${questionType} questions based on the topic entered by the user. Each question should have a statement, and the answer should be either True or False. Send the response in the form of an array of JSON objects with the following format: {"question": "statement", "answer": "True/False"}`;
-        } else if (questionType === "Open Ended") {
-          userPrompt = `Generate ${numQuestions} ${questionType} questions based on the topic entered by the user. Each question should have a prompt, and the answer should be a descriptive response with a maximum length of 15 words. Send the response in the form of an array of JSON objects with the following format: {"question": "prompt", "answer": "response with max length of 15 words"}`;
-        } else {
+          userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user. Send the response in the form of an array of JSON objects with the following format: 
+          {
+            question: "question",
+            answer: "True/False",
+            option1: "True",
+            option2: "False",
+          }`;
+        } 
+        else {
           return res.status(400).json({ error: "Something went wrong" });
         }
       } else {
         if (questionType === "Multiple Choice") {
-          userPrompt = `Generate ${numQuestions} ${questionType} questions based on the file content provided by the user and send the response in the form of an array with JSON objects and keys as the question and answer, do not send the response in the form of string.`;
+          userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user and send the response in the form of an array of JSON objects, store the answer in any one of the options randomly,  like 
+          {
+            question: "question",
+            answer: "answer with max length of 15 words",
+            option1: "option1 with max length of 15 words",
+            option2: "option2 with max length of 15 words",
+            option3: "option3 with max length of 15 words",
+            option4: "option4 with max length of 15 words",
+          }`;
         } else if (questionType === "True/False") {
-          userPrompt = `Generate ${numQuestions} ${questionType} questions based on the file content provided by the user. Each question should have a statement, and the answer should be either True or False. Send the response in the form of an array of JSON objects and keys as the question, options as true and false and answer, do not send the response in the form of string.`;
-        } else if (questionType === "Open Ended") {
-          userPrompt = `Generate ${numQuestions} ${questionType} questions based on the file content provided by the user. Each question should have a prompt, and the answer should be a descriptive response with a maximum length of 15 words. Send the response in the form of an array of JSON objects and keys as the question and answer, do not send the response in the form of string.`;
-        } else {
+          userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user. Send the response in the form of an array of JSON objects with the following format: 
+          {
+            question: "question",
+            answer: "True/False",
+            option1: "True",
+            option2: "False",
+          }`;
+        } 
+        else {
           return res.status(400).json({ error: "Something went wrong" });
         }
       }
 
-      // if (
-      //   questionType &&
-      //   difficulty &&
-      //   numQuestions
-
-      // ) {
-      // if (!myAssistant) {
-      //   myAssistant = await openai.beta.assistants.create({
-      //     instructions: userPrompt,
-      //     name: "Quiz Generator",
-      //     model: "gpt-4-turbo",
-      //   });
-      // } else {
-      //   console.log("assistant already created");
-      // }
       myAssistant1 = await openai.beta.assistants.update(myAssistant1.id, {
         instructions: userPrompt,
         name: "Question generator",
         model: "gpt-4-turbo",
       });
-      assistantCache.set("myAssistant1", myAssistant1);
+      assistantCache.set("myAssistant", myAssistant1);
       console.log(myAssistant1);
 
       let thread;
 
-      // if (textValue || topicValue || file) {
       let content;
 
       if (textValue) {
@@ -399,31 +418,47 @@ app.post("/generate", async (req, res) => {
         if (event.data && event.data.content) {
           event.data.content.forEach((contentItem) => {
             if (contentItem.text && contentItem.text.value) {
-              console.log(contentItem.text.value);
-              const quiz = JSON.parse(contentItem.text.value);
-              quizQuestions.push(quiz);
+              try {
+                const quiz = JSON.parse(contentItem.text.value);
+                quizQuestions.push(quiz);
+                console.log(quiz);
+              } catch (error) {
+                console.error('Error parsing JSON:', error);
+                console.error('Raw response:', contentItem.text.value);
+                // You can add additional error handling or logging here
+              }
             }
           });
         } else {
           console.log("Waiting for more data...");
         }
       }
-      // }
-      // } else {
-      //   return res
-      //     .status(400)
-      //     .json({ error: "Please provide text, topic, or a file." });
-      // }
 
       res.json(quizQuestions);
       const response = await openai.beta.assistants.del(myAssistant1.id);
-      assistantCache.del("myAssistant1");
+      assistantCache.del("myAssistant");
+
+      // Clean up resources
+      if (file) {
+        await openai.files.del(file.id);
+      }
+      if (vectorStore) {
+        await openai.beta.vectorStores.del(vectorStore.id);
+      }
 
       console.log(response);
     }
-  } catch (error) {
+  } catch (error) { //
     console.error("Error:", error);
     res.status(500).json({ error: "Internal server error" });
+
+    // Clean up resources
+    if (file) {
+      await openai.files.del(file.id);
+    }
+    if (vectorStore) {
+      await openai.beta.vectorStores.del(vectorStore.id);
+    }
   }
 });
 
