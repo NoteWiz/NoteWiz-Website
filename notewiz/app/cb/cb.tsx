@@ -291,7 +291,7 @@ const cb = () => {
               </h2>
 
               <div
-                className="border-4 border-dashed border-[#0074D9] rounded-lg p-8 text-center cursor-pointer"
+                className="border-4 border-dashed border-[#ffea00] rounded-lg p-8 text-center cursor-pointer"
                 // onClick={notify}
                 {...getRootProps()}
               >

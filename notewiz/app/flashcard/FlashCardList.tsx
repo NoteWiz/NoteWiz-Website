@@ -39,7 +39,7 @@ export const FlashCardList: React.FC<FlashCardListProps> = ({ flashCards }) => {
           </div>
           <div className="flex items-center justify-between w-full ">
             <button
-              className="ml-2 text-black rounded-full  bg-white p-6 hover:bg-[#0074D9]"
+              className="ml-2 text-black rounded-full  bg-white p-6 hover:bg-[#FFF67A]"
               onClick={handlePrevious}
             >
               <FaArrowLeft />
@@ -50,7 +50,7 @@ export const FlashCardList: React.FC<FlashCardListProps> = ({ flashCards }) => {
               back={flashCards[currentIndex].back}
             />
             <button
-              className="ml-2 text-black rounded-full bg-white p-6 hover:bg-[#0074D9]"
+              className="ml-2 text-black rounded-full bg-white p-6 hover:bg-[#FFF67A]"
               onClick={handleNext}
             >
               <FaArrowRight />

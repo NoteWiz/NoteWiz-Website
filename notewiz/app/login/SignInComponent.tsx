@@ -17,7 +17,7 @@ const SignInComponent = () => {
 
   useEffect(() => {
     if (sessionStatus === "authenticated") {
-      router.replace("/dashboard");
+      router.replace("/home");
     }
   }, [sessionStatus, router]);
 
@@ -60,7 +60,7 @@ const SignInComponent = () => {
     sessionStatus !== "authenticated" && (
       <div className="flex flex-col min-h-screen justify-center items-center bg-blue-400">
         {/* Navbar */}
-        <nav className="bg-[#FFE57D] py-4 fixed w-full z-10 top-12 rounded-3xl mx-auto max-w-4xl">
+        {/* <nav className="bg-[#FFE57D] py-4 fixed w-full z-10 top-12 rounded-3xl mx-auto max-w-4xl">
           <div className="container mx-auto flex justify-between items-center px-4 md:px-6">
             <div className="flex items-center">
               <Link href="/">
@@ -85,11 +85,14 @@ const SignInComponent = () => {
               Call to Action
             </button>
           </div>
-        </nav>
+        </nav> */}
 
         {/* Sign-in */}
-        <section className="flex flex-col items-center justify-center mt-32">
-          <div className="bg-white rounded-lg shadow-lg p-12 md:p-16 lg:p-20">
+        <section className="flex flex-col items-center justify-center ">
+          <div className="bg-white rounded-lg shadow-lg p-12 md:p-16 lg:p-20 h-[87vh] w-[50vw]">
+            <h3 className="mb-6 px-3 font-semibold text-3xl text-black">
+              Login to your account:
+            </h3>
             <button
               type="button"
               className="w-full flex items-center justify-center border border-gray-300 bg-white text-blue-600 font-medium rounded-lg py-3 shadow-md hover:bg-gray-100 mb-4"
@@ -110,7 +113,7 @@ const SignInComponent = () => {
               </span>
               <hr className="flex-grow border-gray-300 dark:border-gray-600" />
             </div>
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form className="space-y-8" onSubmit={handleSubmit}>
               <div>
                 <label
                   htmlFor="email"
@@ -143,7 +146,7 @@ const SignInComponent = () => {
                   required
                 />
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between ">
                 <div className="flex items-center">
                   <input
                     id="remember"
@@ -165,12 +168,12 @@ const SignInComponent = () => {
                   Forgot password?
                 </Link>
               </div>
-              <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-lg py-3">
+              <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-lg py-3 ">
                 Sign in
               </button>
               <p className="text-red-600 text-[16px] mb-4">{error && error}</p>
             </form>
-            <div className="mt-4 text-center">
+            <div className="mt-8 text-center ">
               <p className="text-sm text-gray-700 dark:text-gray-400">
                 Don't have an account yet?{" "}
                 <Link

@@ -68,7 +68,7 @@ const SignUpComponent = () => {
     sessionStatus !== "authenticated" && (
       <div className="flex flex-col min-h-screen justify-center items-center bg-blue-400">
         {/* Navbar */}
-        <nav className="bg-[#FFE57D] py-4 fixed w-full z-10 top-12 rounded-3xl mx-auto max-w-4xl">
+        {/* <nav className="bg-[#FFE57D] py-4 fixed w-full z-10 top-12 rounded-3xl mx-auto max-w-4xl">
           <div className="container mx-auto flex justify-between items-center px-4 md:px-6">
             <div className="flex items-center">
               <Link href="/">
@@ -93,18 +93,15 @@ const SignUpComponent = () => {
               Call to Action
             </button>
           </div>
-        </nav>
+        </nav> */}
 
         {/* Sign-up */}
-        <section className="flex flex-col items-center justify-center mt-32">
-          <div className="bg-white rounded-lg shadow-lg p-10 md:p-14 lg:p-18">
-            <h3 className="mb-6 px-3 font-semibold text-xl text-black">
+        <section className="flex flex-col items-center justify-center ">
+          <div className="bg-white rounded-lg shadow-lg p-10 md:p-14 lg:p-18 h-[87vh] w-[50vw]">
+            <h3 className="mb-6 px-3 font-semibold text-3xl text-black ">
               Let's create your account:
             </h3>
-            <form
-              className="space-y-8 px-3 w-96 flex-row items-center justify-center"
-              onSubmit={handleSubmit}
-            >
+            <form className="space-y-12 " onSubmit={handleSubmit}>
               <div>
                 <label
                   htmlFor="name"
@@ -160,7 +157,7 @@ const SignUpComponent = () => {
                 Sign up
               </button>
             </form>
-            <div className="mt-4 text-center">
+            <div className="mt-16 text-center">
               <p className="text-sm text-gray-700 dark:text-gray-400">
                 Already have an account?{" "}
                 <Link
