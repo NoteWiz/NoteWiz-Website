@@ -60,7 +60,7 @@ export const InputField = ({ setFlashCards }: any) => {
     }
   };
   return (
-    <div className="grid w-[70vw] h-[50vh] gap-2">
+    <div className="grid w-[50vw] h-[50vh] gap-2">
       <Textarea
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -69,7 +69,7 @@ export const InputField = ({ setFlashCards }: any) => {
       />
       <Button
         onClick={handleSubmit}
-        className="bg-[#FFF67A] text-black hover:bg-[#ffea00] "
+        className="bg-[#FFF67A] text-black hover:bg-[#ffea00] py-6 text-xl"
       >
         Send message
       </Button>
