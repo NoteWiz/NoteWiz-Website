@@ -26,7 +26,7 @@ app.use("/upload", cors());
 app.use(bodyParser.json());
 const assistantCache = new NodeCache();
 
-const API_KEY = "sk-proj-gYQ0oNvxz0FcU1gW7wKRT3BlbkFJCtREk9Xq0NxRUKTYYoXa";
+const API_KEY = "";
 
 app.post("/upload", async (req, res) => {
   let myAssistant1 = assistantCache.get("myAssistant");
