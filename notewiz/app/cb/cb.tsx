@@ -272,7 +272,7 @@ const cb = () => {
         <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 mr-4 overflow-y-auto">
           {pdfFile ? (
             <div {...getRootProps()}>
-              <input {...getInputProps()} onClick={notify} />
+              <input {...getInputProps()} />
               <button className="bg-[#FFF67A] hover:bg-[#ffea00] text-black font-bold py-3 px-6 rounded-lg">
                 <i className="fas fa-upload mr-2"></i>
                 Upload Files
@@ -295,7 +295,7 @@ const cb = () => {
                 // onClick={notify}
                 {...getRootProps()}
               >
-                <input {...getInputProps()} onClick={notify} />
+                <input {...getInputProps()} />
 
                 <div className="flex justify-center mb-4">
                   <svg

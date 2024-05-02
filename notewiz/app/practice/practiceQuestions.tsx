@@ -1,12 +1,14 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import QuizPlayer from "./QuizPlayer";
 
 const QuestionGenerator = () => {
   const [error, setError] = useState<string | null>(null);
+  // const [isFileUploading, setIsFileUploading] = useState(false);
 
   const handleError = (errorMessage: string) => {
     setError(errorMessage);
@@ -20,7 +22,7 @@ const QuestionGenerator = () => {
   const [selectedQuestionType, setSelectedQuestionType] =
     useState<string>("Multiple Choice");
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("Easy");
-  const [selectedNumQuestions, setSelectedNumQuestions] = useState<number>(1);
+  const [selectedNumQuestions, setSelectedNumQuestions] = useState<number>(2);
   const [textValue, setTextValue] = useState("");
   const [topicValue, setTopicValue] = useState("");
   const [acceptedFile, setAcceptedFile] = useState<File | null>(null);
@@ -58,12 +60,33 @@ const QuestionGenerator = () => {
   };
 
   const TextSection = () => {
+
     const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       const value = e.target.value;
       setTextValue(value);
     };
 
     const isTextValid = textValue.length <= 2000;
+    // const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    // const [textAreaValue, setTextAreaValue] = useState('');
+
+    // useEffect(() => {
+    //   if (textAreaRef.current) {
+    //     textAreaRef.current.focus();
+    //   }
+    // }, []);
+
+    // const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    //   const newValue = e.target.value;
+    //   setTextAreaValue(newValue);
+    //   setTextValue(newValue);
+    // };
+
+    // const handleTextAreaBlur = () => {
+    //   setTextValue(textAreaValue);
+    // };
+
+    // const isTextValid = textValue.length <= 2000;
 
     return (
       <div>
@@ -74,6 +97,7 @@ const QuestionGenerator = () => {
           value={textValue}
           onChange={handleTextChange}
         />
+        <p className="text-blue-800 font-medium text-xl">Please enter some text.</p>
         {!isTextValid && (
           <p className="text-red-600">
             Text exceeds the maximum character limit (2,000).
@@ -83,7 +107,7 @@ const QuestionGenerator = () => {
           <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 px-2 mb-4">
             <label
               htmlFor="questionType"
-              className="block font-semibold text-gray-600 mb-2"
+              className="block font-bold text-black mb-2"
             >
               Question type
             </label>
@@ -94,14 +118,13 @@ const QuestionGenerator = () => {
               onChange={handleQuestionTypeChange}
             >
               <option>Multiple Choice</option>
-              <option>Open Ended</option>
               <option>True/False</option>
             </select>
           </div>
           <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 px-2 mb-4">
             <label
               htmlFor="difficulty"
-              className="block font-semibold text-gray-600 mb-2"
+              className="block font-bold text-black mb-2"
             >
               Difficulty
             </label>
@@ -119,7 +142,7 @@ const QuestionGenerator = () => {
           <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 px-2 mb-4">
             <label
               htmlFor="maxQuestions"
-              className="block font-semibold text-gray-600 mb-2"
+              className="block font-bold text-black mb-2"
             >
               Max Questions
             </label>
@@ -141,8 +164,18 @@ const QuestionGenerator = () => {
   };
 
   const TopicSection = () => {
+
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, []);
+
     const handleTopicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setTopicValue(e.target.value);
+      const inputValue = e.target.value;
+      setTopicValue(inputValue);
     };
 
     const isTopicValid = topicValue.trim().length > 0;
@@ -150,21 +183,19 @@ const QuestionGenerator = () => {
     return (
       <div>
         <input
+          ref={inputRef}
           type="text"
           className="w-full border border-gray-300 rounded-md p-2 mt-4"
           placeholder="E.g. Biology"
           value={topicValue}
           onChange={handleTopicChange}
         />
-        {!isTopicValid && <p className="text-red-600">Please enter a topic.</p>}
-        <p className="text-gray-600 mt-2">
-          Enter a topic to generate questions from.
-        </p>
+        {!isTopicValid && <p className="text-blue-800 font-medium text-xl mt-2">Please enter a topic.</p>}
         <div className="flex flex-wrap mt-4">
           <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 px-2 mb-4">
             <label
               htmlFor="questionType"
-              className="block font-semibold text-gray-600 mb-2"
+              className="block font-bold text-black mb-2"
             >
               Question type
             </label>
@@ -175,14 +206,13 @@ const QuestionGenerator = () => {
               onChange={handleQuestionTypeChange}
             >
               <option>Multiple Choice</option>
-              <option>Open Ended</option>
               <option>True/False</option>
             </select>
           </div>
           <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 px-2 mb-4">
             <label
               htmlFor="difficulty"
-              className="block font-semibold text-gray-600 mb-2"
+              className="block font-bold text-black mb-2"
             >
               Difficulty
             </label>
@@ -200,11 +230,12 @@ const QuestionGenerator = () => {
           <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 px-2 mb-4">
             <label
               htmlFor="maxQuestions"
-              className="block font-semibold text-gray-600 mb-2"
+              className="block font-bold text-black mb-2"
             >
               Max Questions
             </label>
             <input
+              autoFocus
               id="maxQuestions"
               placeholder="How many questions?"
               type="number"
@@ -226,20 +257,39 @@ const QuestionGenerator = () => {
     const onDrop = async (acceptedFiles: File[]) => {
       if (acceptedFiles.length > 0) {
         const file = acceptedFiles[0];
-        setAcceptedFile(acceptedFiles[0]);
-        console.log(acceptedFiles[0]);
+        setAcceptedFile(file);
+        console.log(file); //
         formData.append("file", file);
+        // setIsFileUploading(true); // Set the file upload status to true
+
         try {
           const response = await fetch("http://localhost:4000/generate", {
             method: "POST",
             body: formData,
           });
           const data = await response.json();
-          console.log("File uploaded");
-          // Handle response as needed
+          if (response.ok) {
+            console.log("File uploaded successfully:", data);
+            toast.success("File uploaded successfully!", {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          } else {
+            console.error("Error uploading file:", data);
+            handleError("An error occurred while uploading the file. Please try again.");
+          }
         } catch (error) {
           console.error("Error uploading file:", error);
+          handleError("An error occurred while uploading the file. Please try again.");
         }
+        //  finally {
+        //   setIsFileUploading(false); // Reset the file upload status to false
+        // }
       } else {
         setAcceptedFile(null);
       }
@@ -253,8 +303,8 @@ const QuestionGenerator = () => {
       <div>
         <div {...getRootProps()}>
           <input {...getInputProps()} />
-          <p>Drag and drop a file here, or click to select a file</p>
-          <button className="bg-yellow-500 text-white rounded-md px-4 py-2 hover:bg-yellow-700 mt-6 w-full focus:outline-none">
+          <p className="text-black font-medium text-xl mt-3">Drag and drop a file here, or click to select a file</p>
+          <button className="bg-blue-600 text-white font-semibold text-xl rounded-md px-2 py-4 mt-6 hover:bg-blue-800 w-full focus:outline-none transition-colors duration-300">
             <i className="fas fa-upload mr-2"></i>
             Upload File
           </button>
@@ -264,7 +314,7 @@ const QuestionGenerator = () => {
           <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 px-2 mb-4">
             <label
               htmlFor="questionType"
-              className="block font-semibold text-gray-600 mb-2"
+              className="block font-bold text-black mb-2"
             >
               Question type
             </label>
@@ -275,14 +325,13 @@ const QuestionGenerator = () => {
               onChange={handleQuestionTypeChange}
             >
               <option>Multiple Choice</option>
-              <option>Open Ended</option>
               <option>True/False</option>
             </select>
           </div>
           <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 px-2 mb-4">
             <label
               htmlFor="difficulty"
-              className="block font-semibold text-gray-600 mb-2"
+              className="block font-bold text-black mb-2"
             >
               Difficulty
             </label>
@@ -300,11 +349,12 @@ const QuestionGenerator = () => {
           <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 px-2 mb-4">
             <label
               htmlFor="maxQuestions"
-              className="block font-semibold text-gray-600 mb-2"
+              className="block font-bold text-black mb-2"
             >
               Max Questions
             </label>
             <input
+              autoFocus
               id="maxQuestions"
               placeholder="How many questions?"
               type="number"
@@ -314,7 +364,7 @@ const QuestionGenerator = () => {
               onChange={handleInputChange}
               value={selectedNumQuestions}
             />
-            {inputError && <p className="text-red-600">{inputError}</p>}
+            {inputError && <p className="text-red-400 font-semibold">{inputError}</p>}
           </div>
         </div>
       </div>
@@ -322,7 +372,20 @@ const QuestionGenerator = () => {
   };
 
   const handleGenerate = async () => {
-    console.log("hello");
+    // if (isFileUploading) {
+    //   toast.error("Please wait for the file to finish uploading before generating questions.", {
+    //     position: "top-center",
+    //     autoClose: 2000,
+    //     hideProgressBar: true,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //   });
+    //   return;
+    // }
+
+    console.log("Printing RequestData.....");
     const requestData = {
       textValue,
       topicValue,
@@ -348,7 +411,8 @@ const QuestionGenerator = () => {
       }
 
       const data = await response.json();
-      setGeneratedQuestions(data);
+      console.log(data[0]);
+      setGeneratedQuestions(data[0]); //
     } catch (error) {
       console.error("Error generating questions:", error);
       handleError(
@@ -361,8 +425,8 @@ const QuestionGenerator = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-yellow-200">
-      <div className="max-w-xl w-full p-6 bg-white rounded-lg shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-blue-200">
+      <div className="max-w-4xl w-full h-full p-6 rounded-lg mx-auto">
         {error && (
           <div
             className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
@@ -372,44 +436,51 @@ const QuestionGenerator = () => {
           </div>
         )}
 
-        {generatedQuestions.length === 0 && (
+        {generatedQuestions?.length === 0 ? (
           <>
-            {/* Section Navigation */}
-            <div className="mb-6 flex justify-between items-center">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => handleSectionChange(item.label)}
-                  className={`text-lg font-semibold focus:outline-none ${
-                    activeSection === item.label
-                      ? "text-blue-600 underline"
-                      : "text-gray-600"
-                  } hover:text-blue-600 transition duration-300`}
-                >
-                  {item.label}
-                </button>
-              ))}
+            <div className="max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-lg">
+              <h1 className="text-4xl font-bold mb-8 text-center text-black">
+                Generate Quiz Questions
+              </h1>
+              <div className="mb-8 flex justify-center space-x-6">
+                {navItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleSectionChange(item.label)}
+                    className={`text-lg font-semibold focus:outline-none px-6 py-3 rounded-full transition duration-300 ${
+                      activeSection === item.label
+                        ? "bg-blue-600 text-white hover:bg-blue-700 shadow-md"
+                        : "bg-blue-100 text-blue-900 hover:bg-blue-200"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Conditional rendering for active section */}
-            {activeSection === "Text" && <TextSection />}
-            {activeSection === "Topic" && <TopicSection />}
-            {activeSection === "Uploads" && <UploadsSection />}
+            <div className="mb-6">
+              {activeSection === "Text" && <TextSection />}
+              {activeSection === "Topic" && <TopicSection />}
+              {/* {activeSection === "Uploads" && <UploadsSection />} */}
+            </div>
 
-            {/* Generate button */}
             <button
-              className="bg-blue-500 text-white rounded-md px-4 py-4 hover:bg-blue-700 mt-6 w-full focus:outline-none"
+              className="bg-yellow-200 text-black font-semibold text-2xl rounded-md px-4 py-4 hover:bg-yellow-300 w-full focus:outline-none transition-colors duration-300"
               onClick={handleGenerate}
+              // disabled={isFileUploading}
             >
               Generate
             </button>
           </>
-        )}
-
-        {generatedQuestions.length > 0 && (
-          <QuizPlayer questions={generatedQuestions} />
+        ) : (
+          <QuizPlayer
+            questions={generatedQuestions}
+            questionType={selectedQuestionType}
+          />
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 };
@@ -417,7 +488,7 @@ const QuestionGenerator = () => {
 const navItems = [
   { id: 1, label: "Text" },
   { id: 2, label: "Topic" },
-  { id: 3, label: "Uploads" },
+  // { id: 3, label: "Uploads" },
 ];
 
 export default QuestionGenerator;
