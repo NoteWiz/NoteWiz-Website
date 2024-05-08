@@ -1,5 +1,4 @@
-import dotenv from "dotenv"
-const port = 4000;
+import dotenv from "dotenv";
 import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
@@ -18,6 +17,10 @@ const readline = createInterface({
 
 dotenv.config({path:"../../.env"});
 
+const port = 4000;
+
+const API_KEY = process.env.API_KEY;
+
 const app = express();
 app.use(express.json());
 app.use(cors({origin:process.env.ORIGIN}));
@@ -26,12 +29,15 @@ app.use(fileUpload());
 app.use(express.static("public"));
 // app.use("/upload", cors());
 // app.use(bodyParser.json());
-const assistantCache = new NodeCache();
+// const assistantCache = new NodeCache();
+const uploadAssistantCache = new NodeCache();
+const flashcardAssistantCache = new NodeCache();
+const generateAssistantCache = new NodeCache();
 
-const API_KEY = process.env.API_KEY;
+const openai = new OpenAI({ apiKey: API_KEY }); // ...why
 
 app.post("/upload", async (req, res) => {
-  let myAssistant1 = assistantCache.get("myAssistant");
+  let myAssistant1 = uploadAssistantCache.get("myAssistant");
   let userInput = req.body.message;
   let fileId = req.body.fileId;
   console.log(userInput);
@@ -48,7 +54,7 @@ app.post("/upload", async (req, res) => {
       name: "Math Tutor",
       model: "gpt-4-turbo",
     });
-    assistantCache.set("myAssistant", myAssistant1);
+    uploadAssistantCache.set("myAssistant", myAssistant1);
   } else {
     console.log("assistant already created");
   }
@@ -111,7 +117,7 @@ app.post("/upload", async (req, res) => {
       },
       model: "gpt-4-turbo",
     });
-    assistantCache.set("myAssistant", myAssistant1);
+    uploadAssistantCache.set("myAssistant", myAssistant1);
     // }
   }
   if (userInput) {
@@ -154,7 +160,7 @@ app.post("/upload", async (req, res) => {
   }
 });
 app.post("/flashcard", async (req, res) => {
-  let myAssistant1 = assistantCache.get("myAssistant1");
+  let myAssistant1 = flashcardAssistantCache.get("myAssistant1");
   let userInput = req.body.message;
   let flashcards = [];
   const secretKey = API_KEY;
@@ -171,7 +177,7 @@ app.post("/flashcard", async (req, res) => {
       name: "flashcard generator",
       model: "gpt-4-turbo",
     });
-    assistantCache.set("myAssistant1", myAssistant1);
+    flashcardAssistantCache.set("myAssistant1", myAssistant1);
   } else {
     console.log("assistant already created");
   }
@@ -213,7 +219,7 @@ app.post("/flashcard", async (req, res) => {
   }
   res.json(flashcards);
   const response = await openai.beta.assistants.del(myAssistant1.id);
-  assistantCache.del("myAssistant1");
+  flashcardAssistantCache.del("myAssistant1");
   console.log(response);
 });
 
@@ -223,7 +229,7 @@ app.post("/generate", async (req, res) => {
   try {
     var file;
     var fileID;
-    let myAssistant1 = assistantCache.get("myAssistant");
+    let myAssistant1 = generateAssistantCache.get("myAssistant");
     const secretKey = API_KEY;
     const openai = new OpenAI({
       apiKey: secretKey,
@@ -234,7 +240,7 @@ app.post("/generate", async (req, res) => {
         name: "Math Tutor",
         model: "gpt-4-turbo",
       });
-      assistantCache.set("myAssistant", myAssistant1);
+      generateAssistantCache.set("myAssistant", myAssistant1);
     } else {
       console.log("assistant already created");
     }
@@ -296,7 +302,7 @@ app.post("/generate", async (req, res) => {
         },
         model: "gpt-4-turbo",
       });
-      assistantCache.set("myAssistant", myAssistant1);
+      generateAssistantCache.set("myAssistant", myAssistant1);
       // }
     }
     console.log("Request received");
@@ -381,7 +387,7 @@ app.post("/generate", async (req, res) => {
         name: "Question generator",
         model: "gpt-4-turbo",
       });
-      assistantCache.set("myAssistant", myAssistant1);
+      generateAssistantCache.set("myAssistant", myAssistant1);
       console.log(myAssistant1);
 
       let thread;
@@ -434,7 +440,7 @@ app.post("/generate", async (req, res) => {
 
       res.json(quizQuestions);
       const response = await openai.beta.assistants.del(myAssistant1.id);
-      assistantCache.del("myAssistant");
+      generateAssistantCache.del("myAssistant");
 
       // Clean up resources
       if (file) {

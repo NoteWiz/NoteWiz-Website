@@ -116,6 +116,8 @@ const cb = () => {
       ]);
       // Update the message state to null after processing
       setMessage(null); //very imp
+      //
+      setValue("");
     }
   }, [message, currentTitle, value]);
 
