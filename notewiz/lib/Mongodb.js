@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
-
+import {DB_NAME} from "./constants"
 const connect = async () => {
-  const uri =
-    "mongodb+srv://Juwairia:070898@cluster0.pghgbgz.mongodb.net/registered_users";
+  const uri =`${process.env.MONGODB_URI}/${DB_NAME}`;
   try {
     await mongoose.connect(uri, {
       // useNewUrlParser: true,
@@ -14,5 +13,6 @@ const connect = async () => {
     throw new Error("Error connecting to Mongoose");
   }
 };
+
 
 export default connect;

@@ -36,7 +36,7 @@ const SignInComponent = () => {
     }
 
     if (!password) {
-      setError("Password is invalid");
+      setError("Please enter the password");
       return;
     }
 
@@ -45,7 +45,7 @@ const SignInComponent = () => {
       email,
       password,
     });
-
+    console.log(res)
     if (res?.error) {
       setError("Invalid email or password");
     } else {
@@ -58,35 +58,7 @@ const SignInComponent = () => {
   };
   return (
     sessionStatus !== "authenticated" && (
-      <div className="flex flex-col min-h-screen justify-center items-center bg-blue-400">
-        {/* Navbar */}
-        {/* <nav className="bg-[#FFE57D] py-4 fixed w-full z-10 top-12 rounded-3xl mx-auto max-w-4xl">
-          <div className="container mx-auto flex justify-between items-center px-4 md:px-6">
-            <div className="flex items-center">
-              <Link href="/">
-                <div className="flex items-center">
-                  <Image src={Logo} alt="Logo" width={30} height={30} />
-                  <span className="text-2xl font-semibold ml-2 hover:underline">
-                    NoteWiz
-                  </span>
-                </div>
-              </Link>
-            </div>
-            <Link href="#" className="text-lg hover:underline">
-              Link 1
-            </Link>
-            <Link href="#" className="text-lg hover:underline">
-              Link 2
-            </Link>
-            <Link href="#" className="text-lg hover:underline">
-              Link 3
-            </Link>
-            <button className="bg-black hover:bg-white hover:text-black text-white rounded-full font-medium py-2 px-6">
-              Call to Action
-            </button>
-          </div>
-        </nav> */}
-
+      <div className="flex flex-col min-h-screen justify-center items-center bg-blue-400"> 
         {/* Sign-in */}
         <section className="flex flex-col items-center justify-center ">
           <div className="bg-white rounded-lg shadow-lg p-12 md:p-16 lg:p-20 h-[87vh] w-[50vw]">

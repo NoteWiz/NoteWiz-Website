@@ -3,8 +3,12 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import User from "@/models/User";
-import ConnectMongodb from "@/lib/Mongodb";
+import connect from "@/lib/Mongodb";
 import { Account, User as AuthUser } from "next-auth";
+import jwt, { getToken } from "next-auth/jwt"
+
+
+
 export const authOptions: any = {
   // Configure one or more authentication providers
   providers: [
@@ -16,7 +20,7 @@ export const authOptions: any = {
         password: { label: "password", type: "password" },
       },
       async authorize(credentials: any) {
-        await ConnectMongodb();
+        await connect();
         try {
           const user = await User.findOne({ email: credentials.email });
           if (user) {
@@ -42,21 +46,27 @@ export const authOptions: any = {
   callbacks: {
     async signIn({ user, account }: { user: AuthUser; account: Account }) {
       if (account?.provider === "credentials") {
-        return true;
+        if(account.access_token){
+          return account.access_token
+        }
+        else{
+          console.log("no access token")
+        }
+        return true ;
       }
       if (account?.provider === "google") {
-        await ConnectMongodb();
+        await connect();
         try {
           const existingUser = await User.findOne({ email: user.email });
           if (!existingUser) {
             const newUser = new User({
               email: user.email,
             });
-
+            
             await newUser.save();
             return true;
           }
-
+          
           return true;
         } catch (err) {
           console.log("Error saving user", err);
@@ -64,7 +74,23 @@ export const authOptions: any = {
         }
       }
     },
+    async session({ session, user, token }:{session:any,user:any,token:any}) {
+      // Customize the session object here if necessary
+       // Add custom data to session object
+      return session;
+    },
+    async jwt({ token, user, account, profile, isNewUser }:{session:any,user:any,token:any,account:any,profile:any,isNewUser:any}) {
+      // Modify or add new fields to the JWT
+      if (user) {
+        token.id = user.id;  // For example, add user id to the JWT
+      }
+      let expirationTime = Math.floor(Date.now() / 1000) + (24 * 60 * 60); // Expires in 24 hours from now
+      token.exp = expirationTime;
+      return token;
+    }
+    
   },
+  
 };
 
 export const handler = NextAuth(authOptions);

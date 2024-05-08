@@ -12,7 +12,7 @@
 //     console.log(error);
 //   }
 // };
-import ConnectMongodb from "@/lib/Mongodb";
+import connect from "@/lib/Mongodb";
 import User from "@/models/User";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
@@ -20,7 +20,7 @@ import bcrypt from "bcryptjs";
 export const POST = async (request: any) => {
   const { username, email, password } = await request.json();
 
-  await ConnectMongodb();
+  await connect();
 
   const existingUser = await User.findOne({ email });
 
