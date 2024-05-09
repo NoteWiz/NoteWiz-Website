@@ -73,7 +73,7 @@ const Homepage = () => {
           </div>
 
           <div className="third-container w-[40%] h-60 rounded-xl mt-4 ">
-            <Link href="/practice">
+            <Link href="/quiz-dashboard">
             <div className="third-container-fill w-full h-full rounded-xl bg-[#6DB9FB] flex flex-row justify-evenly hover:border-[#6DB9FB] border-2 before:border-none hover:bg-white transition-all cursor-pointer">
               <div className="text-heading  pt-11  border-green-500 border-">
                 <div className="pr-20">
