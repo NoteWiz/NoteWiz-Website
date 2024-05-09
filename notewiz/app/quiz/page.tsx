@@ -1,9 +1,9 @@
-import QuizCreate from "@/app/quiz/QuestionGenerator";
+import QuizCreation from "@/components/Quizer/QuizCreation";
 
 export default function page() {
     return (
       <div>
-        <QuizCreate/>
+        <QuizCreation/>
       </div>
     );
   }
