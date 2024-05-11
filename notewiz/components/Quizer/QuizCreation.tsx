@@ -4,13 +4,13 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TextSection from './TextSection';
 import TopicSection from './TopicSection';
-// import UploadsSection from './UploadsSection';
+import UploadsSection from './UploadsSection'
 import QuizPlayer from "./QuizPlayer";
 
 const QuizCreation = () => {
 
   const [error, setError] = useState<string | null>(null);
-  // const [isFileUploading, setIsFileUploading] = useState(false);
+  const [isFileUploading, setIsFileUploading] = useState(false);
 
   const handleError = (errorMessage: string) => {
     setError(errorMessage);
@@ -53,17 +53,28 @@ const QuizCreation = () => {
       difficulty: selectedDifficulty,
       numQuestions: selectedNumQuestions,
     };
+    let formData = new FormData()
+    formData.append("textValue", textValue);
+    formData.append("topicValue", topicValue);
+    formData.append("questionType", selectedQuestionType);
+    formData.append("difficulty", selectedDifficulty);
+    formData.append("numQuesitons", JSON.stringify(selectedNumQuestions));
+    // formData.append("requestData",JSON.stringify(requestData))
+    if (acceptedFile) {
+      formData.append("file", acceptedFile as Blob);
+      setAcceptedFile(null);
+    }
 
-    console.log(requestData);
+    // console.log(requestData);
 
     try {
-      const response = await fetch("http://localhost:4000/generate", {
+      const response = await fetch("/api/quiz", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      });
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
+        body: formData,
+      })
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -154,23 +165,23 @@ const QuizCreation = () => {
                   setInputError={setInputError}
                 />
               )}
-              {/* {activeSection === "Uploads" && (
+              {activeSection === "Uploads" && (
                 <UploadsSection
-                  selectedQuestionType={selectedQuestionType}
-                  setSelectedQuestionType={setSelectedQuestionType}
-                  selectedDifficulty={selectedDifficulty}
-                  setSelectedDifficulty={setSelectedDifficulty}
-                  selectedNumQuestions={selectedNumQuestions}
-                  setSelectedNumQuestions={setSelectedNumQuestions}
-                  inputError={inputError}
-                  setInputError={setInputError}
-                  handleError={handleError}
-                  isFileUploading={isFileUploading}
-                  setIsFileUploading={setIsFileUploading}
-                  acceptedFile={acceptedFile}
-                  setAcceptedFile={setAcceptedFile}
+                selectedQuestionType={selectedQuestionType}
+                setSelectedQuestionType={setSelectedQuestionType}
+                selectedDifficulty={selectedDifficulty}
+                setSelectedDifficulty={setSelectedDifficulty}
+                selectedNumQuestions={selectedNumQuestions}
+                setSelectedNumQuestions={setSelectedNumQuestions}
+                inputError={inputError}
+                setInputError={setInputError}
+                handleError={handleError}
+                isFileUploading={isFileUploading}
+                setIsFileUploading={setIsFileUploading}
+                acceptedFile={acceptedFile}
+                setAcceptedFile={setAcceptedFile}
                 />
-              )} */}
+              )}
             </div>
 
             <button
@@ -195,7 +206,7 @@ const QuizCreation = () => {
 const navItems = [
   { id: 1, label: "Text" },
   { id: 2, label: "Topic" },
-  // { id: 3, label: "Uploads" },
+  { id: 3, label: "Uploads" },
 ];
 
 export default QuizCreation;

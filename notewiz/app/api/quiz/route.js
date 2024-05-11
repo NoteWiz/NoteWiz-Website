@@ -9,12 +9,26 @@ const assistantCache = new NodeCache();
 
 const API_KEY = process.env.API_KEY;
 
+
+
 export const POST = async (request) => {
-    let info = false;
-    let quizQuestions = [];
-    console.log("in backend");
-    const data = await request.formData();
-    let NewFile=data.get("acceptedFile")
+  // let info = false;
+  let quizQuestions = [];
+  console.log("in backend");
+  const data = await request.formData();
+  let textValue = data.get("textValue");
+  let topicValue = data.get("topicValue");
+  let questionType = data.get("questionType");
+  let difficulty = data.get("difficulty");
+  let numQuestions = data.get("numQuesitons");
+  console.log(textValue)
+  console.log(topicValue)
+  console.log(questionType)
+  console.log(difficulty)
+  console.log(numQuestions)
+  
+  let NewFile = data.get("file")
+  console.log(NewFile)
   try {
     var file;
     var fileID;
@@ -25,11 +39,12 @@ export const POST = async (request) => {
     });
     if (!myAssistant2) {
       myAssistant2 = await openai.beta.assistants.create({
-        instructions: "just do whatever the user says",
+        instructions: "Answer the user prompts as quickly and precisely as possible.",
         name: "Math Tutor",
         model: "gpt-4-turbo",
       });
       assistantCache.set("myAssistant1", myAssistant2);
+      console.log(myAssistant2)
     } else {
       console.log("assistant already created");
     }
@@ -57,7 +72,7 @@ export const POST = async (request) => {
         fileID = file.id;
   
         // Fallback if no file is uploaded, create a generic assistant without file search tools
-        myAssistant2 = await openai.beta.assistants.update(myAssistant1.id, {
+        myAssistant2 = await openai.beta.assistants.update(myAssistant2.id, {
           instructions: "Answer the user prompts regarding the file uploaded by the user as quickly and precisely as possible, please give the response in form array of bullet points but in detail and do not contain the name of the file at the end of the response.",
           name: "Math Tutor",
           tools: [{ type: "file_search" }],
@@ -80,11 +95,7 @@ export const POST = async (request) => {
       
 
     //   let { textValue, topicValue, questionType, difficulty, numQuestions } =data.get("textValue","topicValue","questionType","difficulty","numQuestions")
-      let textValue = data.get("textValue");
-      let topicValue = data.get("topicValue");
-      let questionType = data.get("selectedQuestionType");
-      let difficulty = data.get("selectedDifficulty");
-      let numQuestions = data.get("selectedNumQuestions");
+    
     console.log(questionType);
     
 
@@ -136,7 +147,7 @@ export const POST = async (request) => {
         }
       } else {
         if (questionType === "Multiple Choice") {
-          userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user and send the response in the form of an array of JSON objects, store the answer in any one of the options randomly,  like 
+          userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the file content provided by the user and send the response in the form of an array of JSON objects only, store the answer in any one of the options randomly,  like 
           {
             question: "question",
             answer: "answer with max length of 15 words",
@@ -146,7 +157,7 @@ export const POST = async (request) => {
             option4: "option4 with max length of 15 words",
           }`;
         } else if (questionType === "True/False") {
-          userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user. Send the response in the form of an array of JSON objects with the following format: 
+          userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the file content provided by the user. Send the response in the form of an array of JSON objects only with the following format: 
           {
             question: "question",
             answer: "True/False",
@@ -222,7 +233,7 @@ export const POST = async (request) => {
         }
       }
 
-      const response = await openai.beta.assistants.del(myAssistant1.id);
+      const response = await openai.beta.assistants.del(myAssistant2.id);
       assistantCache.del("myAssistant1");
       
       // Clean up resources
