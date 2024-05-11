@@ -14,20 +14,16 @@ export const InputField = ({ setFlashCards }: any) => {
   const [empty, setEmpty] = useState(false);
   const handleSubmit = async () => {
     console.log(value);
-    // formData.append("message", value);
-    const data = { message: value };
+    formData.append("message", value);
     if (value.trim().length > 0) {
       setLoading(true);
       const options = {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        body:formData,
       };
       try {
         const response = await fetch(
-          "http://localhost:4000/flashcard",
+          "/api/flashcard",
           options
         );
         if (!response.ok) {
