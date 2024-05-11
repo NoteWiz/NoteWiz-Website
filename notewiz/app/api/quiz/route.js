@@ -91,10 +91,6 @@ export const POST = async (request) => {
       // }
     }
     console.log("Request received");
-      let myAssistant;
-      
-
-    //   let { textValue, topicValue, questionType, difficulty, numQuestions } =data.get("textValue","topicValue","questionType","difficulty","numQuestions")
     
     console.log(questionType);
     
@@ -188,15 +184,6 @@ export const POST = async (request) => {
       } else {
         content = "null";
       }
-
-    //   thread = await openai.beta.threads.create({
-    //     messages: [
-    //       {
-    //         role: "user",
-    //         content: content,
-    //       },
-    //     ],
-    //   });
 
       console.log("thread created", thread);
 
