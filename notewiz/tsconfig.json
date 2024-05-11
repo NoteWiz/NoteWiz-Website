@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     "models/User.js",
     "lib/Mongodb.js"
-, "app/cb/cb.tsx"  ],
+, "app/cb/cb.tsx", "app/api/chatbot/route.js"  ],
   "exclude": ["node_modules"]
 }

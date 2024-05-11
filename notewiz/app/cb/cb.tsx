@@ -22,6 +22,7 @@ import { MdOutlineQuiz } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { Loading } from "react-loading-dot";
 import { FaArrowUp } from "react-icons/fa6";
+import { NextResponse } from "next/server";
 
 // Define ChatMessage interface
 interface ChatMessage {
@@ -31,6 +32,8 @@ interface ChatMessage {
 }
 
 const cb = () => {
+  const [file,setFile]=useState<File| null>(null);
+  const [error, setError] = useState("");
   const router = useRouter();
   const [isTyping, setIsTyping] = useState(false);
 
@@ -70,12 +73,17 @@ const cb = () => {
     setMessage(null);
     setValue("");
   };
-
+  let formData = new FormData();
+  var Newfile:File
   // Function to fetch messages
   const getMessages = async () => {
     setIsTyping(true);
-    const formData = new FormData();
     formData.append("message", value);
+    if (file) {
+      formData.append("file", file as Blob);
+      setFile(null);
+    }
+    
 
     const options = {
       method: "POST",
@@ -83,16 +91,49 @@ const cb = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:4000/upload", options);
+      const response = await fetch("/api/chatbot", options);
       const data = await response.json();
+      if (!response.ok) {
+        setMessage({role:"Assistant",content:"Sorry, something went wrong!"})
+      }
       console.log(data.messages);
+      let AssistantResponse = data.messages;
+      setMessage({ role: "Assistant", content:AssistantResponse });
 
-      setMessage({ role: "Assistant", content: data.messages });
       setIsTyping(false);
     } catch (error) {
       console.log(error);
       setIsTyping(false);
     }
+  //   try{
+
+  //     const res = await fetch("/api/chatbot", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         value
+  //       }),
+  //     });
+  //     const data = await res.json(); // Parse JSON data from response
+  //     console.log(data.messages);
+  //     // if (res.status === 400) {
+  //     //   setError("This email is already registered");
+  //     // }
+  //     // if (res.status === 200) {
+  //     //   setError("");
+        
+  //     //   // setMessage({ role: "Assistant", content: res });
+  //     //   // router.push("/login");
+  //     // }
+  //     // console.log(formData);
+  //     setMessage({ role: "Assistant", content: data.messages });
+  //   setIsTyping(false);
+  // } catch (error) {
+  //   setError("Error, try again");
+  //   console.log(error);
+  // }
   };
 
   // Effect hook to handle new messages and assign titles
@@ -134,34 +175,26 @@ const cb = () => {
 
   const onDrop = async (acceptedFiles: File[]) => {
     setUploadedFiles(acceptedFiles);
-    const formData = new FormData();
 
     if (acceptedFiles.length > 0) {
-      const file = acceptedFiles[0];
+      const selectedFile = acceptedFiles[0];
+      setFile(selectedFile);
       const isPDF = true;
 
       if (isPDF) {
-        formData.append("file", file);
+       
+        // formData.append("userInput", value);
+        // console.log(formData);
+        if(selectedFile){
 
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (e) => {
-          setPdfFile((e.target?.result as string) || null);
-          console.log("PDF rendered successfully");
-          notify(); // Call notify function after successful PDF rendering
-          console.log(acceptedFiles[0]);
-        };
-
-        try {
-          const response = await fetch("http://localhost:4000/upload", {
-            method: "POST",
-            body: formData,
-          });
-          const data = await response.json();
-          console.log("File uploaded");
-          // Handle response as needed
-        } catch (error) {
-          console.error("Error uploading file:", error);
+          let reader = new FileReader();
+          reader.readAsDataURL(selectedFile);
+          reader.onload = (e) => {
+            setPdfFile((e.target?.result as string) || null);
+            console.log("PDF rendered successfully");
+            notify(); // Call notify function after successful PDF rendering
+            console.log(selectedFile);
+          };
         }
       } else {
         console.log("Please select a PDF file");
@@ -383,7 +416,7 @@ const cb = () => {
                         {chatMessage.role === "user" ? "You" : "Assistant"}
                       </span>
                     </div>
-                    <p>{chatMessage.content}</p>
+                    <p className="leading-loose">{chatMessage.content}</p>
                   </div>
                 </li>
               ))}
