@@ -261,32 +261,32 @@ const QuestionGenerator = () => {
         console.log(file); //
         formData.append("file", file);
         // setIsFileUploading(true); // Set the file upload status to true
-
-        try {
-          const response = await fetch("http://localhost:4000/generate", {
-            method: "POST",
-            body: formData,
-          });
-          const data = await response.json();
-          if (response.ok) {
-            console.log("File uploaded successfully:", data);
-            toast.success("File uploaded successfully!", {
-              position: "top-center",
-              autoClose: 2000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          } else {
-            console.error("Error uploading file:", data);
-            handleError("An error occurred while uploading the file. Please try again.");
-          }
-        } catch (error) {
-          console.error("Error uploading file:", error);
-          handleError("An error occurred while uploading the file. Please try again.");
-        }
+        console.log("form appended successfully")
+        // try {
+        //   const response = await fetch("http://localhost:4000/generate", {
+        //     method: "POST",
+        //     body: formData,
+        //   });
+        //   const data = await response.json();
+        //   if (response.ok) {
+        //     console.log("File uploaded successfully:", data);
+        //     toast.success("File uploaded successfully!", {
+        //       position: "top-center",
+        //       autoClose: 2000,
+        //       hideProgressBar: true,
+        //       closeOnClick: true,
+        //       pauseOnHover: true,
+        //       draggable: true,
+        //       progress: undefined,
+        //     });
+        //   } else {
+        //     console.error("Error uploading file:", data);
+        //     handleError("An error occurred while uploading the file. Please try again.");
+        //   }
+        // } catch (error) {
+        //   console.error("Error uploading file:", error);
+        //   handleError("An error occurred while uploading the file. Please try again.");
+        // }
         //  finally {
         //   setIsFileUploading(false); // Reset the file upload status to false
         // }
@@ -389,21 +389,31 @@ const QuestionGenerator = () => {
     const requestData = {
       textValue,
       topicValue,
-      acceptedFile,
+      // acceptedFile,
       questionType: selectedQuestionType,
       difficulty: selectedDifficulty,
       numQuestions: selectedNumQuestions,
     };
-
+    let formData = new FormData()
+    formData.append("textValue", textValue);
+    formData.append("topicValue", topicValue);
+    formData.append("questionType", selectedQuestionType);
+    formData.append("difficulty", selectedDifficulty);
+    formData.append("numQuesitons", JSON.stringify(selectedNumQuestions));
+    // formData.append("requestData",JSON.stringify(requestData))
+    if (acceptedFile) {
+      formData.append("file", acceptedFile as Blob);
+      setAcceptedFile(null);
+    }
     console.log(requestData);
 
     try {
-      const response = await fetch("http://localhost:4000/generate", {
+      const response = await fetch("/api/quiz", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
+        body: formData,
       });
 
       if (!response.ok) {
