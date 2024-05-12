@@ -30,12 +30,12 @@ const items = [
   {
     src: Layers3,
     label: "Flashcard",
-    route: "/flashcard",
+    route: "/flashcard-dashboard",
   },
   {
     src: Settings,
     label: "Settings",
-    route: "/dashboard",
+    route: "/home",
   },
   {
     src: CircleUserRound,

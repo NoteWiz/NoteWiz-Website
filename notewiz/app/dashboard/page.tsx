@@ -18,20 +18,21 @@ export default function page() {
   }
   if (sessionStatus === "authenticated") {
     return (
-      <div>
+      <div className="flex bg-[#252525]">
         <Sidebar />
-        <UserCard />
-        <h1 className="text-xl flex my-3 justify-start pl-custom-padding font-bold ">
+        <div className="ml-[90px] mt-16"> 
+        <h1 className="text-3xl flex my-3 justify-start pl-[20px] font-semibold text-white">
           Statistics
         </h1>
         <SCard />
-        <h1 className="text-xl my-2  flex justify-start pl-custom-padding font-bold ">
+        <h1 className="text-3xl my-2  flex justify-start pl-[20px] font-bold  text-white ">
           {" "}
           Achievements
         </h1>
         <ACard />
-        <ACard />
-        <ACard />
+        {/* <ACard /> */}
+        {/* <ACard /> */}
+      </div>
       </div>
     );
   }

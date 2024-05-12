@@ -27,7 +27,7 @@ export const sideBarLinks = [
   },
   {
     imgURL: Layers,
-    route: "/flashcard",
+    route: "/flashcard-dashboard",
     label: "Flashcards",
   },
   {
