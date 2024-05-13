@@ -18,21 +18,14 @@ export default function page() {
   }
   if (sessionStatus === "authenticated") {
     return (
-      <div className="flex bg-[#252525]">
-        <Sidebar />
-        <div className="ml-[90px] mt-16"> 
-        <h1 className="text-3xl flex my-3 justify-start pl-[20px] font-semibold text-white">
-          Statistics
-        </h1>
-        <SCard />
-        <h1 className="text-3xl my-2  flex justify-start pl-[20px] font-bold  text-white ">
-          {" "}
-          Achievements
-        </h1>
-        <ACard />
-        {/* <ACard /> */}
-        {/* <ACard /> */}
-      </div>
+      <div className="  h-screen w-screen bg-[#252525] flex justify-center">
+        {/* <Sidebar/> */}
+        <div className=" mt-16">
+          <h1 className="text-3xl  my-3  font-semibold text-white">
+            Statistics
+          </h1>
+          <SCard />
+        </div>
       </div>
     );
   }
