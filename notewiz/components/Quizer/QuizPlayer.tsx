@@ -23,6 +23,10 @@ const QuizPlayer: React.FC<QuizPlayerProps> = ({ questions, questionType }) => {
   const [userAnswer, setUserAnswer] = useState('');
 
   let currentQuestion: QuestionData | undefined;
+  if (!questions || questions.length === 0) {
+    return <div>No questions available</div>;
+  }
+
   if (questions.length > 0 && currentQuestionIndex < questions.length) {
     currentQuestion = questions[currentQuestionIndex];
   }

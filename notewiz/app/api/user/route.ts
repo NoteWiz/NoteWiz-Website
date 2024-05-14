@@ -1,17 +1,3 @@
-// import ConnectMongodb from "@/lib/Mongodb";
-// import User from "@/models/User";
-// import { NextResponse } from "next/server";
-
-// export const POST = async (request: any) => {
-//   try {
-//     const { name, email } = await request.json();
-//     await ConnectMongodb();
-//     await User.create({ name, email });
-//     return NextResponse.json({ message: "User Registered" }, { status: 201 });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 import connect from "@/lib/Mongodb";
 import User from "@/models/User";
 import { NextResponse } from "next/server";
