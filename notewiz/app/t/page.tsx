@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import Sidebar from "@/components/FuncSidebar/S";
 import Chat from "@/assets/icons/Message.svg";
@@ -11,8 +12,22 @@ import Heart from "@/assets/icons/Heart.svg"
 import Book from "@/assets/icons/Book.svg"
 import Thumbs from "@/assets/icons/ThumbsUp.svg"
 import Smiley from "@/assets/icons/Smiley.svg"
+import { useRouter } from "next/navigation";
+import { useSession, signIn, signOut } from "next-auth/react";
+
 
 const page = () => {
+    const router = useRouter();
+    const { data: session, status: sessionStatus } = useSession();
+    if (sessionStatus === "loading") {
+      return <div>Loading...</div>; // Show a loading state while session is being loaded
+    }
+    if (sessionStatus === "unauthenticated") {
+      router.replace("login");
+      return <div>Please sign in to view your account.</div>; // Show a message or redirect to sign-in page
+    }
+    if (sessionStatus === "authenticated")
+        {
   return (
     <div className="flex">
       <Sidebar />
@@ -126,7 +141,8 @@ const page = () => {
         </div>
       </div>
     </div>
-  );
+  )
+};
 };
 
 export default page;
