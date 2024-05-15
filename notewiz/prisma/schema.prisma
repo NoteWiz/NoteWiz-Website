@@ -4,80 +4,102 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("mongodb+srv://Juwairia:070898@cluster0.pghgbgz.mongodb.net/registered_users")
+  url      = env("DATABASE_URL")
 }
-
 model User {
   id        String   @id @default(cuid()) @map("_id")
-  name      String?
-  email     String?  @unique
+  username      String?
+  password      String
+  email     String?  @unique 
   emailVerified DateTime?
   image     String?
-  games     Game[]
-  accounts  Account[]
-  sessions  Session[]
+  // flashcards Flashcard[]
+  flashcardsets FlashcardSet[]
+  // games     Game[]
+  // accounts  Account[]
+  // sessions  Session[]
+}
+model FlashcardSet {
+  id         String     @id @default(cuid()) @map("_id")
+  userId     String
+  user       User       @relation(fields: [userId], references: [id])
+  prompt     String
+  createdAt  DateTime
+  flashcards Flashcard[]
+
+  
 }
 
-model Account {
-  id                 String  @id @default(cuid()) @map("_id")
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String? @db.String
-  access_token       String? @db.String
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String? @db.String
-  session_state      String?
-  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-  @@index([userId])
+model Flashcard {
+  id        String   @id @default(cuid()) @map("_id")
+  flashcardSet  FlashcardSet? @relation(fields: [flashcardSetId], references: [id])
+  flashcardSetId String
+  topic     String
+  front     String
+  back      String
+  // user      User?    @relation(fields: [userId],references: [id])
+  // userId    String? 
 }
+// model Account {
+//   id                 String  @id @default(cuid()) @map("_id")
+//   userId             String
+//   type               String
+//   provider           String
+//   providerAccountId  String
+//   refresh_token      String? @db.String
+//   access_token       String? @db.String
+//   expires_at         Int?
+//   token_type         String?
+//   scope              String?
+//   id_token           String? @db.String
+//   session_state      String?
+//   user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-model Session {
-  id           String   @id @default(cuid()) @map("_id")
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   @@unique([provider, providerAccountId])
+//   @@index([userId])
+// }
 
-  @@index([userId])
-}
+// model Session {
+//   id           String   @id @default(cuid()) @map("_id")
+//   sessionToken String   @unique
+//   userId       String
+//   expires      DateTime
+//   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-enum QuestionType {
-  mcq
-  true_false
-}
+//   @@index([userId])
+// }
 
-model Game {
-  id          String     @id @default(cuid()) @map("_id")
-  userId      String
-  questions   Question[]
-  timeStarted DateTime
-  topic       String
-  text        String
-  timeEnded   DateTime?
-  gameType    QuestionType
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+// enum QuestionType {
+//   mcq
+//   true_false
+// }
 
-  @@index([userId])
-}
+// model Game {
+//   id          String     @id @default(cuid()) @map("_id")
+//   userId      String
+//   questions   Question[]
+//   timeStarted DateTime
+//   topic       String
+//   text        String
+//   timeEnded   DateTime?
+//   gameType    QuestionType
+//   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-model Question {
-  id              String    @id @default(cuid()) @map("_id")
-  question        String
-  answer          String
-  gameId          String
-  options         Json?     // for mcq questions
-  isTrueOrFalse   Boolean?  // for true_false questions
-  isCorrect       Boolean   // to check if user's answer is correct
-  difficulty      LevelofDifficulty
-  questionType    QuestionType
-  userAnswer      String?
-  game            Game      @relation(fields: [gameId], references: [id])
+//   @@index([userId])
+// }
 
-  @@index([gameId])
-}
+// model Question {
+//   id              String    @id @default(cuid()) @map("_id")
+//   question        String
+//   answer          String
+//   gameId          String
+//   options         Json?     // for mcq questions
+//   isTrueOrFalse   Boolean?  // for true_false questions
+//   isCorrect       Boolean   // to check if user's answer is correct
+//   difficulty      LevelofDifficulty
+//   questionType    QuestionType
+//   userAnswer      String?
+//   game            Game      @relation(fields: [gameId], references: [id])
+
+//   @@index([gameId])
+// }

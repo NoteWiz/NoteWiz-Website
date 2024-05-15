@@ -6,14 +6,17 @@ import { useRouter } from "next/navigation";
 export default function page() {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
+  
   if (sessionStatus === "loading") {
     return <div>Loading...</div>; // Show a loading state while session is being loaded
   }
-  if (sessionStatus === "unauthenticated") {
-    router.replace("login");
+  
+  else if (sessionStatus === "unauthenticated") {
+    // router.replace("login");
     return <div>Please sign in to view your account.</div>; // Show a message or redirect to sign-in page
   }
-  if (sessionStatus === "authenticated") {
+  
+  if (session && sessionStatus === "authenticated") {
     return (
       <>
         <Cb />

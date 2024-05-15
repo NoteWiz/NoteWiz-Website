@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import Sidebar from "../../components/FuncSidebar/S";
 import Image from "next/image";
@@ -8,8 +9,49 @@ import Fourth from "@/assets/icons/fourth-cont.png";
 import { useRouter } from "next/router";
 import { CircleArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import prisma from "@/prisma";
+import  { useState, useEffect ,useMemo} from "react";
+import { useSession } from "next-auth/react";
+type User = {
+  id: string;
+  username: string | null;
+  password: string;
+  email: string | null;
+  emailVerified: Date | null;
+  image: string | null;
+};
 
 const Homepage = () => {
+  const { data: session } = useSession();
+  const [userData, setUserData] = useState<User | null>(null);
+  // const memoizedUserData = useMemo(() => userData, [userData]);
+  
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (session?.user) {
+  //       const { email } = session.user;
+  //       const response = await fetch(`/api/user?email=${email}`)
+  //       if (response.ok) {
+  //         try {
+  //           const data = await response.json();
+  //           setUserData(data);
+  //         } catch (error) {
+  //           console.error('Error parsing JSON response:', error);
+  //         }
+  //       } else {
+  //         try {
+  //           const errorData = await response.json();
+  //           console.error('Error fetching user data:', errorData?.message);
+  //         } catch (error) {
+  //           console.error('Error parsing error response:', error);
+  //         }
+  //       }
+  //     }
+  //   };
+  //   fetchData();
+  // }, [session]);
+  
   return (
     <div className="flex flex-row">
       <Sidebar />
@@ -19,7 +61,7 @@ const Homepage = () => {
             <div className="text-heading mt-6 ml-3 ">
               <p className="text-1xl p-4">Welcome Back</p>
               <p className="text-3xl font-medium ml-4 border-green-500 border-">
-                Waqas Faraz
+               {session?.user?.name }
               </p>
                 <Link href="/cb">
               <p className=" text-sm font-light ml-4 border-green-500 border- mt-5 flex align-bottom hover:underline  transition-all cursor-pointer">
