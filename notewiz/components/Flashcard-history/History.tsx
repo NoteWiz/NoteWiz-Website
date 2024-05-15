@@ -5,7 +5,7 @@ const History = () => {
 	return (
 		<div
 			id="FirstCard"
-			className=" mt-20 max-sm:mt-0 w-full h-64 max-sm:h-[300px] max-sm:flex-col max-sm:ml-20 max-sm:w-[300px] bg-[#1E1E1E] rounded-2xl border-2 border-[#1E1E1E] hover:border-[#00E340] hover:border-2"
+			className=" mt-20 max-sm:mt-0 w-full h-64 max-sm:h-[300px] max-sm:flex-col max-sm:ml-20 max-sm:w-[300px] bg-[#1E1E1E] rounded-2xl border-2 border-[#1E1E1E] hover:border-[#00E340] hover:border-2 transition-all duration-300"
 		>
 			<div className="flex flex-col justify-between items-center max-md:flex-col mt-4">
                 <Layers3 color="#00E340" size={36}/>
