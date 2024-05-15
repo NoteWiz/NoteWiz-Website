@@ -17,7 +17,7 @@ const QuizMeCard = (props: Props) => {
     const router = useRouter()
   return (
     <Card className='hover:cursor-pointer hover:opacity-75' onClick={() => {
-        router.push("/quiz")
+        router.push("/QuizForm")
     }}>
         <CardHeader className='flex flex-row items-center justify-between pb-2 space-y-0'>
     <CardTitle className='text-2xl font-bold'>Create Your Quiz!</CardTitle>
