@@ -75,7 +75,7 @@ const UserCard = ({ user }: { user: AuthUser }) => {
 
   if (sessionStatus === "authenticated") {
     return (
-      <div className="pl-custom-padding mb-10 mt-10 ">
+      <div className="pl-[250px] mb-10 mt-10 ">
         <div className="flex flex-row justify-between w-[60%] ">
           <div>
             <h1 className="text-2xl font-bold "> Account Name</h1>

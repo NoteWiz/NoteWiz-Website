@@ -53,10 +53,13 @@ const Homepage = () => {
   // }, [session]);
   
   return (
-    <div className="flex flex-row">
+    <div className="flex">
       <Sidebar />
-      <div className="container flex flex-col  pl-[250px]">
-        <div className="first-container w-[80%] rounded-lg h-60 mt-11 border-green-500 border- ">
+      <div className="ml-[0px]">
+
+      
+      <div className="container flex flex-col  pl-[100px]">
+        <div className="first-container w-[90%] rounded-lg h-60 mt-11 border-green-500 border- ">
           <div className="first-container-fill w-full h-full rounded-2xl bg-[#6DB9FB] hover:bg-[#37A2FF] transition-all flex flex-row justify-between">
             <div className="text-heading mt-6 ml-3 ">
               <p className="text-1xl p-4">Welcome Back</p>
@@ -87,7 +90,7 @@ const Homepage = () => {
         </div>
 
         <div className="second-parent-container flex flex-row">
-          <div className="second-container w-[40%] h-60 rounded-xl mt-4 mr-2 ">
+          <div className="second-container w-[50%] h-60 rounded-xl mt-4 mr-2 ">
             <Link href="/cb">
               <div className="second-container-fill w-full h-full rounded-xl bg-[#6DB9FB] flex flex-row justify-between hover:border-[#6DB9FB] border-2 before:border-none` hover:bg-white transition-all cursor-pointer">
                 <div className="text-heading pl-4 pt-11  border-green-500">
@@ -104,10 +107,10 @@ const Homepage = () => {
                     className=" overflow-visible z-10"
                   />
                   <div>
-                    <ArrowUpRight
+                    {/* <ArrowUpRight
                       size={50}
                       className="absolute top-16 right-60"
-                    />
+                    /> */}
                   </div>
                 </div>
               </div>
@@ -135,10 +138,10 @@ const Homepage = () => {
                   className=" overflow-visible z-10"
                 />
                 <div>
-                  <ArrowUpRight
+                  {/* <ArrowUpRight
                     size={50}
                     className="absolute top-16 right-60"
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -146,16 +149,16 @@ const Homepage = () => {
           </div>
         </div>
         <Link href="/flashcard">
-        <div className="fourth-container-fill w-[80%] h-60 rounded-2xl bg-[#FEAFFF] flex flex-row justify-between mt-3 mb-3 cursor-pointer hover:bg-[#FC64FF] transition-all">
+        <div className="fourth-container-fill w-[90%] h-60 rounded-2xl bg-[#FEAFFF] flex flex-row justify-between mt-3 mb-3 cursor-pointer hover:bg-[#FC64FF] transition-all">
           <div className="text-heading mt-6 ml-3 ">
             <p className="text-3xl font-medium ml-4 mt-[77px] border-green-500 transition-all">
               Generate Flashcards
             </p>
             <div className="">
-              <ArrowUpRight
+              {/* <ArrowUpRight
                 size={50}
                 className="absolute right-[52rem] bottom-[45px]"
-              />
+              /> */}
             </div>
           </div>
           <div className="relative border-green-500 -top- -left-12">
@@ -170,6 +173,7 @@ const Homepage = () => {
         </div>
         </Link>
       </div>
+    </div>
     </div>
   );
 };
