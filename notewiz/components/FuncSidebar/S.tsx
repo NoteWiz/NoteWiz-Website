@@ -6,61 +6,43 @@ import Image from "next/image";
 import Plus from "@/assets/icons/plus.png";
 import { useState } from "react";
 import { ChevronFirst, ChevronLast } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+import { usePathname } from "next/navigation";
 const S = () => {
+  const pathname = usePathname();
   const [collapse, setCollapse] = useState(false);
   const handleClick = () => {
     console.log("clicked");
     setCollapse(!collapse);
   };
   return (
-    <div className={`w-[250px] h-screen top-0 left-0 fixed transition-all duration-300 ease-in-out font-regular ${
-      collapse ? "w-[90px]" : ""
-    }`}>
-      <div
-        className={`w-full h-screen bg-[#0074D9] flex flex-col text-white rounded-tr-xl transition-all duration-300 ease-in-out`}
-      >
-        <div className={`flex px-6 gap-6 flex-col mt-[60px] `}>
-          <div
-            className={` relative align-middle justify-between items-center  pl-4   text-lg rounded-xl  flex${
-              collapse ? "w-[200px]" : ""
-            }`}
-          >
-            <p
-              className={` font-bold text-2xl cursor-pointer ${
-                collapse ? "hidden" : ""
-              }`}
-            >
-              NoteWiz
-            </p>
-            <div className="relative transition-all duration-300 ease-in-out">
-              <button
-                className={` bg-[#FFC700] p-1.5 relative -right-8 top-[-15px]  rounded-full`}
-                onClick={handleClick}
-              >
-                {collapse ? <ChevronLast color="white" className=""/> : <ChevronFirst color="white"/>}
-              </button>
-            </div>
-            {/* <Image src={Plus} alt='' width={22} height={22} className='ml-7  active:text-[#011527]'></Image> */}
-          </div>
-
-          {items.map((item) => (
+    <section className="sticky left-0 top-0 flex h-screen w-fit flex-col justify-between bg-[#181818] p-6 pt-20 text-white max-sm:hidden  lg:w-[264px] rounded-tr-xl">
+      <Link href="/home">
+        <p className="rounded-lg border-2 border-b-4 border-r-4 border-black px-2 py-1 text-xl font-bold transition-all hover:-translate-y-[2px] text-center cursor-pointer md:block dark:border-white mt-8">
+          Notewiz
+        </p>
+      </Link>
+      <div className="flex flex-col gap-4 mb-24  overflow-auto">
+        {items.map((item, index) => {
+          const isActive =
+            pathname === item.route || String.prototype.startsWith(item.route);
+          return (
             <Link
               href={item.route}
               key={item.label}
-              className={`flex gap-3 my-[-7px] pl-4 pr-4 hover:bg-[#005EB0] py-4 rounded-xl ${
-                collapse ? "justify-center w-[60px] mx-[-9px]  " : ""
-              }`}
+              className={cn(
+                "flex gap-2 items-center p-4 rounded-lg justify-start hover:bg-[#00E340]",
+                { "bg-[#00E340]": isActive }
+              )}
             >
-               {React.createElement(eval(item.src),{color:"white",size:22})}
-              <p className={`text-white ${collapse ? "hidden" : " "}`}>
-                {item.label}
-              </p>
+              {React.createElement(item.src, { color: "white", size: 22 })}
+              <p className="text-white">{item.label}</p>
             </Link>
-          ))}
-        </div>
+          );
+        })}
       </div>
-     
-    </div>
+    </section>
   );
 };
 
