@@ -17,7 +17,7 @@ const Homepage = () => {
 
       
       <div className="container flex flex-col  pl-[100px]">
-        <div className="first-container w-[90%] rounded-lg h-60 mt-11 border-green-500 border- ">
+        <div className="first-container w-[90%] rounded-lg h-60 mt-11 border-green-500 border-2 ">
           <div className="first-container-fill w-full h-full rounded-2xl bg-[#6DB9FB] hover:bg-[#37A2FF] transition-all flex flex-row justify-between">
             <div className="text-heading mt-6 ml-3 ">
               <p className="text-1xl p-4">Welcome Back</p>
