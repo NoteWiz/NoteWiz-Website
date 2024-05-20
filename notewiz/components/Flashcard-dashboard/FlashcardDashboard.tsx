@@ -4,7 +4,7 @@ import Sidebar from "@/components/FuncSidebar/S";
 import FirstImage from "@/assets/icons/Notebook.svg";
 import SecondImage from "@/assets/icons/cuate.svg";
 import ThirdImage from "@/assets/icons/Social Strategy.svg";
-import UserCard from "../Dashboard/UserCard";
+import Link from "next/link";
 
 const FlashcardDashboard = () => {
 	return (
@@ -16,11 +16,12 @@ const FlashcardDashboard = () => {
 						id="thirdCard"
 						className=" mt-20 w-full max-sm:h-[300px] h-[545px] rounded-2xl bg-[#1e1e1e] hover:-translate-y-[15px] cursor-pointer border-2 border-b-4 border-r-4 border-black transition-all duration-300 hover:border-[#00E340]"
 					>
+						<Link href="/flashcard">
 						<div className="flex flex-col justify-between items-center ">
-							<p className="text-white text-4xl font-DM_Sans tracking-tighter p-4 mt-3 text-center max-md:text-2xl max-sm:text-4xl max-sm:mt-24 ">
-								{" "}
+						<p className="text-white text-4xl font-DM_Sans tracking-tighter p-4 mt-3 text-center max-md:text-2xl max-sm:text-4xl max-sm:mt-24">
+							
 								Generate Flashcards
-							</p>
+						</p>
 
 							<Image
 								src={ThirdImage}
@@ -30,6 +31,7 @@ const FlashcardDashboard = () => {
 								className="mt-8 max-md:mt-20 max-sm:hidden"
 							/>
 						</div>
+						</Link>
 					</div>
 				</div>
 

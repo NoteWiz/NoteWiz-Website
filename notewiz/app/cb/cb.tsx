@@ -22,7 +22,9 @@ import { MdOutlineQuiz } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { Loading } from "react-loading-dot";
 import { FaArrowUp } from "react-icons/fa6";
+import { StepForward } from 'lucide-react';
 import { NextResponse } from "next/server";
+import CB_S from "./cbSidebar";
 
 // Define ChatMessage interface
 interface ChatMessage {
@@ -68,7 +70,7 @@ const cb = () => {
   };
 
   // Function to define new chat
-  const handleClick = (uniqueTitle: any) => {
+  const handleClickTitle = (uniqueTitle: any) => {
     setCurrentTitle(uniqueTitle);
     setMessage(null);
     setValue("");
@@ -105,35 +107,6 @@ const cb = () => {
       console.log(error);
       setIsTyping(false);
     }
-  //   try{
-
-  //     const res = await fetch("/api/chatbot", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         value
-  //       }),
-  //     });
-  //     const data = await res.json(); // Parse JSON data from response
-  //     console.log(data.messages);
-  //     // if (res.status === 400) {
-  //     //   setError("This email is already registered");
-  //     // }
-  //     // if (res.status === 200) {
-  //     //   setError("");
-        
-  //     //   // setMessage({ role: "Assistant", content: res });
-  //     //   // router.push("/login");
-  //     // }
-  //     // console.log(formData);
-  //     setMessage({ role: "Assistant", content: data.messages });
-  //   setIsTyping(false);
-  // } catch (error) {
-  //   setError("Error, try again");
-  //   console.log(error);
-  // }
   };
 
   // Effect hook to handle new messages and assign titles
@@ -218,7 +191,7 @@ const cb = () => {
   }, [previousChats]);
 
   return (
-    <div className="flex h-screen font-roboto">
+    <div className="flex h-screen font-roboto bg-[#252525]">
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -231,80 +204,16 @@ const cb = () => {
         pauseOnHover
         theme="dark"
       />
-      <div className="bg-[#0074D9] text-white p-6 w-1/6 transition-transform -translate-x-full sm:translate-x-0 flex flex-col justify-between">
-        <div>
-          <button
-            onClick={createNewChat}
-            className="bg-[#FFF67A] hover:bg-[#ffea00] text-black font-bold py-2 px-4 rounded mb-6 w-full"
-          >
-            <i className="fas fa-comment-dots mr-2"></i>
-            New Chat
-          </button>
-          <nav>
-            <ul className="history">
-              {uniqueTitles?.map((uniqueTitle, index) => (
-                <li
-                  key={index}
-                  onClick={() => handleClick(uniqueTitle)}
-                  className="py-2 px-4 rounded hover:bg-[#FFF67A] hover:text-black cursor-pointer transition-colors duration-200"
-                >
-                  {uniqueTitle}
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-        <div className="flex flex-col gap-4">
-          <button
-            className="bg-inherit hover:bg-[#ffea00] text-white hover:text-black font-bold py-2 px-4 rounded mb-2 w-full flex items-center gap-4"
-            onClick={() => handleClickSidebar("/practice")}
-          >
-            <div className="flex flex-col items-center">
-              <MdOutlineQuiz className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col ">Quiz</div>
-          </button>
-          <button
-            className="bg-inherit hover:bg-[#ffea00] text-white hover:text-black font-bold py-2 px-4 rounded mb-2 w-full flex items-center gap-4"
-            onClick={() => handleClickSidebar("/flashcard")}
-          >
-            <div className="flex flex-col items-center">
-              <PiCards className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col">Flashcards</div>
-          </button>
-          <button
-            className="bg-inherit hover:bg-[#ffea00] text-white hover:text-black font-bold py-2 px-4 rounded mb-2 w-full flex items-center gap-4"
-            onClick={() => handleClickSidebar("/dashboard")}
-          >
-            <div className="flex flex-col items-center">
-              <MdOutlineSpaceDashboard className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col">Dashboard</div>
-          </button>
-          <button
-            className="bg-inherit hover:bg-[#ffea00] text-white hover:text-black font-bold py-2 px-4 rounded mb-2 w-full flex items-center gap-4"
-            onClick={() => handleClickSidebar("/home")}
-          >
-            <div className="flex flex-col items-center">
-              <MdHomeMax className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col">Home</div>
-          </button>
-          <button
-            className="bg-inherit hover:bg-[#ffea00] text-white hover:text-black font-bold py-2 px-4 rounded mb-2 w-full flex items-center gap-4"
-            onClick={() => handleClickSidebar("/dashboard")}
-          >
-            <div className="flex flex-col items-center">
-              <MdOutlineAccountCircle className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col">Account</div>
-          </button>
-        </div>
-      </div>
 
-      <div className="flex-1 p-8 flex justify-between overflow-auto">
-        <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 mr-4 overflow-y-auto">
+      
+      <CB_S
+        createNewChat={createNewChat}
+        handleClickTitle={handleClickTitle}
+        uniqueTitles={uniqueTitles}
+      />
+
+      <div className="flex-1 p-8 flex justify-between overflow-auto bg-[#252525]">
+        <div className="bg-[#252525] rounded-lg shadow-lg p-4 w-1/2 mr-4 overflow-y-auto">
           {pdfFile ? (
             <div {...getRootProps()}>
               <input {...getInputProps()} />
@@ -321,12 +230,12 @@ const cb = () => {
             </div>
           ) : (
             <>
-              <h2 className="text-2xl font-semibold mb-4">
+              <h2 className="text-2xl font-semibold mb-4 text-white">
                 Chat with Document
               </h2>
 
               <div
-                className="border-4 border-dashed border-[#ffea00] rounded-lg p-8 text-center cursor-pointer"
+                className="border-4 border-dashed border-[#00E340] rounded-lg p-8 text-center cursor-pointer"
                 // onClick={notify}
                 {...getRootProps()}
               >
@@ -335,7 +244,7 @@ const cb = () => {
                 <div className="flex justify-center mb-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8 text-[#ffea00]"
+                    className="h-8 w-8 text-[#00E340]"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -349,12 +258,12 @@ const cb = () => {
                     />
                   </svg>
                 </div>
-                <p className="text-gray-600 mb-4">
+                <p className="text-white mb-4">
                   Click to Upload or Drop PDF here
                 </p>
 
                 <div className="flex justify-center space-x-4 ">
-                  <button className="bg-[#FFF67A] hover:bg-[#ffea00] text-black font-bold py-3 px-6 rounded-lg">
+                  <button className="bg-[#181818] border-[#00E340] border-2 hover:bg-[#00E340] hover:text-white text-white transition-all duration-300 font-bold py-3 px-6 rounded-lg">
                     <i className="fas fa-upload mr-2"></i>
                     Upload Files
                   </button>
@@ -377,15 +286,15 @@ const cb = () => {
           )}
         </div>
 
-        <div className="bg-[#80C4FF] rounded-lg shadow-lg p-4 w-1/2 overflow-y-auto flex flex-col justify-between">
+        <div className="bg-[#252525] rounded-lg shadow-lg p-4 w-1/2 overflow-y-auto flex flex-col justify-between border-2 border-black">
           <div
             ref={feedContainerRef}
-            className="feed h-[80vh] overflow-y-auto rounded-lg bg-white p-4"
+            className="feed h-[80vh] overflow-y-auto rounded-lg bg-[#181818] p-4"
           >
             <ul className="feed p-0 w-full">
               {isTyping && (
                 <li className="flex w-full my-2 justify-start">
-                  <Loading background={"#0074D9"} />
+                  <Loading background={"#00E340"} />
                   {/* or your custom typing indicator component */}
                 </li>
               )}
@@ -401,19 +310,19 @@ const cb = () => {
                   <div
                     className={`rounded-lg px-4 py-2 max-w-[70%] ${
                       chatMessage.role === "user"
-                        ? "bg-[#e6f3ff] text-[#0074D9]"
-                        : "bg-[#fffccc] text-black"
+                        ? "bg-[#252525] text-white"
+                        : "bg-[#252525] text-white"
                     }`}
                   >
                     <div className="flex items-center space-x-2 mb-1">
                       <span
                         className={`font-bold ${
                           chatMessage.role === "user"
-                            ? "text-[#0074D9]"
-                            : "text-black"
+                            ? "text-[#00E340]"
+                            : "text-[#00E340]"
                         }`}
                       >
-                        {chatMessage.role === "user" ? "You" : "Assistant"}
+                        {chatMessage.role === "user" ? "" : "Assistant"}
                       </span>
                     </div>
                     <p className="leading-loose">{chatMessage.content}</p>
@@ -427,15 +336,20 @@ const cb = () => {
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder="Enter prompt"
+              placeholder="Ask a question..."
               className="flex-grow"
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  getMessages();
+                }
+              }}
             />
             <Button
               type="submit"
               onClick={getMessages}
-              className="bg-[#FFF67A] text-black hover:bg-[#ffea00]"
+              className="bg-[#181818]"
             >
-              <FaArrowUp />
+              <StepForward className="transform -rotate-90" color="#00E340" />
             </Button>
           </div>
         </div>

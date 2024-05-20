@@ -33,16 +33,16 @@ export const FlashCardList: React.FC<FlashCardListProps> = ({ flashCards }) => {
       {Array.isArray(flashCards) && flashCards.length > 0 ? (
         <>
           <div className="flex items-center justify-center w-full mb-4">
-            <span className="text-[#0074D9]">
-              {currentIndex + 1} / {flashCards.length}
+            <span className="text-[#00D93D] text-lg pb-12">
+              {currentIndex + 1} <span className="text-white">/ </span>{flashCards.length}
             </span>
           </div>
-          <div className="flex items-center justify-between w-full ">
+          <div className="flex items-center justify-around w-full">
             <button
-              className="ml-2 text-black rounded-full  bg-white p-6 hover:bg-[#FFF67A]"
+              className="ml-2 text-white rounded-full bg-[#151515] p-6 hover:bg-[#00D93D] hover:text-black"
               onClick={handlePrevious}
             >
-              <FaArrowLeft />
+              <FaArrowLeft size={20} />
             </button>
             <FlashCard
               key={currentIndex}
@@ -50,10 +50,10 @@ export const FlashCardList: React.FC<FlashCardListProps> = ({ flashCards }) => {
               back={flashCards[currentIndex].back}
             />
             <button
-              className="ml-2 text-black rounded-full bg-white p-6 hover:bg-[#FFF67A]"
+              className="ml-2 text-white rounded-full bg-[#151515] p-6 hover:bg-[#00D93D] hover:text-black"
               onClick={handleNext}
             >
-              <FaArrowRight />
+              <FaArrowRight size={20} />
             </button>
           </div>
         </>

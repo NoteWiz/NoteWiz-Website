@@ -12,15 +12,15 @@ export const FlashCard: React.FC<FlashCardProps> = ({ front, back }) => {
     setShowFront(!showFront);
   };
   return (
-    <div className="w-[50vw] h-[50vh] rounded-lg border-solid border-2 border-[#0074D9] p-4 flex flex-col justify-between shadow-lg bg-white ">
+    <div className="w-[50vw] h-[50vh] rounded-lg border-2 border-[#00D93D] p-6 flex flex-col justify-between items-center shadow-lg bg-[#1e1e1e] text-white">
       <div
-        className="flex flex-1 items-center justify-center text-2xl cursor-pointer"
+        className="flex flex-1 items-center justify-center text-2xl font-DM_Sans cursor-pointer transition-all duration-300 ease-in-out"
         onClick={toggleSide}
       >
         {showFront ? front : back}
       </div>
       <button
-        className="mt-4 text-base rounded-lg bg-[#80C4FF] text-black cursor-pointer p-2 pr-[16px] border-0 py-4"
+        className="mt-4 text-base rounded-xl bg-[#151515] text-white hover:bg-[#00D93D] hover:text-black cursor-pointer p-4 w-1/2 transition-all duration-300 ease-in-out"
         onClick={toggleSide}
       >
         {showFront ? "Show Back" : "Show Front"}

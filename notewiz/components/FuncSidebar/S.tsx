@@ -23,7 +23,7 @@ const S = () => {
           Notewiz
         </p>
       </Link>
-      <div className="flex flex-col gap-4 mb-36 mt-8 ">
+      <div className="flex flex-col gap-4 mb-36 mt-8">
         {items.map((item, index) => {
           const isActive =
             pathname === item.route || String.prototype.startsWith(item.route);
