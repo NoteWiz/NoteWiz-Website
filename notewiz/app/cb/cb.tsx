@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 import { Loading } from "react-loading-dot";
 import { FaArrowUp } from "react-icons/fa6";
 import { NextResponse } from "next/server";
-
+import { useSession } from "next-auth/react";
 // Define ChatMessage interface
 interface ChatMessage {
   title: string;
@@ -32,6 +32,7 @@ interface ChatMessage {
 }
 
 const cb = () => {
+  const { data: session, status: sessionStatus } = useSession();
   const [file,setFile]=useState<File| null>(null);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -78,6 +79,7 @@ const cb = () => {
   // Function to fetch messages
   const getMessages = async () => {
     setIsTyping(true);
+    formData.append("session",JSON.stringify(session))
     formData.append("message", value);
     if (file) {
       formData.append("file", file as Blob);

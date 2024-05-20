@@ -15,6 +15,7 @@ model User {
   image     String?
   // flashcards Flashcard[]
   flashcardsets FlashcardSet[]
+   chatbots    Chatbot[]
   // games     Game[]
   // accounts  Account[]
   // sessions  Session[]
@@ -26,8 +27,6 @@ model FlashcardSet {
   prompt     String
   createdAt  DateTime
   flashcards Flashcard[]
-
-  
 }
 
 model Flashcard {
@@ -39,6 +38,25 @@ model Flashcard {
   back      String
   // user      User?    @relation(fields: [userId],references: [id])
   // userId    String? 
+}
+
+
+model Chatbot {
+  id        String    @id @default(cuid()) @map("_id")
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime?  @default(now())
+  updatedAt DateTime? @updatedAt
+  topic     String?
+  chats     Chat[]
+}
+model Chat{
+  id        String   @id @default(cuid()) @map("_id")
+  chatbot   Chatbot?  @relation(fields: [chatbotId], references: [id])
+  chatbotId String
+  createdAt DateTime? @default(now())
+  role      String
+  content   String
 }
 // model Account {
 //   id                 String  @id @default(cuid()) @map("_id")

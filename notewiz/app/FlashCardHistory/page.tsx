@@ -3,7 +3,9 @@ import HistoryCard from "./HistoryCard"
 import { useSession } from "next-auth/react";
 import Loading from "@/utils/Loading";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 export default function page() {
+    const router=useRouter()
     const [loading, setLoading] = useState(true);
     const { data: session, status: sessionStatus } = useSession();
     const flashcardSets = session?.user.flashcardSet || [];
@@ -15,7 +17,10 @@ export default function page() {
       }
       
     else if (sessionStatus === "unauthenticated") {
-        return <div>Please sign in to view your account.</div>; // Show a message or redirect to sign-in page
+        router.push('/login')
+        return (
+            <div>Please sign in to view your account.</div>
+            ) // Show a message or redirect to sign-in page
     }
     else if (sessionStatus === "authenticated") {
         
