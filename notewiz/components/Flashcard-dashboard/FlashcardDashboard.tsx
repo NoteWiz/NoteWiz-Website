@@ -4,6 +4,7 @@ import Sidebar from "@/components/FuncSidebar/S";
 import FirstImage from "@/assets/icons/Notebook.svg";
 import SecondImage from "@/assets/icons/cuate.svg";
 import ThirdImage from "@/assets/icons/Social Strategy.svg";
+import UserCard from "../Dashboard/UserCard";
 
 const FlashcardDashboard = () => {
 	return (
@@ -75,6 +76,7 @@ const FlashcardDashboard = () => {
 					</div>
 				</div>
 			</div>
+			<UserCard/>
 		</div>
 	);
 };
