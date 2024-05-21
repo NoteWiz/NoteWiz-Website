@@ -14,28 +14,30 @@ const FlashcardDashboard = () => {
 				<div className="w-1/3 m-5 max-sm:w-[300px]  ">
 					<div
 						id="thirdCard"
-						className=" mt-20 w-full max-sm:h-[300px] h-[545px] rounded-2xl bg-[#1e1e1e] hover:-translate-y-[15px] cursor-pointer border-2 border-b-4 border-r-4 border-black transition-all duration-300 hover:border-[#00E340]"
+						className=" mt-20 w-full max-sm:h-[300px] h-[545px]  bg-[#1E1E1E] rounded-2xl hover:-translate-y-[15px] border-2 border-b-4 border-r-4 cursor-pointer border-black transition-all duration-300 hover:border-[#00E340]"
 					>
 						<Link href="/flashcard">
-						<div className="flex flex-col justify-between items-center ">
-						<p className="text-white text-4xl font-DM_Sans tracking-tighter p-4 mt-3 text-center max-md:text-2xl max-sm:text-4xl max-sm:mt-24">
-							
-								Generate Flashcards
-						</p>
+							<div className="flex flex-col justify-between items-center ">
+								<p className="text-white text-4xl font-DM_Sans tracking-tighter p-4 mt-3 text-center max-md:text-2xl max-sm:text-4xl max-sm:mt-24">
+									Generate Flashcards
+								</p>
 
-							<Image
-								src={ThirdImage}
-								alt=""
-								height={400}
-								width={400}
-								className="mt-8 max-md:mt-20 max-sm:hidden"
-							/>
-						</div>
+								<Image
+									src={ThirdImage}
+									alt=""
+									height={400}
+									width={400}
+									className="mt-8 max-md:mt-20 max-sm:hidden"
+								/>
+							</div>
 						</Link>
 					</div>
 				</div>
 
-				<div id="Container" className="flex flex-col w-1/3 m-5 max-sm:w-full max-sm:items-center">
+				<div
+					id="Container"
+					className="flex flex-col w-1/3 m-5 max-sm:w-full max-sm:items-center"
+				>
 					<div
 						id="FirstCard"
 						className=" mt-20 max-sm:mt-0 w-full h-64 max-sm:h-[300px] max-sm:w-[300px] bg-[#1E1E1E] rounded-2xl hover:-translate-y-[15px] border-2 border-b-4 border-r-4 cursor-pointer border-black transition-all duration-300 hover:border-[#00E340]"
