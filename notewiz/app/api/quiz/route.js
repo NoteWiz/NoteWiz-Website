@@ -41,7 +41,7 @@ export const POST = async (request) => {
       myAssistant2 = await openai.beta.assistants.create({
         instructions: "Answer the user prompts as quickly and precisely as possible.",
         name: "Math Tutor",
-        model: "gpt-4-turbo",
+        model: "gpt-4o",
       });
       assistantCache.set("myAssistant1", myAssistant2);
       console.log(myAssistant2)
@@ -81,7 +81,7 @@ export const POST = async (request) => {
               vector_store_ids: [vectorStore.id],
             },
           },
-          model: "gpt-4-turbo",
+          model: "gpt-4o",
         });
         assistantCache.set("myAssistant1", myAssistant2);
         // }
@@ -168,7 +168,7 @@ export const POST = async (request) => {
       myAssistant2 = await openai.beta.assistants.update(myAssistant2.id, {
         instructions: userPrompt,
         name: "Question generator",
-        model: "gpt-4-turbo",
+        model: "gpt-4o",
       });
       assistantCache.set("myAssistant1", myAssistant2);
       console.log(myAssistant2);

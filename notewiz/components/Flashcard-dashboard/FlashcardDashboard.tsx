@@ -14,7 +14,7 @@ const FlashcardDashboard = () => {
 				<div className="w-1/3 m-5 max-sm:w-[300px]  ">
 					<div
 						id="thirdCard"
-						className=" mt-20 w-full max-sm:h-[300px] h-[545px] rounded-2xl bg-[#1e1e1e] hover:-translate-y-[15px] cursor-pointer border-2 border-b-4 border-r-4 border-black transition-all duration-300 hover:border-[#00E340]"
+						className=" mt-20 w-full max-sm:h-[300px] h-[545px] "
 					>
 						<Link href="/flashcard">
 							<div className="flex flex-col justify-between items-center ">
