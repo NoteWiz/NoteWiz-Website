@@ -188,7 +188,7 @@ export const authOptions: any = {
         session.user.id=existingUser.id ?? null
         session.accessToken = token.accessToken
         session.user.image = existingUser.image ?? null
-        const UserFlashCards = await prisma.flashcardSet.findMany({
+        const UserFlashCards = await prisma.flashcardSet?.findMany({
           where: {
             userId: existingUser.id
           }
@@ -198,6 +198,18 @@ export const authOptions: any = {
         } else {
           session.user.flashcardSet = null;
         }
+        // const Chatbots = await prisma.chatbot?.findMany({
+        //   where: {
+        //     userId:existingUser.id
+        //   }
+        // })
+        // console.log(Chatbots);
+        // if (Chatbots) {
+        //   // session.user.chatbotId=Chatbots.id
+        //   session.user.chatbots = Chatbots;
+        // } else {
+        //   session.user.chatbots=null
+        // }
         // session.flashcardTopic = UserFlashCards?.prompt
         // session.flashcardDate= UserFlashCards?.createdAt
       }

@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import NodeCache from "node-cache";
 import { createInterface } from "readline";
 import { NextResponse } from "next/server";
+import prisma from "@/prisma";
 
 
 const readline = createInterface({
@@ -26,6 +27,12 @@ export const POST = async (request) => {
   console.log(data.get("file"));
   let myAssistant1 = assistantCache.get("myAssistant");
   let userInput = data.get("message");
+  let session = JSON.parse(data.get("session"))
+  console.log();
+  let userId = session.user.id
+  let chatbotId = session.user.chatbots[0]?.id;
+  console.log(chatbotId)
+  console.log(userId)
   assistantHistory.push({ role: "user", content: userInput });
   const secretKey = API_KEY;
   const openai = new OpenAI({
@@ -37,8 +44,8 @@ export const POST = async (request) => {
   if (!myAssistant1) {
     myAssistant1 = await openai.beta.assistants.create({
       instructions: "Answer the user prompts regarding the file uploaded by the user as quickly and precisely as possible, don't delay the answer and do not contain the name of the file at the end of the response.",
-      name: "Math Tutor",
-      model: "gpt-4-turbo",
+      name: "Chatbot",
+      model: "gpt-4o",
     });
     assistantCache.set("myAssistant", myAssistant1);
   } else {
@@ -71,14 +78,14 @@ export const POST = async (request) => {
       // Fallback if no file is uploaded, create a generic assistant without file search tools
       myAssistant1 = await openai.beta.assistants.update(myAssistant1.id, {
         instructions: "Answer the user prompts regarding the file uploaded by the user as quickly and precisely as possible, please give the response in form array of bullet points but in detail and do not contain the name of the file at the end of the response.",
-        name: "Math Tutor",
+        name: "Chatbot",
         tools: [{ type: "file_search" }],
         tool_resources: {
           file_search: {
             vector_store_ids: [vectorStore.id],
           },
         },
-        model: "gpt-4-turbo",
+        model: "gpt-4o",
       });
       assistantCache.set("myAssistant", myAssistant1);
       // }
@@ -122,6 +129,58 @@ export const POST = async (request) => {
     }
     
     console.log(assistantHistory)
+    try {
+      // console.log(userId)
+      // console.log(assistantHistory.map((chat) => ({
+      //   "role": chat.role,
+      //   "chat":chat.content
+      // })))
+      // const chatbots = await prisma.chatbot.create({
+      //   data: {
+      //     userId: userId,
+      //     topic: "hello",
+      //     chats: {
+      //       create: assistantHistory.map((chat) => ({
+      //         role: chat.role,
+      //         content:chat.content
+      //       }))
+      //     }
+      //   }
+      // })
+      if (!chatbotId) {
+        // Create a new Chatbot record if it doesn't exist
+        const newChatbot = await prisma.chatbot.create({
+          data: {
+            userId: userId,
+            topic: "Chat Session",
+            chats: {
+              create: assistantHistory.map((chat) => ({
+                role: chat.role,
+                content: chat.content,
+              }))
+            }
+          }
+        });
+        chatbotId = newChatbot.id; // Save the new chatbotId
+        session.chatbotId = chatbotId; // Update session with chatbotId
+      } else {
+        // Add new chats to the existing Chatbot record
+        await prisma.chatbot.update({
+          where: { id: chatbotId },
+          data: {
+            chats: {
+              create: assistantHistory.map((chat) => ({
+                role: chat.role,
+                content: chat.content,
+              }))
+            }
+          }
+        });
+      }
+    } catch (error) {
+      console.log("error saving chats",error)
+      return NextResponse.json({"error":error})
+    }
     return NextResponse.json({ messages });
 
   } else {
