@@ -4,34 +4,35 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("mongodb+srv://Juwairia:070898@cluster0.pghgbgz.mongodb.net/registered_users")
+  url      = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model User {
-  id        String   @id @default(cuid()) @map("_id")
-  name      String?
-  email     String?  @unique
+  id            String    @id @default(cuid()) @map("_id")
+  name          String?
+  email         String?   @unique
   emailVerified DateTime?
-  image     String?
-  games     Game[]
-  accounts  Account[]
-  sessions  Session[]
+  image         String?
+  games         Game[]
+  accounts      Account[]
+  sessions      Session[]
 }
 
 model Account {
-  id                 String  @id @default(cuid()) @map("_id")
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String? @db.String
-  access_token       String? @db.String
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String? @db.String
-  session_state      String?
-  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String  @id @default(cuid()) @map("_id")
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -47,7 +48,7 @@ model Session {
   @@index([userId])
 }
 
-enum QuestionType {
+enum GameType {
   mcq
   true_false
 }
@@ -57,10 +58,11 @@ model Game {
   userId      String
   questions   Question[]
   timeStarted DateTime
-  topic       String
-  text        String
+  topic       String?
+  text        String?
+  file_url    String?      
   timeEnded   DateTime?
-  gameType    QuestionType
+  gameType    GameType
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
@@ -71,12 +73,11 @@ model Question {
   question        String
   answer          String
   gameId          String
-  options         Json?     // for mcq questions
-  isTrueOrFalse   Boolean?  // for true_false questions
-  isCorrect       Boolean   // to check if user's answer is correct
-  difficulty      LevelofDifficulty
-  questionType    QuestionType
+  options         Json?     // for mcq and for true_false questions
+  isCorrect       Boolean?  // for mcq and for true_false questions
+  questionType    GameType
   userAnswer      String?
+
   game            Game      @relation(fields: [gameId], references: [id])
 
   @@index([gameId])

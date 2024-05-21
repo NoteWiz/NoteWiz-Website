@@ -214,7 +214,7 @@ export const POST = async (request) => {
               try {
                 const quiz = JSON.parse(contentItem.text.value);
                 quizQuestions.push(quiz);
-                console.log("love",quiz);
+                console.log("Quiz",quiz);
               } catch (error) {
                 console.error("Error parsing JSON:", error);
                 console.error("Raw response:", contentItem.text.value);
