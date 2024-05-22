@@ -5,6 +5,7 @@ import FirstImage from "@/assets/icons/Notebook.svg";
 import SecondImage from "@/assets/icons/cuate.svg";
 import ThirdImage from "@/assets/icons/Social Strategy.svg";
 import Link from "next/link";
+import History from "../Flashcard-history/History";
 
 const FlashcardDashboard = () => {
 	return (
@@ -62,21 +63,23 @@ const FlashcardDashboard = () => {
 						id="secondCard"
 						className="  max-sm:h-[300px] max-sm:w-[300px] mt-8 w-full h-64 bg-[#1E1E1E] rounded-2xl hover:-translate-y-[15px] border-2 border-b-4 border-r-4 cursor-pointer border-black transition-all duration-300 hover:border-[#00E340]"
 					>
+							<Link href="/flashcard-history">
 						<div className="flex flex-row justify-between max-md:flex-col max-md:items-center mt-4 max-sm:mt-28">
-							<p className="text-white text-4xl font-DM_Sans tracking-tighter p-1 ml-4 mt-24 max-md:m-auto max-md:text-2xl max-sm:text-4xl  ">
-								Flashcards History
-							</p>
+								<p className="text-white text-4xl font-DM_Sans tracking-tighter p-1 ml-4 mt-24 max-md:m-auto max-md:text-2xl max-sm:text-4xl  ">
+									Flashcards History
+								</p>
 
-							<div className="relative m-auto w-1/3 h-1/2 max-md:w-[70%] max-sm:hidden  ">
-								<Image
-									src={SecondImage}
-									alt=""
-									// width={300}
-									// height={300}
-									className=" mt-7 max-sm:opacity-0"
-								/>
-							</div>
+								<div className="relative m-auto w-1/3 h-1/2 max-md:w-[70%] max-sm:hidden  ">
+									<Image
+										src={SecondImage}
+										alt=""
+										// width={300}
+										// height={300}
+										className=" mt-7 max-sm:opacity-0"
+									/>
+								</div>
 						</div>
+							</Link>
 					</div>
 				</div>
 			</div>
