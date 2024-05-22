@@ -15,7 +15,7 @@ const Homepage = () => {
 			<Sidebar />
 			<div className=" w-[80%]">
 				<div className="container   pl-[100px] mt-5">
-					<div className="first-container-fill  w-[90%] max-sm:w-full h-60 text-white  rounded-2xl bg-[#1e1e1e] max-md:flex-col cursor-pointer border-2 border-black transition-all duration-300 hover:border-[#00E340] flex flex-row justify-between">
+					<div className="first-container-fill  w-[90%] max-sm:w-full h-60 text-white  rounded-2xl bg-[#1e1e1e] max-md:flex-col border-2 border-black transition-all duration-300 hover:border-[#00E340] flex flex-row justify-between">
 						<div className="text-heading my-4 ml-3 max-md:m-auto">
 							<p className="text-1xl p-4 max-sm:text-3xl max-sm:text-center max-md:hidden">Welcome Back</p>
 							<p className="text-3xl font-medium ml-4 max-sm:text-center max-sm:m-auto ">
