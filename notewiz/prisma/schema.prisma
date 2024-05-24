@@ -16,6 +16,7 @@ model User {
   // flashcards Flashcard[]
   flashcardsets FlashcardSet[]
    chatbots    Chatbot[]
+    // chatThreads  ChatThread[]
   // games     Game[]
   // accounts  Account[]
   // sessions  Session[]
@@ -40,23 +41,39 @@ model Flashcard {
   // userId    String? 
 }
 
-
 model Chatbot {
   id        String    @id @default(cuid()) @map("_id")
   userId    String
   user      User      @relation(fields: [userId], references: [id])
   createdAt DateTime?  @default(now())
   updatedAt DateTime? @updatedAt
-  topic     String?
-  chats     Chat[]
+ chatThreads ChatThread[]
+}
+model ChatThread {
+
+  id         String   @id @default(cuid()) @map("_id")
+
+  title      String
+
+  // userId     String
+
+  // user       User     @relation(fields: [userId], references: [id])
+  chatbotId  String
+
+  chatbot    Chatbot  @relation(fields: [chatbotId], references: [id])
+
+  chats      Chat[]
+
 }
 model Chat{
   id        String   @id @default(cuid()) @map("_id")
-  chatbot   Chatbot?  @relation(fields: [chatbotId], references: [id])
-  chatbotId String
-  createdAt DateTime? @default(now())
+  chatThread   ChatThread  @relation(fields: [chatThreadId], references: [id])
+  chatThreadId String
+  createdAt DateTime @default(now())
+  title     String?
   role      String
   content   String
+
 }
 // model Account {
 //   id                 String  @id @default(cuid()) @map("_id")

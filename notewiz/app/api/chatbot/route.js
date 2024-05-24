@@ -18,7 +18,10 @@ const API_KEY = process.env.API_KEY;
 function cleanResponseText(text) {
   return text.replace(/【\d+:\d+†.*】/g, "");
 }
-const assistantHistory = [];
+// const assistantHistory = [];
+const contextHistory = [];  // History for context in OpenAI assistant
+
+const messageHistory = [];  // History
 
 export const POST = async (request) => {
 
@@ -27,13 +30,22 @@ export const POST = async (request) => {
   console.log(data.get("file"));
   let myAssistant1 = assistantCache.get("myAssistant");
   let userInput = data.get("message");
+  let title = data.get("title")
+  console.log(title)
   let session = JSON.parse(data.get("session"))
-  console.log();
   let userId = session.user.id
-  let chatbotId = session.user.chatbots[0]?.id;
-  console.log(chatbotId)
+  let threadId = data.get("threadId");
+  // let chatbotId = session.user.chatbots[0]?.id;
+  // console.log(chatbotId)
   console.log(userId)
-  assistantHistory.push({ role: "user", content: userInput });
+  // assistantHistory.push({ title:title, role: "user", content: userInput });
+  contextHistory.push({ title, role: "user", content: userInput });
+
+  if (!messageHistory.some(message => message.content === userInput && message.role === "user")) {
+    messageHistory.push({ title, role: "user", content: userInput });
+  }
+
+
   const secretKey = API_KEY;
   const openai = new OpenAI({
     apiKey: secretKey,
@@ -94,7 +106,7 @@ export const POST = async (request) => {
     }
   }
   if (userInput) {
-    const threadMessages = assistantHistory.map((item) => ({
+    const threadMessages = contextHistory.map((item) => ({
       role: item.role,
       content: item.content,
       attachments: fileID ? [{ file_id: fileID, tools: [{ type: "file_search" }] }] : [],
@@ -107,8 +119,13 @@ export const POST = async (request) => {
       },
       stream: true,
     });
+    // const myThread = await openai.beta.threads.retrieve(
+    //   stream.thread_id
+    // );
+  
+    // console.log(myThread);
     const messages = [];
-
+    let combinedResponse = '';
     for await (const event of stream) {
       if (event.data && event.data.content) {
         // Loop through each content item (assuming each content item follows the shown structure)
@@ -116,11 +133,19 @@ export const POST = async (request) => {
           if (contentItem.text && contentItem.text.value) {
             const cleanedText = cleanResponseText(contentItem.text.value);
             console.log(cleanedText); // Now logging without the source marks
+            combinedResponse += cleanedText;
             messages.push(cleanedText);
-            messages.forEach((response) => {
-              assistantHistory.push({ role: "assistant", content: response });
-            });
-            console.log(assistantHistory)
+            // messages.forEach((response) => {
+            //   assistantHistory.push({ title:title, role: "assistant", content: response });
+            // });
+            // console.log(assistantHistory)
+            if (!contextHistory.some(chat => chat.content === cleanedText && chat.role === "assistant")) {
+              contextHistory.push({ title, role: "assistant", content: cleanedText });
+            }
+
+            if (!messageHistory.some(chat => chat.content === cleanedText && chat.role === "assistant")) {
+              messageHistory.push({ title, role: "assistant", content: cleanedText });
+            }
           }
         });
       } else {
@@ -128,63 +153,105 @@ export const POST = async (request) => {
       }
     }
     
-    console.log(assistantHistory)
+    // console.log(assistantHistory)
     try {
-      // console.log(userId)
-      // console.log(assistantHistory.map((chat) => ({
-      //   "role": chat.role,
-      //   "chat":chat.content
-      // })))
-      // const chatbots = await prisma.chatbot.create({
-      //   data: {
-      //     userId: userId,
-      //     topic: "hello",
-      //     chats: {
-      //       create: assistantHistory.map((chat) => ({
-      //         role: chat.role,
-      //         content:chat.content
-      //       }))
-      //     }
-      //   }
-      // })
-      if (!chatbotId) {
-        // Create a new Chatbot record if it doesn't exist
-        const newChatbot = await prisma.chatbot.create({
-          data: {
-            userId: userId,
-            topic: "Chat Session",
-            chats: {
-              create: assistantHistory.map((chat) => ({
-                role: chat.role,
-                content: chat.content,
-              }))
-            }
+      await prisma.$transaction(async (prisma) => {
+        const existingChatbot = await prisma.chatbot.findFirst({ where: { userId } });
+        if (!existingChatbot) {
+          // Create a new Chatbot record if it doesn't exist
+          await prisma.chatbot.create({
+            data: {
+              userId,
+              chatThreads: {
+                create: {
+                  title,
+                  chats: {
+                    create: messageHistory.map((chat) => ({ role: chat.role, content: chat.content })),
+                  },
+                },
+              },
+            },
+          });
+        } else {
+    
+          // Add new chats to the existing Chatbot record
+        
+          const chatThread = await prisma.chatThread.findFirst({
+    
+            where: { title, chatbotId: existingChatbot.id },
+    
+          });
+          if (!chatThread) {
+            await prisma.chatbot.update({
+              where: { id: existingChatbot.id },
+              data: {
+                chatThreads: {
+                  create: {
+                    title,
+                    chats: {
+                      create: messageHistory.map((chat) => ({ role: chat.role, content: chat.content })),
+                    },
+                  },
+                },
+              },
+            });
+          } else {
+            await prisma.chatThread.update({
+              where: { id: chatThread.id },
+              data: {
+                chats: {
+                  create: messageHistory.map((chat) => ({ role: chat.role, content: chat.content })),
+                },
+              },
+            });
           }
-        });
-        chatbotId = newChatbot.id; // Save the new chatbotId
-        session.chatbotId = chatbotId; // Update session with chatbotId
-      } else {
-        // Add new chats to the existing Chatbot record
-        await prisma.chatbot.update({
-          where: { id: chatbotId },
-          data: {
-            chats: {
-              create: assistantHistory.map((chat) => ({
-                role: chat.role,
-                content: chat.content,
-              }))
-            }
-          }
-        });
-      }
+        }
+      });
+      messageHistory.length = 0;
     } catch (error) {
-      console.log("error saving chats",error)
-      return NextResponse.json({"error":error})
+    
+      console.log("error saving chats", error);
+    
+      return NextResponse.json({ error });
+    
     }
     return NextResponse.json({ messages });
 
   } else {
     console.log("error entering if block");
     return NextResponse.json({ error: "No user input provided" });
+  }
+}
+
+export const GET = async (request) => {
+  const { searchParams } = new URL(request.url ?? '');
+  const chatbotId = searchParams.get("id");
+  const title=searchParams.get("title")
+  try {
+    const chatThreads = await prisma.chatThread.findMany({
+      where: {
+        chatbotId,
+        // title
+        ...(title && { title }),
+      },
+      include: {
+
+        chats: true,  // Include the related `Chat` records
+
+      },
+    });
+    const groupedChats = chatThreads.reduce((acc, chatThread) => {
+      const { title, chats } = chatThread;
+      if (!acc[title]) {
+        acc[title] = [];
+      }
+      acc[title].push(...chats);
+      return acc;
+    }, {});
+    console.log(groupedChats)
+    return NextResponse.json(groupedChats) 
+  } catch (error) {
+    console.error("Error fetching flashcard sets:", error);
+    return [];
   }
 }

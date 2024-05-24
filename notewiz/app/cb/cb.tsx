@@ -24,16 +24,23 @@ import { Loading } from "react-loading-dot";
 import { FaArrowUp } from "react-icons/fa6";
 import { NextResponse } from "next/server";
 import { useSession } from "next-auth/react";
+import {Chatbot} from "@prisma/client"
 // Define ChatMessage interface
 interface ChatMessage {
   title: string;
   role: string;
   content: string;
 }
-
+// interface Chatbot {
+//   id: string;
+//   userId: string;
+//   createdAt: Date | null;
+//   updatedAt: Date | null;
+// }
 const cb = () => {
   const { data: session, status: sessionStatus } = useSession();
-  const [file,setFile]=useState<File| null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const chatbots: Chatbot[] = session && Array.isArray(session.user?.chatbots) ? session.user.chatbots : [];
   const [error, setError] = useState("");
   const router = useRouter();
   const [isTyping, setIsTyping] = useState(false);
@@ -45,11 +52,16 @@ const cb = () => {
   const [fileId, setFileId] = useState<string | null>(null);
   // State variables
   const [value, setValue] = useState("");
-  const [message, setMessage] = useState<{
-    role: string;
-    content: string;
-  } | null>(null);
-  const [previousChats, setPreviousChats] = useState<ChatMessage[]>([]);
+  const [isNewChat, setIsNewChat] = useState(true); // New state to track if it's a new chat
+
+  // const [message, setMessage] = useState<{
+  //   role: string;
+  //   content: string;
+  // } | null>(null);
+  const [message, setMessage] = useState<ChatMessage | null>(null);
+  const [currentChatId, setCurrentChatId] = useState<string|null>(null);
+  // const [previousChats, setPreviousChats] = useState < {[title:string]}:ChatMessage[]>({});
+  const [previousChats, setPreviousChats] = useState<{ [title: string]: ChatMessage[] }>({});
   const [currentTitle, setCurrentTitle] = useState("");
   const [pdfFile, setPdfFile] = useState<string | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -66,6 +78,8 @@ const cb = () => {
     setValue("");
     setCurrentTitle("");
     setPdfFile(null);
+    setIsNewChat(true);
+    setCurrentChatId(null) ; 
   };
 
   // Function to define new chat
@@ -73,14 +87,27 @@ const cb = () => {
     setCurrentTitle(uniqueTitle);
     setMessage(null);
     setValue("");
+    // setCurrentChatId(uniqueTitle);
+    const chatMessages = previousChats[uniqueTitle];
+    if (chatMessages && chatMessages.length > 0) {
+      setCurrentChatId(chatMessages[0].title); // Assuming the title is used as chatId
+    }
+    setIsNewChat(false); // Ensure this chat is marked as not new
   };
-  let formData = new FormData();
+  // let formData = new FormData();
   var Newfile:File
   // Function to fetch messages
   const getMessages = async () => {
+    const formData = new FormData(); 
     setIsTyping(true);
     formData.append("session",JSON.stringify(session))
     formData.append("message", value);
+    if (isNewChat) {
+      formData.append("title", value);
+    } else {
+      formData.append("title", currentTitle);
+      formData.append("threadId", currentChatId || ""); 
+    }
     if (file) {
       formData.append("file", file as Blob);
       setFile(null);
@@ -96,12 +123,23 @@ const cb = () => {
       const response = await fetch("/api/chatbot", options);
       const data = await response.json();
       if (!response.ok) {
-        setMessage({role:"Assistant",content:"Sorry, something went wrong!"})
+        setMessage({title:currentTitle, role: "Assistant", content: "Sorry, something went wrong!"});
+      } else {
+        
+        console.log(data.messages);
+        let AssistantResponse = data.messages;
+        setMessage({title:currentTitle, role: "Assistant", content:AssistantResponse });
+        // setPreviousChats((prevChats) => [
+        //   ...prevChats,
+        //   { title: currentTitle, role: "user", content: value },
+        //   { title: currentTitle, role: "Assistant", content: AssistantResponse },
+        // ]);
+        if (isNewChat) {
+          setCurrentTitle(value);
+          setIsNewChat(false); // Mark that the chat is no longer new after the first message
+          setCurrentChatId(data.threadId);
+        }
       }
-      console.log(data.messages);
-      let AssistantResponse = data.messages;
-      setMessage({ role: "Assistant", content:AssistantResponse });
-
       setIsTyping(false);
     } catch (error) {
       console.log(error);
@@ -139,39 +177,103 @@ const cb = () => {
   };
 
   // Effect hook to handle new messages and assign titles
+  // useEffect(() => {
+  //   if (!currentTitle && value && message) {
+  //     setCurrentTitle(value);
+  //   }
+  //   if (currentTitle && value && message) {
+  //     if (message) {
+  //       // Added a conditional check to update previousChats only if message is valid
+  //       setPreviousChats((prevChats) => [
+  //         ...prevChats,
+  //         { title: currentTitle || value, role: "user", content: value },
+  //         { title: currentTitle || value, role: message.role, content: message.content },
+  //       ]);
+  //       setMessage(null);
+  //       setValue("");
+  //     }
+  //   }
+  // }, [message, currentTitle, value]);
   useEffect(() => {
-    if (!currentTitle && value && message) {
-      setCurrentTitle(value);
-    }
-    if (currentTitle && value && message) {
-      setPreviousChats((prevChats) => [
-        ...previousChats,
-        {
-          title: currentTitle,
-          role: "user",
-          content: value,
-        },
-        {
-          title: currentTitle,
-          role: message.role,
-          content: message.content,
-        },
-      ]);
-      // Update the message state to null after processing
-      setMessage(null); //very imp
-      //
+    const fetchChats = async () => {
+      if (session && Array.isArray(session.user.chatbots) && session.user.chatbots.length > 0) {
+        try {
+          const chats = await Promise.all(
+            session.user.chatbots.map(async (chat) => {
+              const response = await fetch(`/api/chatbot?id=${chat.id}&title=${value}`);
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              const data = await response.json();
+              return data;
+              
+            })
+          );
+          const allChats = Object.assign({}, ...chats); 
+          setPreviousChats(allChats);
+        } catch (error) {
+          console.error("Error fetching chats:", error);
+        }
+      }
+      else {
+        // If there are no chatbots for the user, reset the previousChats state
+        setPreviousChats({});
+      }
+    };
+
+    fetchChats();
+    return () => {
+      setPreviousChats({});
+    };
+  }, [session, currentChatId]);
+//   useEffect(() => {
+//   // Reset the previousChats state when the component mounts
+//   setPreviousChats({});
+// }, []);
+  useEffect(() => {
+    if (message) {
+      setPreviousChats((prevChats) => {
+        const updatedChats = { ...prevChats };
+        if (!updatedChats[currentTitle]) {
+          updatedChats[currentTitle] = [];
+        }
+        const existingMessage = updatedChats[currentTitle].find(
+          (msg) =>
+            msg.role === message.role &&
+            msg.content === message.content
+        );
+        
+        if (!existingMessage) {
+          updatedChats[currentTitle].push({
+            title: currentTitle,
+            role: "user",
+            content: value,
+          }, message);
+        }
+        
+        return updatedChats;
+       
+      });
+      setMessage(null);
       setValue("");
     }
-  }, [message, currentTitle, value]);
+  }, [message,currentTitle, value]);
+    useEffect(() => {
+
+    if (feedContainerRef.current) {
+
+      feedContainerRef.current.scrollTop = feedContainerRef.current.scrollHeight;
+
+    }
+
+  }, [previousChats]);
 
   // Filter previous chats by title
-  const currentChat = previousChats.filter(
-    (previousChat) => previousChat.title === currentTitle
-  );
+  const currentChat = previousChats[currentTitle] || [];
 
-  const uniqueTitles = Array.from(
-    new Set(previousChats.map((previousChat) => previousChat.title))
-  );
+
+
+  const uniqueTitles = Object.keys(previousChats);
 
   // Function to handle file upload
 

@@ -9,8 +9,8 @@ declare module "next-auth" {
       image: string | null;
       accessToken: string;
       flashcardSet: FlashcardSet | null;
-      chatbotId: string | null;
-      chatbots: Chatbot|null
+      chatbotId:string|null
+      chatbots: Chatbot[] | null;
     };
   }
 
@@ -24,8 +24,8 @@ declare module "next-auth" {
   interface Chatbot{
     id: string;
     userId: string;
-    createdAt: string;
-    updatedAt: string;
-    topic:     String
+    threadId: string;
+    createdAt: Date | null;
+    updatedAt: Date | null;
   }
 }

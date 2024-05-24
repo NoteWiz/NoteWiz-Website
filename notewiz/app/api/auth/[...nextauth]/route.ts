@@ -198,18 +198,18 @@ export const authOptions: any = {
         } else {
           session.user.flashcardSet = null;
         }
-        // const Chatbots = await prisma.chatbot?.findMany({
-        //   where: {
-        //     userId:existingUser.id
-        //   }
-        // })
-        // console.log(Chatbots);
-        // if (Chatbots) {
-        //   // session.user.chatbotId=Chatbots.id
-        //   session.user.chatbots = Chatbots;
-        // } else {
-        //   session.user.chatbots=null
-        // }
+        const Chatbots = await prisma.chatbot?.findMany({
+          where: {
+            userId:existingUser.id
+          }
+        })
+        console.log(Chatbots);
+        if (Chatbots) {
+          // session.user.chatbotId=Chatbots.id
+          session.user.chatbots = Chatbots;
+        } else {
+          session.user.chatbots=null
+        }
         // session.flashcardTopic = UserFlashCards?.prompt
         // session.flashcardDate= UserFlashCards?.createdAt
       }
