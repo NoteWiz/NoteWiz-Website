@@ -12,6 +12,7 @@ import Link from "next/link";
 import prisma from "@/prisma";
 import  { useState, useEffect ,useMemo} from "react";
 import { useSession } from "next-auth/react";
+import UserCard from "../Dashboard/UserCard";
 type User = {
   id: string;
   username: string | null;
@@ -174,6 +175,7 @@ const Homepage = () => {
         </Link>
       </div>
     </div>
+    {/* <UserCard /> */}
     </div>
   );
 };
