@@ -6,9 +6,14 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+<<<<<<< HEAD
 import { useSession } from "next-auth/react";
 import { Account, User as AuthUser } from "next-auth";
 
+=======
+import { Label } from "@radix-ui/react-label";
+import { ChevronsRight } from 'lucide-react';
+>>>>>>> fa31efaabd8c29d477cbc894e63654fa1e2915c9
 
 export const InputField = ({ setFlashCards }: any) => {
   const formData = new FormData();
@@ -48,33 +53,34 @@ export const InputField = ({ setFlashCards }: any) => {
     } else {
       setEmpty(true);
       const notify = () =>
-        toast.warn("Please enter text!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
+        toast.error("Please enter text!", {
+          position: "top-right",
+          autoClose: 500,
+          hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: "dark",
           // transition: Bounce,
         });
       notify();
     }
   };
   return (
-    <div className="grid w-[50vw] h-[50vh] gap-2">
+    <div className="flex flex-col items-center w-[50vw] h-[50vh] gap-2">
       <Textarea
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Type your message here."
+        placeholder="Type your message here ..."
         required
+        className="h-96 focus:border-[#00D93D] border-4 rounded-xl"
       />
       <Button
         onClick={handleSubmit}
-        className="bg-[#FFF67A] text-black hover:bg-[#ffea00] py-6 text-xl"
+        className="hover: bg-[#151515] mt-6 lg:w-1/3 sm:w-1/2 md:w-1/2 rounded-xl items-center text-white border-[#00D93D] border-4 hover:bg-[#00D93D] hover:text-black py-8 text-xl"
       >
-        Send message
+        Generate <ChevronsRight /> 
       </Button>
       {empty ? <ToastContainer /> : null}
       {loading ? (

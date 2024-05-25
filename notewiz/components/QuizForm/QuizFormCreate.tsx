@@ -26,18 +26,6 @@ import { Separator } from "@/components/ui/separator";
 import { QuizCreationSchema, QuizCreationType } from "@/lib/schemas/forms/quiz";
 import QuizPlay from '@/app/QuizPlay/QuizPlay';
 
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
-
-type QuestionType = {
-  question: string;
-  answer: string;
-  option1: string;
-  option2: string;
-  option3: string;
-  option4: string;
-};
 
 type Props = {
   inputType: "text" | "topic" | "file";
@@ -47,7 +35,7 @@ type Props = {
 };
 
 const QuizFormCreate = (props: Props) => {
-  const [generatedQuestions, setGeneratedQuestions] = useState<QuestionType[]>([]);
+  const [generatedQuestions, setGeneratedQuestions] = useState([]);
   const [selectedQuestionType, setSelectedQuestionType] = useState("");
 
   const [inputType, setInputType] = useState<"text" | "topic" | "file">(
@@ -79,7 +67,8 @@ const QuizFormCreate = (props: Props) => {
     } as QuizCreationType);
   }, [inputType, props.text, props.topic, props.file, form]);
 
-  const onSubmit = async (data: QuizCreationType) => {
+  const onSubmit = (data: QuizCreationType) => {
+    
     // Handle form submission here
     const formData = new FormData();
     formData.append("type", data.type);
@@ -95,236 +84,235 @@ const QuizFormCreate = (props: Props) => {
       formData.append("file", data.file as Blob);
     }
 
-    try {
-      const response = await fetch("/api/questions", {
-        method: "POST",
-        body: formData,
+    fetch("/api/questions", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setGeneratedQuestions(data.quizQuestions[0]);
+        setSelectedQuestionType(data.questionType);
+        // console.log(data.questionType);
+        // console.log(data.quizQuestions[0]); // Handle success
+      })
+      .catch((error) => {
+        console.error("Error generating questions:", error); // Handle error
       });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const result = await response.json();
-      setGeneratedQuestions(result.quizQuestions[0]);
-      setSelectedQuestionType(result.questionType);
-      
-      // console.log('Questions saved to the database:', result);
-    } catch (error) {
-      console.error("Error generating questions or saving to the database:", error);
-    }
   };
-
+  
   return (
-    generatedQuestions.length === 0 ? (
-      <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold">Quiz Creation</CardTitle>
-            <CardDescription></CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <div className="flex justify-center">
-                  <Button
-                    variant={inputType === "text" ? "default" : "secondary"}
-                    className="w-1/3 rounded-none rounded-l-lg"
-                    onClick={() => setInputType("text")}
-                    type="button"
-                  >
-                    <AlignCenter className="w-4 h-4 mr-2" /> Text
-                  </Button>
-                  <Separator orientation="vertical" />
-                  <Button
-                    variant={inputType === "topic" ? "default" : "secondary"}
-                    className="w-1/3 rounded-none"
-                    onClick={() => setInputType("topic")}
-                    type="button"
-                  >
-                    <PencilLine className="w-4 h-4 mr-2" /> Topic
-                  </Button>
-                  <Separator orientation="vertical" />
-                  <Button
-                    variant={inputType === "file" ? "default" : "secondary"}
-                    className="w-1/3 rounded-none rounded-r-lg"
-                    onClick={() => setInputType("file")}
-                    type="button"
-                  >
-                    <Upload className="w-4 h-4 mr-2" /> Upload
-                  </Button>
-                </div>
+    generatedQuestions.length === 0 ?(
+    <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">Quiz Creation</CardTitle>
+          <CardDescription></CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <div className="flex justify-center">
+                <Button
+                  variant={inputType === "text" ? "default" : "secondary"}
+                  className="w-1/3 rounded-none rounded-l-lg"
+                  onClick={() => setInputType("text")}
+                  type="button"
+                >
+                  <AlignCenter className="w-4 h-4 mr-2" /> Text
+                </Button>
+                <Separator orientation="vertical" />
+                <Button
+                  variant={inputType === "topic" ? "default" : "secondary"}
+                  className="w-1/3 rounded-none"
+                  onClick={() => setInputType("topic")}
+                  type="button"
+                >
+                  <PencilLine className="w-4 h-4 mr-2" /> Topic
+                </Button>
+                <Separator orientation="vertical" />
+                <Button
+                  variant={inputType === "file" ? "default" : "secondary"}
+                  className="w-1/3 rounded-none rounded-r-lg"
+                  onClick={() => setInputType("file")}
+                  type="button"
+                >
+                  <Upload className="w-4 h-4 mr-2" /> Upload
+                </Button>
+              </div>
 
-                {inputType === "text" && (
-                  <FormField
-                    control={form.control}
-                    name="text"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Text</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your text"
-                            {...field}
-                            maxLength={2000}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Enter your text here (maximum 2,000 characters)
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
-
-                {inputType === "topic" && (
-                  <FormField
-                    control={form.control}
-                    name="topic"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Topic</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter a topic" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          Please provide any topic you would like to be quizzed on
-                          here.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
-
-                {inputType === "file" && (
-                  <FormField
-                    control={form.control}
-                    name="file"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Upload File</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="file"
-                            onChange={(e) => {
-                              const file = e.target.files ? e.target.files[0] : null;
-                              if (file) {
-                                form.setValue("file", file);
-                              }
-                            }}
-                          />
-                        </FormControl>
-                        <FormDescription>Upload a file here</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
-
+              {inputType === "text" && (
                 <FormField
                   control={form.control}
-                  name="questionType"
+                  name="text"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Question Type</FormLabel>
+                      <FormLabel>Text</FormLabel>
                       <FormControl>
-                        <div className="flex justify-between">
-                          <Button
-                            variant={
-                              form.getValues("questionType") === "mcq"
-                                ? "default"
-                                : "secondary"
-                            }
-                            className="w-1/2 rounded-none rounded-l-lg"
-                            onClick={() => form.setValue("questionType", "mcq")}
-                            type="button"
-                          >
-                            <List className="w-4 h-4 mr-2" /> Multiple Choice
-                          </Button>
-                          <Separator orientation="vertical" />
-                          <Button
-                            variant={
-                              form.getValues("questionType") === "true_false"
-                                ? "default"
-                                : "secondary"
-                            }
-                            className="w-1/2 rounded-none rounded-r-lg"
-                            onClick={() => form.setValue("questionType", "true_false")}
-                            type="button"
-                          >
-                            <CopyCheck className="w-4 h-4 mr-2" /> True/False
-                          </Button>
-                        </div>
+                        <Input
+                          placeholder="Enter your text"
+                          {...field}
+                          maxLength={2000}
+                        />
                       </FormControl>
                       <FormDescription>
-                        Choose the type of questions you want
+                        Enter your text here (maximum 2,000 characters)
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+              )}
 
+              {inputType === "topic" && (
                 <FormField
                   control={form.control}
-                  name="difficulty"
+                  name="topic"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Difficulty</FormLabel>
+                      <FormLabel>Topic</FormLabel>
                       <FormControl>
-                        <select
-                          {...field}
-                          className="border border-gray-300 rounded-md p-2 w-full"
-                        >
-                          <option value="easy">Easy</option>
-                          <option value="medium">Medium</option>
-                          <option value="hard">Hard</option>
-                        </select>
+                        <Input placeholder="Enter a topic" {...field} />
                       </FormControl>
-                      <FormDescription>Choose the difficulty level</FormDescription>
+                      <FormDescription>
+                        Please provide any topic you would like to be quizzed on
+                        here.
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+              )}
 
+              {inputType === "file" && (
                 <FormField
                   control={form.control}
-                  name="numQuestions"
+                  name="file"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Number of Questions</FormLabel>
+                      <FormLabel>Upload File</FormLabel>
                       <FormControl>
+                        <Input
+                          type="file"
+                          onChange={(e) => {
+                            const file = e.target.files ? e.target.files[0] : null;
+                            if (file) {
+                              form.setValue("file", file);
+                          }
+                          }}
+                        />
+                      </FormControl>
+                      <FormDescription>Upload a file here</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
+              <FormField
+                control={form.control}
+                name="questionType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Question Type</FormLabel>
+                    <FormControl>
+                      <div className="flex justify-between">
+                        <Button
+                          variant={
+                            form.getValues("questionType") === "mcq"
+                              ? "default"
+                              : "secondary"
+                          }
+                          className="w-1/2 rounded-none rounded-l-lg"
+                          onClick={() => form.setValue("questionType", "mcq")}
+                          type="button"
+                        >
+                          <List className="w-4 h-4 mr-2" /> Multiple Choice
+                        </Button>
+                        <Separator orientation="vertical" />
+                        <Button
+                          variant={
+                            form.getValues("questionType") === "true_false"
+                              ? "default"
+                              : "secondary"
+                          }
+                          className="w-1/2 rounded-none rounded-r-lg"
+                          onClick={() => form.setValue("questionType", "true_false")}
+                          type="button"
+                        >
+                          <CopyCheck className="w-4 h-4 mr-2" /> True/False
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormDescription>
+                      Choose the type of questions you want
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="difficulty"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Difficulty</FormLabel>
+                    <FormControl>
+                      <select
+                        {...field}
+                        className="border border-gray-300 rounded-md p-2 w-full"
+                      >
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                      </select>
+                    </FormControl>
+                    <FormDescription>Choose the difficulty level</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="numQuestions"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Number of Questions</FormLabel>
+                    <FormControl>
                       <Input
                         placeholder="How many questions?"
                         type="number"
                         {...field}
-                        onChange={(e) => field.onChange(Number(e.target.value))} // Ensure the value is a number
                         min={1}
                         max={10}
                       />
-                      </FormControl>
-                      <FormDescription>
-                        You can choose how many questions you would like to be quizzed
-                        on here.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormControl>
+                    <FormDescription>
+                      You can choose how many questions you would like to be quizzed
+                      on here.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <Button type="submit">Submit</Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
-      </div>
-    ) : (
-      <QuizPlay
-        questions={generatedQuestions}
-        questionType={selectedQuestionType}
-      />
-    )
+              <Button type="submit">Submit</Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>) : (
+          <QuizPlay
+            questions={generatedQuestions}
+            questionType={selectedQuestionType}
+          />
+        )
   );
 };
 

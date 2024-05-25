@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { SquarePlus } from 'lucide-react';
 interface NewFlashcardProps {
   resetFlashCards: () => void;
 }
@@ -11,12 +12,13 @@ export const NewFlashcard: React.FC<NewFlashcardProps> = ({
     resetFlashCards();
   };
   return (
-    <div className="flex  items-center justify-center">
+    <div className="flex items-center justify-center">
       <button
-        className="rounded-lg bg-[#FFF67A] p-4 w-[70vw] text-black text-xl"
+        className="flex items-center justify-center gap-2 rounded-xl bg-white text-black hover:bg-black hover:text-white p-4 px-2 w-1/12 text-xl transition duration-300 ease-in-out"
         onClick={handleSubmit}
       >
-        Make new flash cards
+        
+        <SquarePlus className="w-6 h-6" />
       </button>
     </div>
   );

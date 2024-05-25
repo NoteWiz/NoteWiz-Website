@@ -242,14 +242,17 @@ export const GET = async (request) => {
     });
     const groupedChats = chatThreads.reduce((acc, chatThread) => {
       const { title, chats } = chatThread;
-      if (!acc[title]) {
-        acc[title] = [];
+      if (!acc.has(title)) {
+        acc.set(title, []);
       }
-      acc[title].push(...chats);
+      acc.get(title).push(...chats);
       return acc;
-    }, {});
-    console.log(groupedChats)
-    return NextResponse.json(groupedChats) 
+    }, new Map());
+
+    // Convert Map to a plain object for JSON serialization
+    const groupedChatsObject = Object.fromEntries(groupedChats);
+
+    return NextResponse.json(groupedChatsObject);
   } catch (error) {
     console.error("Error fetching flashcard sets:", error);
     return [];
