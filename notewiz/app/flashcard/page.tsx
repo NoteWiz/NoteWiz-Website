@@ -24,7 +24,7 @@ export default function page() {
           <Zap className="z-10 mr-2" />Flash Card Generator <Zap className="z-10 ml-3" />
           </p>
         </div>
-        <div className="flex-1 flex items-center justify-center overflow-auto">
+        <div className="flex-1 flex items-center justify-center overflow-auto ">
           {flashCards.length === 0 ? (
             <InputField setFlashCards={setFlashCards} />
           ) : (

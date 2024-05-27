@@ -113,7 +113,7 @@ const FlashcardDashboard = () => {
 						className="  max-sm:h-[300px] max-sm:w-[300px] mt-8 w-full h-64 bg-[#1E1E1E] rounded-2xl hover:-translate-y-[15px] border-2 border-b-4 border-r-4 cursor-pointer border-black transition-all duration-300 hover:border-[#00E340]"
 						onClick={()=>handleClick('/FlashCardHistory')}
 					>
-							<Link href="/flashcard-history">
+							{/* <Link href="/flashcard-history"> */}
 						<div className="flex flex-row justify-between max-md:flex-col max-md:items-center mt-4 max-sm:mt-28">
 								<p className="text-white text-4xl font-DM_Sans tracking-tighter p-1 ml-4 mt-24 max-md:m-auto max-md:text-2xl max-sm:text-4xl  ">
 									Flashcards History
@@ -129,7 +129,7 @@ const FlashcardDashboard = () => {
 									/>
 								</div>
 						</div>
-							</Link>
+							{/* </Link> */}
 					</div>
 				</div>
 			</div>

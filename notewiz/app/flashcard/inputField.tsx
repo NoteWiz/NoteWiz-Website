@@ -6,14 +6,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-<<<<<<< HEAD
 import { useSession } from "next-auth/react";
 import { Account, User as AuthUser } from "next-auth";
 
-=======
 import { Label } from "@radix-ui/react-label";
 import { ChevronsRight } from 'lucide-react';
->>>>>>> fa31efaabd8c29d477cbc894e63654fa1e2915c9
 
 export const InputField = ({ setFlashCards }: any) => {
   const formData = new FormData();
