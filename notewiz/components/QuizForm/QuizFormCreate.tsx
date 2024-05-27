@@ -56,6 +56,7 @@ const QuizFormCreate = (props: Props) => {
     const form = useForm<QuizCreationType>({
       // @ts-ignore
     resolver: zodResolver(QuizCreationSchema),
+    
     defaultValues: {
       type: inputType,
       text: props.text || "",
