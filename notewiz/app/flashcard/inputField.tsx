@@ -6,17 +6,23 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useSession } from "next-auth/react";
+import { Account, User as AuthUser } from "next-auth";
+
 import { Label } from "@radix-ui/react-label";
 import { ChevronsRight } from 'lucide-react';
 
 export const InputField = ({ setFlashCards }: any) => {
   const formData = new FormData();
+  const { data: session, status: sessionStatus } = useSession();
   const [value, setValue] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [empty, setEmpty] = useState(false);
   const handleSubmit = async () => {
     console.log(value);
+    console.log(session)
     formData.append("message", value);
+    formData.append("session",JSON.stringify(session))
     if (value.trim().length > 0) {
       setLoading(true);
       const options = {
@@ -37,6 +43,7 @@ export const InputField = ({ setFlashCards }: any) => {
           throw new Error("Response data is not an array");
         }
         setFlashCards(data[0]);
+        
       } catch (error) {
         console.log(error);
       }

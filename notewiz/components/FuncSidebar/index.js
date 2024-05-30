@@ -26,7 +26,7 @@ const items = [
   {
     src: MessagesSquare,
     label: "Chat Now",
-    route: "/cb",
+    route: "/chatbot-dashboard",
   },
   {
     src: Layers3,
