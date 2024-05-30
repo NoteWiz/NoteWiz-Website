@@ -47,7 +47,7 @@ const CB_S: React.FC<CB_SProps> = ({ createNewChat, handleClickTitle, uniqueTitl
             <li
               key={index}
               onClick={() => handleClickTitle(uniqueTitle)}
-              className="py-2 px-4 rounded hover:bg-[#FFF67A] hover:text-black cursor-pointer transition-colors duration-200"
+              className="py-2 px-4 rounded hover:bg-[#00E340] hover:text-black cursor-pointer transition-colors duration-200"
             >
               {uniqueTitle}
             </li>
@@ -55,7 +55,7 @@ const CB_S: React.FC<CB_SProps> = ({ createNewChat, handleClickTitle, uniqueTitl
         </ul>
       </nav>
 
-      <div className="flex flex-col gap-4 mt-4">
+      <div className="flex flex-col gap-1 mt-4">
         {items.map((item, index) => {
           const isActive = pathname === item.route || String.prototype.startsWith(item.route);
           return (

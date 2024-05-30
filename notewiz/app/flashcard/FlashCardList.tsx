@@ -29,7 +29,7 @@ export const FlashCardList: React.FC<FlashCardListProps> = ({ flashCards }) => {
   };
 
   return (
-    <div className="flex flex-wrap justify-center p-5  rounded-lg gap-[20px] overflow-auto h-[70vh]">
+    <div className="flex flex-wrap justify-center p-5  rounded-lg gap-[20px] overflow-hidden h-[74vh]">
       {Array.isArray(flashCards) && flashCards.length > 0 ? (
         <>
           <div className="flex items-center justify-center w-full mb-4">

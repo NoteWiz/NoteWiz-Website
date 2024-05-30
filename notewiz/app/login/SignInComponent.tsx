@@ -9,10 +9,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useEffect } from "react";
+import Loading from "@/utils/Loading";
 
 const SignInComponent = () => {
   const [error, setError] = useState("");
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const { data: session, status: sessionStatus } = useSession();
 
   useEffect(() => {
@@ -26,6 +28,7 @@ const SignInComponent = () => {
     return emailRegex.test(email);
   };
   const handleSubmit = async (e: any) => {
+    setLoading(true);
     e.preventDefault();
     const email = e.target[0].value;
     const password = e.target[1].value;
@@ -47,22 +50,23 @@ const SignInComponent = () => {
     });
     console.log(res)
     if (res?.error) {
+      setLoading(false)
       setError("Invalid email or password");
     } else {
       setError("");
+      setLoading(false)
       if (res?.url) router.replace("/dashboard");
     }
     if (sessionStatus === "loading") {
-      return <h1>Loading...</h1>;
+      return (<Loading loading={true}/>);
     }
   };
   return (
     sessionStatus !== "authenticated" && (
-      <div className="flex flex-col min-h-screen justify-center items-center bg-blue-400"> 
-        {/* Sign-in */}
-        <section className="flex flex-col items-center justify-center ">
-          <div className="bg-white rounded-lg shadow-lg p-12 md:p-16 lg:p-20 h-[87vh] w-[50vw]">
-            <h3 className="mb-6 px-3 font-semibold text-3xl text-black">
+      <div className="flex flex-col h-screen justify-center items-center bg-blue-400 max-h-screen" >
+        {loading? (<Loading loading={loading}/>):(<section className="flex flex-col items-center justify-evenly ">
+          <div className="bg-white rounded-lg shadow-lg p-12 md:p-16 lg:p-18 max-h-screen max-w-xl  mx-auto w-[50vw] h-[70vh] lg:h-[94vh]">
+            <h3 className="mb-4 px-3 font-semibold text-3xl text-black">
               Login to your account:
             </h3>
             <button
@@ -143,9 +147,9 @@ const SignInComponent = () => {
               <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-lg py-3 ">
                 Sign in
               </button>
-              <p className="text-red-600 text-[16px] mb-4">{error && error}</p>
+              <p className="text-red-600 text-[16px] ">{error && error}</p>
             </form>
-            <div className="mt-8 text-center ">
+            <div className="flex flex-col items-center justify-between mt-8 mb-4 ">
               <p className="text-sm text-gray-700 dark:text-gray-400">
                 Don't have an account yet?{" "}
                 <Link
@@ -157,7 +161,9 @@ const SignInComponent = () => {
               </p>
             </div>
           </div>
-        </section>
+        </section>)}
+        {/* Sign-in */}
+        
       </div>
     )
   );

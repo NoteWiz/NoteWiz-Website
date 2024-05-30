@@ -12,15 +12,18 @@ import Heart from "@/assets/icons/Heart.svg"
 import Book from "@/assets/icons/Book.svg"
 import Thumbs from "@/assets/icons/ThumbsUp.svg"
 import Smiley from "@/assets/icons/Smiley.svg"
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
+import Loading from "@/utils/Loading";
 
 
 const page = () => {
-    const router = useRouter();
+  const router = useRouter();
+  const [loading,setLoading]=useState(true)
     const { data: session, status: sessionStatus } = useSession();
     if (sessionStatus === "loading") {
-      return <div>Loading...</div>; // Show a loading state while session is being loaded
+      return (<Loading loading={loading}/>); // Show a loading state while session is being loaded
     }
     if (sessionStatus === "unauthenticated") {
       router.replace("login");
@@ -35,7 +38,7 @@ const page = () => {
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-4 text-white ml-[100px]">Statistics</h2>
           <div className="grid grid-cols-2 gap-4 ml-[100px] lg:w-[71%] max-sm:grid-cols-1 max-sm:w-[80%]">
-            <div className="bg-[#00DB3D] text-black p-4 md:w-full h-24 rounded-lg flex items-center">
+            <div className="bg-[#00DB3D] text-black p-4 md:w-full h-24 rounded-lg flex items-center"  onClick={() => signOut({ callbackUrl: "/login" })}>
               <Image
                 src={Thumbs}
                 alt="Heart Icon"
