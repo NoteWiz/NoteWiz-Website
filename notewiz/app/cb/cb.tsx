@@ -105,18 +105,12 @@ const cb = () => {
     setIsTyping(true);
     formData.append("session",JSON.stringify(session))
     formData.append("message", value);
-    // if (isNewChat) {
-    //   formData.append("title", `${value}-${Date.now().toString()}`);
-    // } else {
-    //   formData.append("title", currentTitle);
-    //   formData.append("threadId", currentChatId || ""); 
-    // }
-    const chatTitle = isNewChat ? `${value}` : currentTitle;
-    formData.append("title", chatTitle);
-    if (!isNewChat) {
-        formData.append("threadId", currentChatId || "");
+    if (isNewChat) {
+      formData.append("title", value);
+    } else {
+      formData.append("title", currentTitle);
+      formData.append("threadId", currentChatId || ""); 
     }
-   
     if (file) {
       formData.append("file", file as Blob);
       setFile(null);
@@ -180,7 +174,7 @@ const cb = () => {
         try {
           const chats = await Promise.all(
             session.user.chatbots.map(async (chat) => {
-              const response = await fetch(`/api/chatbot?id=${chat.id}`);
+              const response = await fetch(`/api/chatbot?id=${chat.id}&title=${value}`);
               if (!response.ok) {
                 throw new Error('Network response was not ok');
               }
@@ -210,16 +204,13 @@ const cb = () => {
 //   // Reset the previousChats state when the component mounts
 //   setPreviousChats({});
 // }, []);
+  useEffect(() => {
     if (message) {
       setPreviousChats((prevChats) => {
         const updatedChats = { ...prevChats };
-
-        if (isNewChat) {
-          updatedChats[currentTitle] = [];
-        }
         if (!updatedChats[currentTitle]) {
           updatedChats[currentTitle] = [];
-        } 
+        }
         const existingMessage = updatedChats[currentTitle].find(
           (msg) =>
             msg.role === message.role &&
@@ -240,6 +231,7 @@ const cb = () => {
       setMessage(null);
       setValue("");
     }
+  }, [message,currentTitle, value]);
     useEffect(() => {
 
     if (feedContainerRef.current) {
