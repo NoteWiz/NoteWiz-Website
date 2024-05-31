@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { getServerSession } from "next-auth";
 import SessionProvider from "@/lib/SessionProvider";
 import localFont from "next/font/local"
 
-const inter = Inter({ subsets: ["latin"] });
+const dm_sans = DM_Sans({ subsets: ["latin"] });
+
 const grotesque = localFont({
   src: [
     {
@@ -42,7 +43,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <SessionProvider session={session}>
-        <body className={grotesque.className} font-sans-serif='true'>{children}</body>
+        <body className={`${grotesque.variable} ${dm_sans.className}`} font-sans-serif='true'>{children}</body>
       </SessionProvider>
     </html>
   );
