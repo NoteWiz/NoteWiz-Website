@@ -67,7 +67,7 @@ const SignUpComponent = () => {
 
   return (
     sessionStatus !== "authenticated" && (
-      <div className="flex  h-screen justify-center items-center bg-[#252525]">
+      <div className="flex  h-screen justify-center items-center bg-[#252525] ">
         {/* Navbar */}
         {/* <nav className="bg-[#FFE57D] py-4 fixed w-full z-10 top-12 rounded-3xl mx-auto max-w-4xl">
           <div className="container mx-auto flex justify-between items-center px-4 md:px-6">
@@ -97,11 +97,11 @@ const SignUpComponent = () => {
         </nav> */}
 
         {/* Sign-up */}
-        <div className="flex flex-row bg-[#181818] rounded-xl">
+        <div className="flex flex-row bg-[#181818] rounded-xl max-sm:w-full  max-sm:mx-5 max-md:mx-5 max-lg:m-5  max-lg:h-[50%]">
 
-        <section className="flex flex-col items-center justify-center ">
-          <div className=" rounded-lg  p-10 md:p-14 lg:p-18 h-[87vh] w-[40vw]">
-            <h3 className="mb-6 px-1 font-bold text-5xl text-white tracking-tighter w-[80%] text-left">
+        <section className="flex flex-col items-center justify-center max-sm:w-full max-md:mx-5 max-lg:h-[50%]">
+          <div className=" rounded-lg  p-10  w-[40vw] max-sm:w-full max-lg:h-[70%]">
+            <h3 className="mb-6 px-1 font-bold text-5xl text-white tracking-tighter w-[80%] text-left max-sm:text-4xl max-sm:text-center max-sm:m-auto max-md:w-full max-md:text-3xl">
               Make your first mark in learning!
             </h3>
             <form className="space-y-6 " onSubmit={handleSubmit} >
@@ -173,8 +173,8 @@ const SignUpComponent = () => {
             </div>
           </div>
         </section>
-        <div className="image flex m-10">
-          <Image src={Image1} alt="" width={500} height={200}/>
+        <div className="image flex m-10  max-sm:hidden ">
+          <Image src={Image1} alt="" width={500} height={200} className=""/>
         </div>
         </div>
 
