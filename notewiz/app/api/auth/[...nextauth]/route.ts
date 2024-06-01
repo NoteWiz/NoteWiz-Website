@@ -749,6 +749,14 @@ export const authOptions: any = {
         } else {
           session.user.chatbots=null
         }
+        // const quizSet = await prisma.quizSet?.findMany({
+        //   where:{userId:existingUser.id}
+        // })
+        // if (quizSet) {
+        //   session.user.quizSet = quizSet;
+        // } else {
+        //   session.user.quizSet=null
+        // }
         // session.flashcardTopic = UserFlashCards?.prompt
         // session.flashcardDate= UserFlashCards?.createdAt
       }

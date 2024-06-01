@@ -4,6 +4,7 @@ import OpenAI from "openai";
 import NodeCache from "node-cache";
 import { createInterface } from "readline";
 import { NextResponse } from "next/server";
+import prisma from "@/prisma/index"
 
 dotenv.config({ path: "../../.env" });
 const assistantCache = new NodeCache();
@@ -14,6 +15,9 @@ export const POST = async (request) => {
   let quizQuestions = [];
   console.log("in backend");
   const data = await request.formData();
+  const userAnswer = data.get("userAnswer");
+  const score = data.get("score");
+  let session = JSON.parse(data.get("session"))
   const type = data.get("type")?.toString() || "";
   const text = data.get("text")?.toString() || "";
   const topic = data.get("topic")?.toString() || "";
@@ -21,6 +25,7 @@ export const POST = async (request) => {
   const questionType = data.get("questionType")?.toString() || "";
   const difficulty = data.get("difficulty")?.toString() || "";
   const numQuestions = data.get("numQuestions")?.toString() || "";
+  let userId=session.user.id
 
   console.log(type);
   console.log(text);
@@ -110,18 +115,22 @@ export const POST = async (request) => {
           {
             question: "question",
             answer: "answer with max length of 15 words",
-            option1: "option1 with max length of 15 words",
-            option2: "option2 with max length of 15 words",
-            option3: "option3 with max length of 15 words",
-            option4: "option4 with max length of 15 words",
+            options:{
+              option1: "option1 with max length of 15 words",
+              option2: "option2 with max length of 15 words",
+              option3: "option3 with max length of 15 words",
+              option4: "option4 with max length of 15 words",
+            }
           }`;
         } else if (questionType === "true_false") {
           userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user. Send the response in the form of an array of JSON objects with the following format: 
           {
             question: "question",
             answer: "True/False",
-            option1: "True",
-            option2: "False",
+            options:{
+              option1: "True",
+              option2: "False",
+            }
           }`;
         } else {
           return NextResponse.status(400).json({ error: "Something went wrong" });
@@ -132,18 +141,22 @@ export const POST = async (request) => {
           {
             question: "question",
             answer: "answer with max length of 15 words",
-            option1: "option1 with max length of 15 words",
-            option2: "option2 with max length of 15 words",
-            option3: "option3 with max length of 15 words",
-            option4: "option4 with max length of 15 words",
+            options:{
+              option1: "option1 with max length of 15 words",
+              option2: "option2 with max length of 15 words",
+              option3: "option3 with max length of 15 words",
+              option4: "option4 with max length of 15 words",
+            }
           }`;
         } else if (questionType === "true_false") {
           userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user. Send the response in the form of an array of JSON objects with the following format: 
           {
             question: "question",
             answer: "True/False",
-            option1: "True",
-            option2: "False",
+            options:{
+              option1: "True",
+              option2: "False",
+            }
           }`;
         } else {
           return NextResponse.status(400).json({ error: "Something went wrong" });
@@ -154,18 +167,22 @@ export const POST = async (request) => {
           {
             question: "question",
             answer: "answer with max length of 15 words",
-            option1: "option1 with max length of 15 words",
-            option2: "option2 with max length of 15 words",
-            option3: "option3 with max length of 15 words",
-            option4: "option4 with max length of 15 words",
+            options:{
+              option1: "option1 with max length of 15 words",
+              option2: "option2 with max length of 15 words",
+              option3: "option3 with max length of 15 words",
+              option4: "option4 with max length of 15 words",
+            }
           }`;
         } else if (questionType === "true_false") {
           userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the file content provided by the user. Send the response in the form of an array of JSON objects only with the following format: 
           {
             question: "question",
             answer: "True/False",
-            option1: "True",
-            option2: "False",
+            options:{
+              option1: "True",
+              option2: "False",
+            }
           }`;
         } else {
           return NextResponse.status(400).json({ error: "Something went wrong" });
@@ -214,7 +231,8 @@ export const POST = async (request) => {
               try {
                 const quiz = JSON.parse(contentItem.text.value);
                 quizQuestions.push(quiz);
-                console.log("Quiz",quiz);
+                console.log("Quiz", quiz);
+                console.log(quizQuestions);
               } catch (error) {
                 console.error("Error parsing JSON:", error);
                 console.error("Raw response:", contentItem.text.value);
@@ -240,9 +258,32 @@ export const POST = async (request) => {
         
         console.log(response);
     }
+    // try {
+    //   const date = new Date ();
+    //     const quizSet =await prisma.quizSet.create({
+    //       data: {
+    //         userId,
+    //         createdAt: date,
+    //         prompt: topic || text || fileUrl,
+    //         quizQuestions: {
+    //           create: quizQuestions[0].map((question) => ({
+    //             prompt: topic || text || fileUrl,
+    //             difficulty,
+    //             questionType,
+    //             question: question.question,
+    //             correctAnswer: question.answer,
+    //             options: question.options,
+    //           })),
+    //         }
+    //       }
+    //     })
+    //   var quizSetId=quizSet.id
+    //   console.log("saved");
+    // } catch (error) {
+    //   console.log("not saved",error)
+    // }
 } catch (error) {
     //
-    
     // Clean up resources
     if (file) {
         await openai.files.del(file.id);
@@ -253,6 +294,6 @@ export const POST = async (request) => {
     console.error("Error:", error);
     NextResponse.status(500).json({ error: "Internal server error" });
 }
-return NextResponse.json({ quizQuestions, fileUrl, questionType }, { status: 200 });
+return NextResponse.json({ quizQuestions, fileUrl, questionType}, { status: 200 });
 
 }
