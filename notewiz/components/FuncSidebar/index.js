@@ -5,6 +5,7 @@
 // import flashcard from "@/assets/icons/flashcard.png";
 // import history from "@/assets/icons/history.png";
 // import dashboard from "@/assets/icons/dashboard.png";
+
 import {
   MessagesSquare,
   CircleUserRound,
@@ -15,6 +16,7 @@ import {
   LayoutDashboard,
   Home,
   CopyPlus,
+  Timer
 } from "lucide-react";
 
 const items = [
@@ -32,6 +34,11 @@ const items = [
     src: Layers3,
     label: "Flashcard",
     route: "/flashcard-dashboard",
+  },
+  {
+    src:Timer,
+    label:"Quiz",
+    route: ["/quiz-dashboard", "/QuizForm"],
   },
   {
     src: LayoutDashboard,

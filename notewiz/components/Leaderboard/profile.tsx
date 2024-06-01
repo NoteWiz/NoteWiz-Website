@@ -2,9 +2,9 @@ import React from 'react';
 
 export default function Profiles({ Leaderboard }) {
   return (
-    <div id="profile" className="mt-12">
+    <div id="profile" className="mt-12 font-DM_Sans ] ">
       {Leaderboard.map((value, index) => (
-        <div className="flex justify-between mx-60 mb-8 " key={index}>
+        <div className="flex justify-between  mb-8 border-2 border-[#00E340] p-3 rounded-xl " key={index}>
           <div className="flex justify-between ">
         
             <img src={value.img} alt={value.name} className="w-20 h-20 rounded-full" />
