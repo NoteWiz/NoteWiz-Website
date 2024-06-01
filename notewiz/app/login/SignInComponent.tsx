@@ -64,7 +64,7 @@ const SignInComponent = () => {
 	};
 	return (
 		sessionStatus !== "authenticated" && (
-			<div className="flex flex-row h-screen justify-center items-center bg-[#252525] pt-10">
+			<div className="flex flex-row h-screen justify-center items-center bg-[#252525] py-10">
 				<div className="bg-[#181818] flex flex-row gap-36 rounded-xl max-sm:w-[80%] max-md:mx-3 max-md:gap-20 max-md:my-20 max-md:h-[90%] h-">
 					<div className="flex max-sm:hidden ">
 						<Image src={LoginImg} alt="" width={500} />
