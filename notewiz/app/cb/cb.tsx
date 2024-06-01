@@ -34,12 +34,6 @@ interface ChatMessage {
   role: string;
   content: string;
 }
-// interface Chatbot {
-//   id: string;
-//   userId: string;
-//   createdAt: Date | null;
-//   updatedAt: Date | null;
-// }
 const cb = () => {
   const { data: session, status: sessionStatus } = useSession();
   const [file, setFile] = useState<File | null>(null);
@@ -47,20 +41,9 @@ const cb = () => {
   const [error, setError] = useState("");
   const router = useRouter();
   const [isTyping, setIsTyping] = useState(false);
-
-  const handleClickSidebar = (route: string) => {
-    router.push(route);
-  };
-  let clicked = false;
-  const [fileId, setFileId] = useState<string | null>(null);
   // State variables
   const [value, setValue] = useState("");
   const [isNewChat, setIsNewChat] = useState(true); // New state to track if it's a new chat
-
-  // const [message, setMessage] = useState<{
-  //   role: string;
-  //   content: string;
-  // } | null>(null);
   const [message, setMessage] = useState<ChatMessage | null>(null);
   const [currentChatId, setCurrentChatId] = useState<string|null>(null);
   // const [previousChats, setPreviousChats] = useState < {[title:string]}:ChatMessage[]>({});
@@ -96,8 +79,7 @@ const cb = () => {
       setCurrentChatId(chatMessages[0].title); // Assuming the title is used as chatId
     }
     setIsNewChat(false); // Ensure this chat is marked as not new
-  };
-  // let formData = new FormData();
+  }
   var Newfile:File
   // Function to fetch messages
   const getMessages = async () => {
@@ -132,11 +114,6 @@ const cb = () => {
         console.log(data.messages);
         let AssistantResponse = data.messages;
         setMessage({title:currentTitle, role: "Assistant", content:AssistantResponse });
-        // setPreviousChats((prevChats) => [
-        //   ...prevChats,
-        //   { title: currentTitle, role: "user", content: value },
-        //   { title: currentTitle, role: "Assistant", content: AssistantResponse },
-        // ]);
         if (isNewChat) {
           setCurrentTitle(value);
           setIsNewChat(false); // Mark that the chat is no longer new after the first message
@@ -149,25 +126,6 @@ const cb = () => {
       setIsTyping(false);
     }
   };
-
-  // Effect hook to handle new messages and assign titles
-  // useEffect(() => {
-  //   if (!currentTitle && value && message) {
-  //     setCurrentTitle(value);
-  //   }
-  //   if (currentTitle && value && message) {
-  //     if (message) {
-  //       // Added a conditional check to update previousChats only if message is valid
-  //       setPreviousChats((prevChats) => [
-  //         ...prevChats,
-  //         { title: currentTitle || value, role: "user", content: value },
-  //         { title: currentTitle || value, role: message.role, content: message.content },
-  //       ]);
-  //       setMessage(null);
-  //       setValue("");
-  //     }
-  //   }
-  // }, [message, currentTitle, value]);
   useEffect(() => {
     const fetchChats = async () => {
       if (session && Array.isArray(session.user.chatbots) && session.user.chatbots.length > 0) {
@@ -200,11 +158,6 @@ const cb = () => {
       setPreviousChats({});
     };
   }, [session, currentChatId]);
-//   useEffect(() => {
-//   // Reset the previousChats state when the component mounts
-//   setPreviousChats({});
-// }, []);
-  useEffect(() => {
     if (message) {
       setPreviousChats((prevChats) => {
         const updatedChats = { ...prevChats };
@@ -231,7 +184,6 @@ const cb = () => {
       setMessage(null);
       setValue("");
     }
-  }, [message,currentTitle, value]);
     useEffect(() => {
 
     if (feedContainerRef.current) {

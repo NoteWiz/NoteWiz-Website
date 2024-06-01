@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SessionProvider, useSession } from "next-auth/react";
 import { useEffect } from "react";
+import Image1 from "@/assets/SignUp Page.svg"
 const SignUpComponent = () => {
   const [error, setError] = useState("");
   const router = useRouter();
@@ -66,7 +67,7 @@ const SignUpComponent = () => {
 
   return (
     sessionStatus !== "authenticated" && (
-      <div className="flex flex-col min-h-screen justify-center items-center bg-blue-400">
+      <div className="flex  h-screen justify-center items-center bg-[#252525] max-lg:py-10">
         {/* Navbar */}
         {/* <nav className="bg-[#FFE57D] py-4 fixed w-full z-10 top-12 rounded-3xl mx-auto max-w-4xl">
           <div className="container mx-auto flex justify-between items-center px-4 md:px-6">
@@ -96,16 +97,18 @@ const SignUpComponent = () => {
         </nav> */}
 
         {/* Sign-up */}
-        <section className="flex flex-col items-center justify-center ">
-          <div className="bg-white rounded-lg shadow-lg p-10 md:p-14 lg:p-18 h-[87vh] w-[50vw]">
-            <h3 className="mb-6 px-3 font-semibold text-3xl text-black ">
-              Let's create your account:
+        <div className="flex flex-row bg-[#181818] rounded-xl max-sm:w-full max-sm:h-[90%]  max-sm:mx-5 max-md:mx-5 max-md:h-[90%] max-md:gap-0 max-lg:mx-10 max-lg:h-[100%] ">
+
+        <section className="flex flex-col items-center justify-center max-sm:w-full max-md:w-full">
+          <div className=" rounded-lg  p-10  w-[35vw] max-sm:w-full max-md:w-full max-lg:h-full max-lg:w-full">
+            <h3 className="mb-6 px-1 font-bold text-5xl text-white tracking-tighter w-[90%] text-left max-sm:text-4xl max-sm:text-center max-md:w-full max-md:text-3xl">
+              Make your first mark in learning!
             </h3>
-            <form className="space-y-12 " onSubmit={handleSubmit}>
+            <form className="space-y-6 " onSubmit={handleSubmit} >
               <div>
                 <label
                   htmlFor="name"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white dark:text-white"
                 >
                   Your Name
                 </label>
@@ -121,7 +124,7 @@ const SignUpComponent = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white dark:text-white"
                 >
                   Your Email
                 </label>
@@ -137,7 +140,7 @@ const SignUpComponent = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white dark:text-white"
                 >
                   Password
                 </label>
@@ -152,17 +155,17 @@ const SignUpComponent = () => {
               </div>
               <button
                 type="submit"
-                className="w-full shadow-md bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-lg py-3"
+                className="w-full shadow-md bg-black hover:border-2 hover:border-[#00D93D] border-2 border-black transition-all duration-300 text-white font-medium rounded-lg py-3"
               >
                 Sign up
               </button>
             </form>
-            <div className="mt-16 text-center">
-              <p className="text-sm text-gray-700 dark:text-gray-400">
+            <div className="mt-5 text-center ">
+              <p className="text-sm text-white dark:text-gray-400 tracking-tight">
                 Already have an account?{" "}
                 <Link
                   href="/login"
-                  className="text-pink-400 hover:underline font-bold"
+                  className="text-[#00D93D] hover:underline font-semibold tracking-tight underline"
                 >
                   Sign in
                 </Link>
@@ -170,6 +173,11 @@ const SignUpComponent = () => {
             </div>
           </div>
         </section>
+        <div className="image flex m-10  max-sm:hidden  ">
+          <Image src={Image1} alt="" width={500} height={200} className=""/>
+        </div>
+        </div>
+
       </div>
     )
   );

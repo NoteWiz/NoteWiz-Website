@@ -26,6 +26,7 @@ const messageHistory = [];  // History
 export const POST = async (request) => {
 
   const data = await request.formData();
+  let isNewChat = data.get("isNewChat") === "true";
   let NewFile = data.get('file');
   console.log(data.get("file"));
   let myAssistant1 = assistantCache.get("myAssistant");
