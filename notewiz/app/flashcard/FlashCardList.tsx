@@ -58,7 +58,7 @@ export const FlashCardList: React.FC<FlashCardListProps> = ({ flashCards }) => {
           </div>
         </>
       ) : (
-        <p>No flashcards available</p>
+        <p className="text-white tracking-tighter text-4xl">No flashcards available</p>
       )}
     </div>
   );

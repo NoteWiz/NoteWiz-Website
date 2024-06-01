@@ -186,7 +186,7 @@ const Homepage = () => {
 	return (
 		<div className="flex bg-[#252525]">
 			<Sidebar />
-			<div className=" w-[80%]">
+			<div className=" w-[80%] tracking-tighter">
 				<div className="container   pl-[100px] mt-5">
 					<div className="first-container-fill  w-[90%] max-sm:w-full h-60 text-white  rounded-2xl bg-[#1e1e1e] max-md:flex-col border-2 border-black transition-all duration-300 hover:border-[#00E340] flex flex-row justify-between">
 						<div className="text-heading my-4 ml-3 max-md:m-auto">
