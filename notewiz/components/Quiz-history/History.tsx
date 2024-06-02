@@ -14,10 +14,11 @@ interface Props {
 const History = ({ topic, date, id, score, difficulty }: Props) => {
     const router = useRouter();
 
-	const handleClick = async (flashcardSetId: any) => {
+	const handleClick = async () => {
         // setShowFlashcards(true)
         // fetchData()
-        router.push(`/quizHistory/quizQuestions/${id}`);
+		console.log(score)
+        router.push(`/quizHistory/quizQuestions/${id}?score=${score}`);
     }
 	console.log(topic)
 	return (
