@@ -2,6 +2,7 @@ import prisma from "@/prisma/index";
 import { SquareScissorsIcon } from "lucide-react";
 import { NextResponse } from "next/server";
 
+
 export const POST = async (request) => {
     const data = await request.json()
     const { userAnswers,prompt,questionType,questions,difficulty, score,userId } = data;
@@ -34,3 +35,17 @@ export const POST = async (request) => {
     return NextResponse.json({ response: "data saved successfully" });
 }
 
+export const GET = async(request) => {
+    const { searchParams } = new URL(request.url ?? '');
+    const quizSetId = searchParams.get("quizSetId");
+    console.log(quizSetId)
+
+    const quizQuestions = await prisma.question.findMany({
+        where: {
+            quizSetId,
+        },
+    })
+    console.log(quizQuestions);
+    
+    return NextResponse.json(quizQuestions);
+}
