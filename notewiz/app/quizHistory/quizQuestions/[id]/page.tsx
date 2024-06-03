@@ -41,7 +41,7 @@ export default function page({params}:any) {
             {loading ? (
                 <Loading loading={loading} />
             ) : (
-                <QuestionsList questions={questions} score={score}  />
+                <QuestionsList questions={questions} score={score} />
             )}
         </div>
     );

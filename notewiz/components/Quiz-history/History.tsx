@@ -5,13 +5,13 @@ import { useRouter } from "next/navigation";
 
 
 interface Props {
-	topic: string;
+	prompt: string;
 	date: string;
     id: string;
     score: number;
     difficulty:string
 }
-const History = ({ topic, date, id, score, difficulty }: Props) => {
+const History = ({ prompt, date, id, score, difficulty }: Props) => {
     const router = useRouter();
 
 	const handleClick = async () => {
@@ -20,7 +20,7 @@ const History = ({ topic, date, id, score, difficulty }: Props) => {
 		console.log(score)
         router.push(`/quizHistory/quizQuestions/${id}?score=${score}`);
     }
-	console.log(topic)
+	console.log(prompt)
 	return (
 		<div
 			id="FirstCard"
@@ -29,7 +29,7 @@ const History = ({ topic, date, id, score, difficulty }: Props) => {
 			<div className="flex flex-col justify-between items-center max-md:flex-col mt-4" onClick={handleClick}>
 				<Layers3 color="#00E340" size={36} />
 				<p className="text-white text-4xl font-DM_Sans tracking-tighter mt-8   max-md:text-3xl  max-sm:text-4xl max-sm:mt-16">
-					{topic}
+					Prompt: {prompt}
 				</p>
 				<div className="flex justify-between items-center  flex-col">
 				<p className="text-white text-4xl font-DM_Sans tracking-tighter mt-10   max-md:text-3xl  max-sm:text-4xl max-sm:mt-16">

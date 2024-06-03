@@ -34,7 +34,7 @@ const page = () => {
         const quizSets = session?.user.quizSet || [];
 
         if (!Array.isArray(quizSets)) {
-            console.error("Flashcard sets is not an array:", quizSets);
+            console.error("questions set is not an array:", quizSets);
             return null; // Handle this case appropriately
         }
         return (
@@ -43,7 +43,7 @@ const page = () => {
                     <Sidebar />
                     <div className=" w-[80%] grid grid-cols-2 gap-4 m-5 max-sm:w-full max-md:grid max-md:grid-cols-1 max-sm:grid max-sm:grid-cols-1 ">
                         {quizSets.map((quizSet:Props , index: any) => (
-                            <History key={index} topic={quizSet.prompt} date={quizSet.createdAt} id={quizSet.id} score={quizSet.score} difficulty={quizSet.difficulty }/>
+                            <History key={index} prompt={quizSet.prompt} date={quizSet.createdAt} id={quizSet.id} score={quizSet.score} difficulty={quizSet.difficulty}/>
                         ))}
 					
                     </div>
