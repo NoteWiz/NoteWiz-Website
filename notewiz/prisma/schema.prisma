@@ -71,8 +71,8 @@ model QuizSet {
   user          User     @relation(fields: [userId], references: [id])
   prompt        String
   createdAt     DateTime
-  score        Float
-  difficulty   String
+  score        Float?
+  difficulty   String?
   quizQuestions Question[]
   quizResponse  QuizResponse[]
 }

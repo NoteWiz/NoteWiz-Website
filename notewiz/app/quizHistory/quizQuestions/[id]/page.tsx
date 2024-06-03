@@ -7,13 +7,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function page({params}:any) {
     const router = useRouter();
-    // const { id } = router.searchParams;
-     // Get the id from the query parameters
-    const searchParams = useSearchParams();
     const quizSetId = params.id
     console.log(quizSetId);
     const [loading, setLoading] = useState(false);
-    // const [flashcards, setFlashcards] = useState([]);
 
     useEffect(() => {
         const fetchData = async() => {
@@ -26,15 +22,6 @@ export default function page({params}:any) {
                     const response = await fetch(`/api/quizResponse?quizSetId=${quizSetId}`, options)
                     const data = await response.json();
                     console.log(data)
-                    // if (data) {
-                    //     var quizQuestions = data.map((flashcard:any) => ({
-                    //         front: flashcard.front,
-                    //         back: flashcard.back,
-                    //       }));
-                    //     //   setFlashcards(formattedFlashcards);
-                    //     }
-                    // setLoading(false);
-                    // console.log(quizQuestions)
                 } catch (error) {
                     console.error(error)
                 }
