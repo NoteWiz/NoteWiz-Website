@@ -5,7 +5,7 @@ import { z } from "zod";
 const commonSectionSchema = {
   questionType: z.enum(["mcq", "true_false"]),
   difficulty: z.enum(["easy", "medium", "hard"]),
-  numQuestions: z.number().min(1).max(10),
+  numQuestions: z.coerce.number().min(1).max(10),
 };
 
 const textSectionSchema = z.object({

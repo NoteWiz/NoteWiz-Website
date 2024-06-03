@@ -2,26 +2,40 @@ import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Timer } from 'lucide-react';
-
+import { useSession } from "next-auth/react";
 interface QuestionData {
+  title?: string;
   question: string;
   answer: string;
-  option1?: string;
-  option2?: string;
-  option3?: string;
-  option4?: string;
+  options: {
+    option1?: string;
+    option2?: string;
+    option3?: string;
+    option4?: string;
+  }
 }
 
 interface QuizPlayProps {
   questions: QuestionData[];
   questionType: string;
+  title?: string; 
+  filename?: string;
+  prompt: string;
+  difficulty: string;
 }
 
-const QuizPlay: React.FC<QuizPlayProps> = ({ questions, questionType }) => {
+const QuizPlay: React.FC<QuizPlayProps> = ({filename, title, prompt,difficulty, questions, questionType }) => {
+  const { data: session, status: sessionStatus } = useSession();
+  const formData = new FormData();
+  const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [userAnswer, setUserAnswer] = useState('');
+  const [userAnswers, setUserAnswers] = useState<string[]>([]);
+  if (session && session.user) {
+    var userId=session.user.id
+  }
 
   let currentQuestion: QuestionData | undefined;
   if (!questions || questions.length === 0) {
@@ -32,15 +46,19 @@ const QuizPlay: React.FC<QuizPlayProps> = ({ questions, questionType }) => {
     currentQuestion = questions[currentQuestionIndex];
   }
 
-  const handleButtonClick = (selectedOption: string) => {
+  const handleButtonClick = async(selectedOption: string) => {
     if (!currentQuestion) return; // Exit early if currentQuestion is undefined
     
     const trimmedAnswer = selectedOption;
+    userAnswers.push(trimmedAnswer);
     const correctAnswer = currentQuestion.answer ? currentQuestion.answer : '';
 
     // Give user notification if correct answer or wrong answer selected
+    let newScore = score;
     if (trimmedAnswer === correctAnswer) {
-      setScore(score + 1);
+      setIsCorrect(true);
+      newScore = score + 1;
+      setScore(prevScore => prevScore + 1);
       toast.success('Correct Answer!', {
         position: 'bottom-right',
         autoClose: 500,
@@ -61,10 +79,11 @@ const QuizPlay: React.FC<QuizPlayProps> = ({ questions, questionType }) => {
         progress: undefined,
       });
     }
-
     // Check if quiz is completed
     if (currentQuestionIndex === questions.length - 1) {
+      console.log(score)
       setShowResult(true);
+      saveInfo(prompt, title,filename, questionType,difficulty, questions,newScore,userAnswers,userId);
       toast.success('Quiz Completed!', {
         position: 'top-center',
         autoClose: 500,
@@ -91,10 +110,10 @@ const QuizPlay: React.FC<QuizPlayProps> = ({ questions, questionType }) => {
     }
     
     const options = [
-      currentQuestion.option1,
-      currentQuestion.option2,
-      currentQuestion.option3,
-      currentQuestion.option4,
+      currentQuestion.options.option1,
+      currentQuestion.options.option2,
+      currentQuestion.options.option3,
+      currentQuestion.options.option4,
     ].filter(Boolean); // Filter out undefined/null values
 
     switch (questionType) {
@@ -149,7 +168,30 @@ const QuizPlay: React.FC<QuizPlayProps> = ({ questions, questionType }) => {
         return <p>Unsupported question type</p>;
     }
   };
-
+  const saveInfo = async (prompt: string, title: string | undefined, filename: string | undefined, questionType: string, difficulty: string, questions: QuestionData[], score: number, userAnswers: string[], userId:string) => {
+    try {
+      const response = await fetch("/api/quizResponse", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userAnswers,
+          score,
+          filename,
+          title,
+          prompt,
+          questionType,
+          difficulty,
+          questions,
+          userId
+        })
+      });
+    } catch (error) {
+      console.log("error saving data")
+    }
+    // saveInfo();
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#252525]">
       <div className="bg-[#181818] p-8 rounded-lg shadow-xl max-sm:w-4/5 md:w-4/5 lg:w-1/2">
@@ -171,7 +213,7 @@ const QuizPlay: React.FC<QuizPlayProps> = ({ questions, questionType }) => {
             <p className="text-xl text-white">
               Percentage: <span className='text-[#00D93D]'> {((score / questions.length) * 100).toFixed(1)} </span>%
             </p>
-          </div>
+            </div>
         ) : (
           <>{renderQuestion()}</>
         )}

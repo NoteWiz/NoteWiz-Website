@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
 import {
 	Form,
 	FormControl,
@@ -31,10 +32,12 @@ import { PrismaClient } from "@prisma/client";
 type QuestionType = {
 	question: string;
 	answer: string;
-	option1: string;
-	option2: string;
-	option3: string;
-	option4: string;
+	options: {
+		option1: string;
+		option2: string;
+		option3: string;
+		option4: string;
+	}
 };
 
 type Props = {
@@ -45,11 +48,16 @@ type Props = {
 };
 
 const QuizFormCreate = (props: Props) => {
+	const { data: session, status: sessionStatus } = useSession();	
+	const [prompt, setPrompt] = useState<string>('');
+	const [title, setTitle] = useState<string>('');
+	const [filename, setFilename]= useState<string>('');
+	const [difficulty,setDifficulty]=useState<string>('');
 	const [generatedQuestions, setGeneratedQuestions] = useState<
 		QuestionType[]
 	>([]);
 	const [selectedQuestionType, setSelectedQuestionType] = useState("");
-
+	const [quizSetId,setQuizSetId]=useState("")
 	const [inputType, setInputType] = useState<"text" | "topic" | "file">(
 		props.inputType
 	);
@@ -84,17 +92,21 @@ const QuizFormCreate = (props: Props) => {
 	const onSubmit = async (data: QuizCreationType) => {
 		// Handle form submission here
 		const formData = new FormData();
+		formData.append("session",JSON.stringify(session))
 		formData.append("type", data.type);
 		formData.append("questionType", data.questionType);
 		formData.append("difficulty", data.difficulty);
-		formData.append("numQuestions", String(data.numQuestions));
-
+		setDifficulty(data.difficulty)
+		formData.append("numQuestions", String(Number(data.numQuestions)));
 		if (data.type === "text") {
 			formData.append("text", data.text);
+			setPrompt(data.text);
 		} else if (data.type === "topic") {
 			formData.append("topic", data.topic);
+			setPrompt(data.topic);
 		} else if (data.type === "file") {
 			formData.append("file", data.file as Blob);
+			setPrompt("")
 		}
 
 		try {
@@ -110,8 +122,10 @@ const QuizFormCreate = (props: Props) => {
 			const result = await response.json();
 			setGeneratedQuestions(result.quizQuestions[0]);
 			setSelectedQuestionType(result.questionType);
+			setQuizSetId(result.quizSetId)
+			setFilename(result.filename);
+			setTitle(result.title);
 
-			// console.log('Questions saved to the database:', result);
 		} catch (error) {
 			console.error(
 				"Error generating questions or saving to the database:",
@@ -415,6 +429,10 @@ const QuizFormCreate = (props: Props) => {
 		</div>
 	) : (
 		<QuizPlay
+			prompt={prompt}
+			filename={filename}
+			title={title}
+			difficulty={difficulty}	
 			questions={generatedQuestions}
 			questionType={selectedQuestionType}
 		/>
