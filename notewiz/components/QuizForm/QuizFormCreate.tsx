@@ -48,9 +48,11 @@ type Props = {
 };
 
 const QuizFormCreate = (props: Props) => {
-	const { data: session, status: sessionStatus } = useSession();
+	const { data: session, status: sessionStatus } = useSession();	
 	const [prompt, setPrompt] = useState<string>('');
-	const [difficulty,setDifficulty]=useState<string>('')
+	const [title, setTitle] = useState<string>('');
+	const [filename, setFilename]= useState<string>('');
+	const [difficulty,setDifficulty]=useState<string>('');
 	const [generatedQuestions, setGeneratedQuestions] = useState<
 		QuestionType[]
 	>([]);
@@ -95,7 +97,7 @@ const QuizFormCreate = (props: Props) => {
 		formData.append("questionType", data.questionType);
 		formData.append("difficulty", data.difficulty);
 		setDifficulty(data.difficulty)
-		formData.append("numQuestions", String(data.numQuestions));
+		formData.append("numQuestions", String(Number(data.numQuestions)));
 		if (data.type === "text") {
 			formData.append("text", data.text);
 			setPrompt(data.text);
@@ -104,7 +106,7 @@ const QuizFormCreate = (props: Props) => {
 			setPrompt(data.topic);
 		} else if (data.type === "file") {
 			formData.append("file", data.file as Blob);
-			setPrompt(data.file)
+			setPrompt("")
 		}
 
 		try {
@@ -121,11 +123,9 @@ const QuizFormCreate = (props: Props) => {
 			setGeneratedQuestions(result.quizQuestions[0]);
 			setSelectedQuestionType(result.questionType);
 			setQuizSetId(result.quizSetId)
-			// if (session && session.user) {
-			// 	session.user.quizSetId = result.quizSetId;
-			//   }
+			setFilename(result.filename);
+			setTitle(result.title);
 
-			// console.log('Questions saved to the database:', result);
 		} catch (error) {
 			console.error(
 				"Error generating questions or saving to the database:",
@@ -430,6 +430,8 @@ const QuizFormCreate = (props: Props) => {
 	) : (
 		<QuizPlay
 			prompt={prompt}
+			filename={filename}
+			title={title}
 			difficulty={difficulty}	
 			questions={generatedQuestions}
 			questionType={selectedQuestionType}

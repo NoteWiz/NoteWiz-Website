@@ -9,7 +9,6 @@ import { LucideLayoutDashboard } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Loading from '@/utils/Loading';
-import { ServerSession } from "mongodb";
 
 type Props = {}
 
@@ -17,7 +16,6 @@ const QuizHistory = (props: Props) => {
     const router=useRouter()
     const [loading, setLoading] = useState(true);
     const { data: session, status: sessionStatus } = useSession();
-    let userId = "";
     if (sessionStatus === "loading") {
             return( <Loading loading={loading}/>) // Show a loading state while session is being loaded
       }
@@ -29,9 +27,6 @@ const QuizHistory = (props: Props) => {
             ) // Show a message or redirect to sign-in page
     }
     else if (sessionStatus === "authenticated") {
-        if (session && session.user) {
-             userId=session.user.id
-        }
         return (
             <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 w-[400px]">
             <Card>
@@ -45,7 +40,7 @@ const QuizHistory = (props: Props) => {
                 </div>
                 </CardHeader>
                 <CardContent className="max-h-[60vh] overflow-scroll">
-                <QuizHistoryComponent limit={100} userId={userId} />
+                <QuizHistoryComponent limit={100} userId={session.user.id} />
                 </CardContent>
             </Card>
             </div>

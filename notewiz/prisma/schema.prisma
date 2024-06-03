@@ -15,7 +15,7 @@ model User {
   emailVerified DateTime?
   image         String?
   flashcardsets FlashcardSet[]
-  chatbots    Chatbot[]
+  chatbots      Chatbot[]
   QuizSet       QuizSet[]
 }
 
@@ -38,62 +38,64 @@ model Flashcard {
 }
 
 model Chatbot {
-  id        String    @id @default(cuid()) @map("_id")
-  userId    String
-  user      User      @relation(fields: [userId], references: [id])
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
- chatThreads ChatThread[]
+  id          String       @id @default(cuid()) @map("_id")
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime?    @default(now())
+  updatedAt   DateTime?    @updatedAt
+  chatThreads ChatThread[]
 }
+
 model ChatThread {
-
-  id         String   @id @default(cuid()) @map("_id")
-  title      String
-  chatbotId  String
-  chatbot    Chatbot  @relation(fields: [chatbotId], references: [id])
-  chats      Chat[]
-
+  id        String  @id @default(cuid()) @map("_id")
+  title     String
+  chatbotId String
+  chatbot   Chatbot @relation(fields: [chatbotId], references: [id])
+  chats     Chat[]
 }
-model Chat{
-  id        String   @id @default(cuid()) @map("_id")
-  chatThread   ChatThread  @relation(fields: [chatThreadId], references: [id])
-  chatThreadId String
-  createdAt DateTime @default(now())
-  title     String?
-  role      String
-  content   String
 
+model Chat {
+  id           String     @id @default(cuid()) @map("_id")
+  chatThread   ChatThread @relation(fields: [chatThreadId], references: [id])
+  chatThreadId String
+  createdAt    DateTime   @default(now())
+  title        String?
+  role         String
+  content      String
 }
 
 model QuizSet {
-  id            String   @id @default(cuid()) @map("_id")
+  id            String         @id @default(cuid()) @map("_id")
   userId        String
-  user          User     @relation(fields: [userId], references: [id])
-  prompt        String
+  user          User           @relation(fields: [userId], references: [id])
+  prompt        String?
+  title         String?
+  filename      String?
   createdAt     DateTime
-  score        Float?
-  difficulty   String?
+  score         Float
+  difficulty    String
   quizQuestions Question[]
   quizResponse  QuizResponse[]
 }
 
 model Question {
-  id           String   @id @default(cuid()) @map("_id")
-  quizSet      QuizSet? @relation(fields: [quizSetId], references: [id])
-  quizSetId    String
-  prompt       String
-  questionType String
-  question     String
+  id            String   @id @default(cuid()) @map("_id")
+  quizSet       QuizSet? @relation(fields: [quizSetId], references: [id])
+  quizSetId     String
+  prompt        String?
+  questionType  String
+  question      String
   correctAnswer String //for mcq questions //for mcq questions
-  options         Json?     // for mcq questions // for true_false questions   // to check if user's answer is correct
-  userAnswer   String
-}
-model QuizResponse{
-  id          String @id @default(cuid()) @map("_id")
-  quizSetId      String
-  quizSet      QuizSet? @relation(fields: [quizSetId], references: [id])
+  options       Json? // for mcq questions // for true_false questions   // to check if user's answer is correct
   userAnswer    String
-  score         String
+}
+
+model QuizResponse {
+  id         String   @id @default(cuid()) @map("_id")
+  quizSetId  String
+  quizSet    QuizSet? @relation(fields: [quizSetId], references: [id])
+  userAnswer String
+  score      String
 }
 
 // model Account {
