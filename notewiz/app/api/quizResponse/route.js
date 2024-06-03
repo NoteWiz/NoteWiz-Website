@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 
 export const POST = async (request) => {
     const data = await request.json()
-    const { userAnswers,prompt,questionType,questions,difficulty, score,userId } = data;
-    console.log(userId, userAnswers, prompt, questionType, questions, difficulty, score);
+    const { userAnswers, title, filename, prompt,questionType,questions,difficulty, score,userId } = data;
+    console.log(userId, title, userAnswers, prompt, questionType, questions, difficulty, score);
     try {
         const date = new Date ();
           const quizSet =await prisma.quizSet.create({
@@ -14,6 +14,8 @@ export const POST = async (request) => {
               userId,
               createdAt: date,
             prompt,
+            title,
+            filename,
             score,
               difficulty,
               quizQuestions: {

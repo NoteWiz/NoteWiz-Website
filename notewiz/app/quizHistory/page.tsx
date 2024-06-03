@@ -7,6 +7,8 @@ import Loading from "@/utils/Loading";
 import History from "@/components/Quiz-history/History";
 import { useRouter } from "next/navigation";
 interface Props {
+    filename: string;
+    title: string;
     prompt: string;
     date: string;
     id: string;
@@ -43,7 +45,7 @@ const page = () => {
                     <Sidebar />
                     <div className=" w-[80%] grid grid-cols-2 gap-4 m-5 max-sm:w-full max-md:grid max-md:grid-cols-1 max-sm:grid max-sm:grid-cols-1 ">
                         {quizSets.map((quizSet:Props , index: any) => (
-                            <History key={index} prompt={quizSet.prompt} date={quizSet.createdAt} id={quizSet.id} score={quizSet.score} difficulty={quizSet.difficulty}/>
+                            <History key={index} filename={quizSet.filename} title={quizSet.title} prompt={quizSet.prompt} date={quizSet.createdAt} id={quizSet.id} score={quizSet.score} difficulty={quizSet.difficulty}/>
                         ))}
 					
                     </div>

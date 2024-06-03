@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Timer } from 'lucide-react';
 import { useSession } from "next-auth/react";
 interface QuestionData {
+  title?: string;
   question: string;
   answer: string;
   options: {
@@ -17,11 +18,13 @@ interface QuestionData {
 interface QuizPlayProps {
   questions: QuestionData[];
   questionType: string;
+  title?: string; 
+  filename?: string;
   prompt: string;
   difficulty: string;
 }
 
-const QuizPlay: React.FC<QuizPlayProps> = ({prompt,difficulty, questions, questionType }) => {
+const QuizPlay: React.FC<QuizPlayProps> = ({filename, title, prompt,difficulty, questions, questionType }) => {
   const { data: session, status: sessionStatus } = useSession();
   const formData = new FormData();
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
@@ -80,7 +83,7 @@ const QuizPlay: React.FC<QuizPlayProps> = ({prompt,difficulty, questions, questi
     if (currentQuestionIndex === questions.length - 1) {
       console.log(score)
       setShowResult(true);
-      saveInfo(prompt,questionType,difficulty,questions,newScore,userAnswers,userId);
+      saveInfo(prompt, title,filename, questionType,difficulty, questions,newScore,userAnswers,userId);
       toast.success('Quiz Completed!', {
         position: 'top-center',
         autoClose: 500,
@@ -165,7 +168,7 @@ const QuizPlay: React.FC<QuizPlayProps> = ({prompt,difficulty, questions, questi
         return <p>Unsupported question type</p>;
     }
   };
-  const saveInfo = async (prompt: string, questionType: string, difficulty: string, questions: QuestionData[], score: number, userAnswers: string[], userId:string) => {
+  const saveInfo = async (prompt: string, title: string | undefined, filename: string | undefined, questionType: string, difficulty: string, questions: QuestionData[], score: number, userAnswers: string[], userId:string) => {
     try {
       const response = await fetch("/api/quizResponse", {
         method: "POST",
@@ -175,6 +178,8 @@ const QuizPlay: React.FC<QuizPlayProps> = ({prompt,difficulty, questions, questi
         body: JSON.stringify({
           userAnswers,
           score,
+          filename,
+          title,
           prompt,
           questionType,
           difficulty,

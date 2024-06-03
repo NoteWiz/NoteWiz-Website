@@ -21,32 +21,31 @@ export const POST = async (request) => {
 	const type = data.get("type")?.toString() || "";
 	const text = data.get("text")?.toString() || "";
 	const topic = data.get("topic")?.toString() || "";
-	// const file = data.get("file") as File | null;
 	const questionType = data.get("questionType")?.toString() || "";
 	const difficulty = data.get("difficulty")?.toString() || "";
 	const numQuestions = data.get("numQuestions")?.toString() || "";
 	let userId = session.user.id;
 
-	console.log(type);
-	console.log(text);
-	console.log(topic);
-	// console.log(file);
-	console.log(questionType);
-	console.log(difficulty);
-	console.log(numQuestions);
+	// console.log(type);
+	// console.log(text);
+	// console.log(topic);
+	// console.log(questionType);
+	// console.log(difficulty);
+	// console.log(numQuestions);
 
 	let NewFile = data.get("file");
-	console.log(NewFile);
 
 	try {
 		var file;
 		var fileID;
-		var fileUrl;
+		var filename;
 		let myAssistant2 = assistantCache.get("myAssistant1");
 		const secretKey = API_KEY;
+
 		const openai = new OpenAI({
 			apiKey: secretKey
 		});
+
 		if (!myAssistant2) {
 			myAssistant2 = await openai.beta.assistants.create({
 				instructions:
@@ -80,7 +79,7 @@ export const POST = async (request) => {
 					);
 				console.log(myVectorStoreFile);
 				fileID = file.id;
-				fileUrl = NewFile.name;
+				filename = file.filename;
 
 				// Fallback if no file is uploaded, create a generic assistant without file search tools
 				myAssistant2 = await openai.beta.assistants.update(
@@ -108,14 +107,15 @@ export const POST = async (request) => {
 		console.log("Request received");
 
 		console.log(questionType);
-		console.log(fileUrl);
+		console.log(filename);
 
 		let userPrompt;
 		if (questionType && difficulty && numQuestions) {
 			if (text) {
 				if (questionType === "mcq") {
-					userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user and send the response in the form of an array of JSON objects, store the answer in any one of the options randomly,  like 
+					userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user and send the response in the form of an array of JSON objects, store the answer in any one of the options randomly, also, return same title for all questions for the content like 
           {
+			title: "title not more than 2 words",
             question: "question",
             answer: "answer with max length of 15 words",
             options:{
@@ -126,8 +126,9 @@ export const POST = async (request) => {
             }
           }`;
 				} else if (questionType === "true_false") {
-					userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user. Send the response in the form of an array of JSON objects with the following format: 
+					userPrompt = `Generate ${numQuestions} ${questionType} ${difficulty} questions based on the text entered by the user. Send the response in the form of an array of JSON objects, also, return same title for all the questions with the following format: 
           {
+			title: "title not more than 2 words",
             question: "question",
             answer: "True/False",
             options:{
@@ -274,7 +275,6 @@ export const POST = async (request) => {
 			console.log(response);
 		}
 	} catch (error) {
-		//
 		// Clean up resources
 		if (file) {
 			await openai.files.del(file.id);
@@ -285,8 +285,16 @@ export const POST = async (request) => {
 		console.error("Error:", error);
 		NextResponse.status(500).json({ error: "Internal server error" });
 	}
+
+	// Ensure the quizQuestions array is flattened before returning
+	let flatQuestions = quizQuestions.flat();
+
+	// Access the title from the first question if available
+	let title = flatQuestions.length > 0 ? flatQuestions[0].title : "";
+	console.log(title);
+
 	return NextResponse.json(
-		{ quizQuestions, fileUrl, questionType },
+		{ quizQuestions, filename, questionType, title },
 		{ status: 200 }
 	);
 };

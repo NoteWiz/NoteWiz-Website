@@ -38,7 +38,7 @@ const QuestionsList = ({ questions, score }: Props) => {
 	const numericScore = score ? Number(score) : 0;
 
 	return (
-		<div className="w-screen text-white">
+		<div className="w-screen text-white overflow-y-scroll">
 			<div className="flex flex-row">
 				<S />
 				<div className="w-full md:w-[80%] mx-auto px-4">
