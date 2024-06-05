@@ -4,7 +4,7 @@ interface LoadingProps {
   }
 const Loading = ({loading}:LoadingProps) => {
     return (
-        <div className="flex justify-center w-full items-center bg-black h-screen">
+        <div className="flex justify-center w-screen items-center bg-black h-screen">
             <RingLoader color={'#00E340'} loading={loading} size={150}/>
         </div>
     )

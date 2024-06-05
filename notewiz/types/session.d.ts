@@ -11,6 +11,8 @@ declare module "next-auth" {
       flashcardSet: FlashcardSet | null;
       chatbotId:string|null
       chatbots: Chatbot[] | null;
+      quizSet:QuizSet|null
+      quizSetId:string|null
     };
   }
 
@@ -27,5 +29,11 @@ declare module "next-auth" {
     threadId: string;
     createdAt: Date | null;
     updatedAt: Date | null;
+  }
+  interface QuizSet {
+    id:            string   
+    userId:        string
+    prompt:        string
+    createdAt:     Date
   }
 }
