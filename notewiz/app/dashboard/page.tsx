@@ -38,7 +38,7 @@ const page = () => {
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-4 text-white ml-[100px]">Statistics</h2>
           <div className="grid grid-cols-2 gap-4 ml-[100px] lg:w-[71%] max-sm:grid-cols-1 max-sm:w-[80%]">
-            <div className="bg-[#00DB3D] text-black p-4 md:w-full h-24 rounded-lg flex items-center"  onClick={() => signOut({ callbackUrl: "/login" })}>
+            <div className="bg-[#00DB3D] text-black p-4 md:w-full h-24 rounded-lg flex items-center">
               <Image
                 src={Thumbs}
                 alt="Heart Icon"
