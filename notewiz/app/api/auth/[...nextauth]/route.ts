@@ -749,6 +749,18 @@ export const authOptions: any = {
         } else {
           session.user.chatbots=null
         }
+        const ChatOnlyBots = await prisma.chatOnlyBot?.findMany({
+          where: {
+            userId:existingUser.id
+          }
+        })
+        console.log(ChatOnlyBots);
+        if (ChatOnlyBots) {
+          // session.user.chatbotId=Chatbots.id
+          session.user.chatOnlyBots = ChatOnlyBots;
+        } else {
+          session.user.chatOnlyBots=null
+        }
         const quizSet = await prisma.quizSet?.findMany({
           where:{userId:existingUser.id}
         })

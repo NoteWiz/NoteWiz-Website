@@ -16,6 +16,7 @@ model User {
   image         String?
   flashcardsets FlashcardSet[]
   chatbots      Chatbot[]
+  chatOnlyBot   ChatOnlyBot[]
   QuizSet       QuizSet[]
 }
 
@@ -57,6 +58,32 @@ model ChatThread {
 model Chat {
   id           String     @id @default(cuid()) @map("_id")
   chatThread   ChatThread @relation(fields: [chatThreadId], references: [id])
+  chatThreadId String
+  createdAt    DateTime   @default(now())
+  title        String?
+  role         String
+  content      String
+}
+model ChatOnlyBot {
+  id          String       @id @default(cuid()) @map("_id")
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime?    @default(now())
+  updatedAt   DateTime?    @updatedAt
+  chatThreads ChatOnlyThread[]
+}
+
+model ChatOnlyThread {
+  id        String  @id @default(cuid()) @map("_id")
+  title     String
+  chatbotId String
+  chatbot   ChatOnlyBot @relation(fields: [chatbotId], references: [id])
+  chats     ChatOnly[]
+}
+
+model ChatOnly {
+  id           String     @id @default(cuid()) @map("_id")
+  chatThread   ChatOnlyThread @relation(fields: [chatThreadId], references: [id])
   chatThreadId String
   createdAt    DateTime   @default(now())
   title        String?
