@@ -13,7 +13,7 @@ import { usePathname } from "next/navigation";
 interface CB_SProps {
   createNewChat: () => void;
   handleClickTitle: (uniqueTitle: any) => void;
-  uniqueTitles: string[];
+  uniqueTitles: any[];
 }
 
 const CB_S: React.FC<CB_SProps> = ({ createNewChat, handleClickTitle, uniqueTitles }) => {
