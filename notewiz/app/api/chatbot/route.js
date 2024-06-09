@@ -209,12 +209,26 @@ export const POST = async (request) => {
         }
       });
       messageHistory.length = 0;
+      if (file) {
+        await openai.files.del(file.id);
+      }
+      if (vectorStore) {
+          await openai.beta.vectorStores.del(vectorStore.id);
+      }
+      
     } catch (error) {
     
       console.log("error saving chats", error);
+      if (file) {
+        await openai.files.del(file.id);
+      }
+      if (vectorStore) {
+          await openai.beta.vectorStores.del(vectorStore.id);
+      }
+      
     
       return NextResponse.json({ error });
-    
+      
     }
     return NextResponse.json({ messages });
 

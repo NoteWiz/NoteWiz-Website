@@ -28,7 +28,7 @@ const page = () => {
 						</Link>
 					</div>
                     <div className=" mt-20 w-1/3 max-sm:h-[300px] max-sm:w-full h-[545px]  bg-[#1E1E1E] rounded-2xl hover:-translate-y-[15px] border-2 border-b-4 border-r-4 cursor-pointer border-black transition-all duration-300 hover:border-[#00E340]">
-						<Link href="/cb">
+						<Link href="/chatbot">
 							<div className="flex flex-col justify-between gap-16 items-center ">
 								<p className="text-white text-4xl font-DM_Sans tracking-tighter p-4 mt-3 text-center max-md:text-2xl max-sm:text-4xl max-sm:mt-24">
 									Chatbot

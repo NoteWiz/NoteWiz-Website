@@ -15,7 +15,7 @@ export default function page() {
   };
   return (
     <div className="flex h-screen">
-      <div className="flex-none">
+      <div className="flex-none bg-[#252525]">
         <S />
       </div>
       <div className="flex-1 bg-[#252525]  flex flex-col pl-[0px]">

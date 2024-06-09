@@ -218,7 +218,7 @@ const Homepage = () => {
 
 					<div className="second-parent-container flex flex-row w-[90%] mt-2 max-sm:flex max-sm:flex-col max-sm:w-full">
 						<div className="second-container w-[50%] h-60 rounded-xl mt-4 mr-4 max-sm:w-full">
-							<Link href="/cb">
+							<Link href="/chatbot-dashboard">
 								<div className="second-container-fill w-full h-full  flex flex-row max-md:text-lg max-md:flex-col justify-between  rounded-2xl bg-[#1e1e1e] text-white cursor-pointer border-2  border-black duration-300 hover:border-[#00E340] transition-all ">
 									<div className="text-heading ml-3 my-5 max-sm:m-auto max-md:text-lg max-md:m-auto">
 										<p className="text-3xl font-medium  mt-7  flex  flex-row  max-sm:m-auto max-md:text-lg max-md:m-auto">
@@ -238,6 +238,8 @@ const Homepage = () => {
 							</Link>
 						</div>
 						<div className="third-container w-[50%] h-60 rounded-xl mt-4 max-sm:w-full  ">
+              <Link href="/quiz-dashboard">
+
 							<div className="third-container-fill w-full h-full flex flex-row justify-between max-md:flex-col rounded-2xl bg-[#1e1e1e] text-white cursor-pointer border-2  border-black duration-300 hover:border-[#00E340] transition-all ">
 								<div className="text-heading ml-3 my-5   max-sm:m-auto max-md:m-auto">
 									<p className="text-3xl font-medium  mt-7  flex  flex-row max-sm:m-auto max-md:text-lg max-md:m-auto ">
@@ -251,13 +253,14 @@ const Homepage = () => {
 										width={200}
 										height={220}
 										className=" overflow-visible z-10"
-									/>
+                    />
 								</div>
 							</div>
+                    </Link>
 						</div>
 					</div>
 					<div className="w-[90%] mb-5 max-sm:w-full">
-						<Link href="/flashcard">
+						<Link href="/flashcard-dashboard">
 							<div className="fourth-container-fill w-full h-60 rounded-2xl  flex flex-row max-md:flex-col justify-between mt-3 mb-3  bg-[#1e1e1e] text-white cursor-pointer border-2  border-black duration-300 hover:border-[#00E340] transition-all">
 								<div className="text-heading mt-6 ml-3 max-sm:m-auto max-md:m-auto ">
 									<p className="text-3xl font-medium ml-4 p-auto max-sm:m-auto max-sm:text-center mt-16 max-md:text-lg max-md:m-auto">
