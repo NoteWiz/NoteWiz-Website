@@ -57,7 +57,7 @@ const cb = () => {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   //Toast function
-  const notify = () => toast.success("File successfully uploaded!");
+  const notify = () => toast.success("File uploaded successfully!");
   // Function to reset chat state
   const createNewChat = () => {
     setMessage(null);
@@ -251,7 +251,7 @@ const cb = () => {
     <div className="flex h-screen font-roboto bg-[#252525]">
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={500}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -295,7 +295,6 @@ const cb = () => {
 
               <div
                 className="border-4 border-dashed border-[#00E340] rounded-lg p-8 text-center cursor-pointer"
-                // onClick={notify}
                 {...getRootProps()}
               >
                 <input {...getInputProps()} />
