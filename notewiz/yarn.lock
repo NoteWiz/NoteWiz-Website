@@ -4576,6 +4576,11 @@ merge-refs@^1.2.1:
   resolved "https://registry.npmjs.org/merge-refs/-/merge-refs-1.2.2.tgz"
   integrity sha512-RwcT7GsQR3KbuLw1rRuodq4Nt547BKEBkliZ0qqsrpyNne9bGTFtsFIsIpx82huWhcl3kOlOlH4H0xkPk/DqVw==
 
+merge-refs@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/merge-refs/-/merge-refs-1.3.0.tgz#65d7f8c5058917b9d1fc204ae4b9a727614d0119"
+  integrity sha512-nqXPXbso+1dcKDpPCXvwZyJILz+vSLqGGOnDrYHQYE+B8n9JTCekVLC65AfCpR4ggVyA/45Y0iR9LDyS2iI+zA==
+
 merge2@^1.3.0:
   version "1.4.1"
   resolved "https://registry.npmjs.org/merge2/-/merge2-1.4.1.tgz"
@@ -5332,6 +5337,11 @@ path2d-polyfill@^2.0.1:
   resolved "https://registry.npmjs.org/path2d-polyfill/-/path2d-polyfill-2.0.1.tgz"
   integrity sha512-ad/3bsalbbWhmBo0D6FZ4RNMwsLsPpL6gnvhuSaU5Vm7b06Kr5ubSltQQ0T7YKsiJQO+g22zJ4dJKNTXIyOXtA==
 
+path2d@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/path2d/-/path2d-0.2.0.tgz#28bb0e8e6298b2a1adb75ab1b4ffd8c263c28c19"
+  integrity sha512-KdPAykQX6kmLSOO6Jpu2KNcCED7CKjmaBNGGNuctOsG0hgYO1OdYQaan6cYXJiG0WmXOwZZPILPBimu5QAIw3A==
+
 pbkdf2@^3.0.3, pbkdf2@^3.1.2:
   version "3.1.2"
   resolved "https://registry.npmjs.org/pbkdf2/-/pbkdf2-3.1.2.tgz"
@@ -5350,6 +5360,14 @@ pdfjs-dist@3.11.174:
   optionalDependencies:
     canvas "^2.11.2"
     path2d-polyfill "^2.0.1"
+
+pdfjs-dist@4.2.67:
+  version "4.2.67"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-4.2.67.tgz#dd2a65a4b00d95cd4bc2c1f6a27c5e9eb31d512a"
+  integrity sha512-rJmuBDFpD7cqC8WIkQUEClyB4UAH05K4AsyewToMTp2gSy3Rrx8c1ydAVqlJlGv3yZSOrhEERQU/4ScQQFlLHA==
+  optionalDependencies:
+    canvas "^2.11.2"
+    path2d "^0.2.0"
 
 pdfjs-dist@^2.0.197:
   version "2.16.105"
@@ -5671,6 +5689,16 @@ react-d3-cloud@^1.0.6:
     react-fast-compare "^3.2.0"
     react-faux-dom "^4.5.0"
 
+react-doc-viewer@^0.1.11:
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/react-doc-viewer/-/react-doc-viewer-0.1.11.tgz#37edf460543740122411718ebe5899eb17b528a5"
+  integrity sha512-9mAq56sNWdXTXWySw9iFr6BBHlEqjf4ZfdSOXMhZeaxdAfwUoakXvbiqrFAKZwTEfPaMInkRgtGUZKd4QejTlw==
+  dependencies:
+    pdfjs-dist "4.2.67"
+    react-pdf "8.0.2"
+    styled-components "^5.3.11"
+    wl-msg-reader "^0.2.0"
+
 react-dom@^16.0.0, react-dom@^16.13.1, react-dom@^16.2.0:
   version "16.14.0"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-16.14.0.tgz"
@@ -5772,6 +5800,20 @@ react-pdf-viewer@^0.1.0:
     react-dom "^16.2.0"
     webpack "^3.10.0"
     webpack-dev-server "^2.9.7"
+
+react-pdf@8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/react-pdf/-/react-pdf-8.0.2.tgz#ff4a0e9260c47f1a261b878a2cc0408080eecc06"
+  integrity sha512-C0PFC+j9vmEIZ82Iq0c85xUWkgsZTUS05syqOk8NC+7PAanyWlVi/ImYkGQe27zYAlBA6IidRYEt1DAAXKq1Ow==
+  dependencies:
+    clsx "^2.0.0"
+    dequal "^2.0.3"
+    make-cancellable-promise "^1.3.1"
+    make-event-props "^1.6.0"
+    merge-refs "^1.3.0"
+    pdfjs-dist "3.11.174"
+    tiny-invariant "^1.0.0"
+    warning "^4.0.0"
 
 react-pdf@^7.7.1:
   version "7.7.1"
@@ -6741,7 +6783,7 @@ style-attr@^1.0.1:
   resolved "https://registry.npmjs.org/style-attr/-/style-attr-1.3.0.tgz"
   integrity sha512-srFr54gzEZoy73WgYfnbxCAtNCzF0Hn5RGzK7gi/0G6ttZd9v3WZFGY4ed5ABr43dbGjPNr4T46geUxxUP9i6w==
 
-styled-components@^5.1.1:
+styled-components@^5.1.1, styled-components@^5.3.11:
   version "5.3.11"
   resolved "https://registry.npmjs.org/styled-components/-/styled-components-5.3.11.tgz"
   integrity sha512-uuzIIfnVkagcVHv9nE0VPlHPSCmXIUGKfJ42LNjxCCTDTL5sgnJ8Z7GZBq0EnLYGln77tPpEpExt2+qa+cZqSw==
@@ -7465,6 +7507,11 @@ window-size@0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/window-size/-/window-size-0.1.0.tgz"
   integrity sha512-1pTPQDKTdd61ozlKGNCjhNRd+KPmgLSGa3mZTHoOliaGcESD8G1PXhh7c1fgiPjVbNVfgy2Faw4BI8/m0cC8Mg==
+
+wl-msg-reader@^0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/wl-msg-reader/-/wl-msg-reader-0.2.1.tgz#735441ce1e4b6e81e4716515a0b4d0d332df4ec2"
+  integrity sha512-PFK8vjdaGUmj0EqBKL/ECSeSgxI/QBy2njuxX+UaCKjDaN6H0UYVLmmizmMJsrzkQ9QmDvsJiSE0H1o7wY4Zfg==
 
 wordwrap@0.0.2:
   version "0.0.2"

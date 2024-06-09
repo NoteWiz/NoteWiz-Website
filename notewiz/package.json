@@ -53,6 +53,7 @@
     "prettier-plugin-tailwindcss": "^0.5.14",
     "react": "^18.2.0",
     "react-d3-cloud": "^1.0.6",
+    "react-doc-viewer": "^0.1.11",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.51.5",

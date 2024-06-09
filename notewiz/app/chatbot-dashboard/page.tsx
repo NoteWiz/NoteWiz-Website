@@ -31,7 +31,7 @@ const page = () => {
 						<Link href="/cb">
 							<div className="flex flex-col justify-between gap-16 items-center ">
 								<p className="text-white text-4xl font-DM_Sans tracking-tighter p-4 mt-3 text-center max-md:text-2xl max-sm:text-4xl max-sm:mt-24">
-									Chat with ChatGPT
+									Chatbot
 								</p>
 
 								<Image
