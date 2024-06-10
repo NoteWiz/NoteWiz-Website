@@ -12,7 +12,7 @@ import { Account, User as AuthUser } from "next-auth";
 import { Label } from "@radix-ui/react-label";
 import LoadingQuestions from "@/components/LoadingQuestions";
 
-export const InputField = ({ setFlashCards }: any) => {
+export const InputField = ({ setFlashCards}: any) => {
   const [isFetching, setIsFetching] = useState(false);
   const formData = new FormData();
   const { data: session, status: sessionStatus } = useSession();
@@ -68,11 +68,11 @@ export const InputField = ({ setFlashCards }: any) => {
     }
   };
   return (
-    <div className="flex flex-col items-center w-[60vw] h-[60vh] gap-6">
+    <>
       {isFetching ? (
         <LoadingQuestions finished={false} />
       ) : (
-        <>
+        <div className="flex flex-col items-center w-[60vw] h-[60vh] gap-6">
           <Textarea
             value={value}
             onChange={(e) => setValue(e.target.value)}
@@ -88,8 +88,9 @@ export const InputField = ({ setFlashCards }: any) => {
             Generate
           </Button>
           {empty ? <ToastContainer /> : null}
-        </>
+          </div>
       )}
-    </div>
+      </>
+  
   );
 };

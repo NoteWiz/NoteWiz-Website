@@ -72,7 +72,7 @@ const CB_S: React.FC<CB_SProps> = ({ createNewChat, handleClickTitle, uniqueTitl
               href={item.route as string}
               key={item.label}
               className={cn(
-                "flex gap-2 items-center p-2 rounded-lg justify-start hover:bg-[#00E340]",
+                "flex gap-2 items-center p-1 rounded-lg justify-start hover:bg-[#00E340]",
                 { "bg-[#00E340]": isActive }
               )}
             >
@@ -85,7 +85,7 @@ const CB_S: React.FC<CB_SProps> = ({ createNewChat, handleClickTitle, uniqueTitl
       <div className=" flex flex-col">
 				<Popover>
 					<PopoverTrigger>
-						<div className="flex flex-row gap-2 hover:cursor-pointer hover:bg-[#00E340] rounded-lg p-2 mt-4">
+						<div className="flex flex-row gap-2 hover:cursor-pointer hover:bg-[#00E340] rounded-lg p-1 mt-4">
 							<Settings />
 							<p className="tracking-tight ">Settings</p>
 						</div>

@@ -26,7 +26,7 @@ const S = () => {
 	};
 
 	return (
-		<section className="sticky left-0 top-0 flex h-screen w-fit flex-col bg-[#181818] p-6 pt-2 text-white max-sm:hidden lg:w-[264px] rounded-tr-xl">
+		<section className="sticky left-0 top-0 flex h-screen w-fit flex-col bg-[#181818] p-6 pt-2 text-white max-sm:hidden lg:w-[264px] rounded-tr-xl overflow-y-auto">
 			<Link href="/home">
 				<p className="rounded-lg border-2 border-b-4 border-r-4 border-black px-2 py-1 text-xl font-bold transition-all hover:-translate-y-[2px] text-center cursor-pointer md:block dark:border-white mt-8 mb-10">
 					Notewiz

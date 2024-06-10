@@ -168,11 +168,6 @@ const ChatBot = () => {
         if (!updatedChats[currentTitle]) {
           updatedChats[currentTitle] = [];
         }
-        // const existingMessage = updatedChats[currentTitle].find(
-        //   (msg) =>
-        //     msg.role === message.role &&
-        //     msg.content === message.content
-        // );
         
         if (true) {
           updatedChats[currentTitle].push({
@@ -237,79 +232,6 @@ const ChatBot = () => {
       />
 
       <div className="flex-1 p-8 flex justify-between overflow-auto bg-[#252525]">
-        {/* <div className="bg-[#252525] rounded-lg shadow-lg p-4 w-1/2 mr-4 overflow-y-auto">
-          {pdfFile ? (
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
-              <button className="bg-[#FFF67A] hover:bg-[#ffea00] text-black font-bold py-3 px-6 rounded-lg">
-                <i className="fas fa-upload mr-2"></i>
-                Upload Files
-              </button>
-              <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                <Viewer
-                  fileUrl={pdfFile}
-                  plugins={[defaultLayoutPluginInstance]}
-                />
-              </Worker>
-            </div>
-          ) : (
-            <>
-              <h2 className="text-2xl font-semibold mb-4 text-white">
-                Chat with Document
-              </h2>
-
-              <div
-                className="border-4 border-dashed border-[#00E340] rounded-lg p-8 text-center cursor-pointer"
-                // onClick={notify}
-                {...getRootProps()}
-              >
-                <input {...getInputProps()} />
-
-                <div className="flex justify-center mb-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8 text-[#00E340]"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      className=" cursor-pointer"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                    />
-                  </svg>
-                </div>
-                <p className="text-white mb-4">
-                  Click to Upload or Drop PDF here
-                </p>
-
-                <div className="flex justify-center space-x-4 ">
-                  <button className="bg-[#181818] border-[#00E340] border-2 hover:bg-[#00E340] hover:text-white text-white transition-all duration-300 font-bold py-3 px-6 rounded-lg">
-                    <i className="fas fa-upload mr-2"></i>
-                    Upload Files
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
-
-          {uploadedFiles.some((file) => file.type === "application/pdf") && (
-            <div className="mt-4">
-              <h4 className="text-lg font-bold">Uploaded Files</h4>
-              <ul className="list-disc list-inside">
-                {uploadedFiles.map((file, index) => (
-                  <li key={index}>
-                    {file.name} - {file.size} bytes
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div> */}
-
         <div className="bg-[#252525] rounded-lg shadow-lg p-4 w-full overflow-y-auto flex flex-col justify-between border-2 border-black">
           <div
             ref={feedContainerRef}
@@ -351,14 +273,6 @@ const ChatBot = () => {
                     </div>
                     <p className="leading-loose white-space-pre-wrap">
                       {chatMessage.content.replace(/[#*`~]/g, "")}
-                    {/* {(() => {
-                          if (typeof chatMessage.content === "string") {
-                            return chatMessage.content.replace(/[#*`~]/g, "");
-                          } else {
-                            console.error(`Unexpected content type: ${typeof chatMessage.content}`, chatMessage.content);
-                            return chatMessage.content;
-                          }
-                        })()} */}
                     </p>
                   </div>
                 </li>

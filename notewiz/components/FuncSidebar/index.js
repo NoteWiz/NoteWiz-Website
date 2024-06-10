@@ -30,7 +30,7 @@ const items = [
 	{
 		src: Timer,
 		label: "Quiz",
-		route: ["/quiz-dashboard", "/QuizForm"]
+		route: "/quiz-dashboard"
 	},
 	{
 		src: LayoutDashboard,

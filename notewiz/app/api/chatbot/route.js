@@ -16,7 +16,7 @@ const assistantCache = new NodeCache();
 
 const API_KEY = process.env.API_KEY;
 function cleanResponseText(text) {
-  return text.replace(/【\d+:\d+†.*】/g, "");
+  return text.replace(/【\d+:\d+†.*】|[#*~`]/g, "");
 }
 // const assistantHistory = [];
 const contextHistory = [];  // History for context in OpenAI assistant
