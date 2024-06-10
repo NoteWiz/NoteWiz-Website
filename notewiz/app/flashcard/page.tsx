@@ -21,8 +21,10 @@ export default function page() {
       </div>
       <div className="flex-1 bg-[#252525] flex flex-col pl-[0px]">
         <div className="flex-none">
-          <p className="text-white font-DM_Sans tracking-tight pt-16 flex justify-center text-5xl ">
-          <Zap className="z-10 mr-2" />Flash Card Generator <Zap className="z-10 ml-3" />
+          <p className="text-white font-semibold tracking-tight pt-16 flex justify-center text-5xl ">
+          {/* <Zap className="z-10 mr-2 font-semibold" /> */}
+          Flashcard Generator 
+          {/* <Zap className="z-10 ml-3" /> */}
           </p>
         </div>
         <div className="flex-1 flex items-center justify-center overflow-auto">

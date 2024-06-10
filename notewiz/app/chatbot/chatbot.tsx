@@ -26,7 +26,7 @@ import { StepForward } from 'lucide-react';
 import { NextResponse } from "next/server";
 import { useSession } from "next-auth/react";
 import {Chatbot} from "@prisma/client"
-import CB_S from "./cbSidebar";
+import CB_S from "./chatbotSidebar";
 
 // Define ChatMessage interface
 interface ChatMessage {
@@ -205,44 +205,7 @@ const ChatBot = () => {
 
   const uniqueTitles = Object.keys(previousChats);
 
-  // Function to handle file upload
-
-//   const onDrop = async (acceptedFiles: File[]) => {
-//     setUploadedFiles(acceptedFiles);
-
-//     if (acceptedFiles.length > 0) {
-//       const selectedFile = acceptedFiles[0];
-//       setFile(selectedFile);
-//       const isPDF = true;
-
-//       if (isPDF) {
-       
-//         // formData.append("userInput", value);
-//         // console.log(formData);
-//         if(selectedFile){
-
-//           let reader = new FileReader();
-//           reader.readAsDataURL(selectedFile);
-//           reader.onload = (e) => {
-//             setPdfFile((e.target?.result as string) || null);
-//             console.log("PDF rendered successfully");
-//             notify(); // Call notify function after successful PDF rendering
-//             console.log(selectedFile);
-//           };
-//         }
-//       } else {
-//         console.log("Please select a PDF file");
-//         toast.error("Error uploading file: Only PDF files are allowed");
-//       }
-//     } else {
-//       console.log("Please select a file");
-//       toast.error("Error uploading file");
-//     }
-//   };
-
-  // UseDropzone hook configuration
-//   const { getRootProps, getInputProps } = useDropzone({ onDrop });
-
+  
   // Scroll the chat feed container to the bottom
   useEffect(() => {
     if (feedContainerRef.current) {

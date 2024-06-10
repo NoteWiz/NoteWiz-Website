@@ -1,4 +1,12 @@
 "use client";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger
+} from "@/components/ui/popover";
+import { useSession, signIn, signOut } from "next-auth/react";
+import { Settings, LogOut } from "lucide-react";
+
 import React from "react";
 import items from "@/components/FuncSidebar/index";
 import Link from "next/link";
@@ -13,7 +21,7 @@ import { usePathname } from "next/navigation";
 interface CB_SProps {
   createNewChat: () => void;
   handleClickTitle: (uniqueTitle: any) => void;
-  uniqueTitles: any[];
+  uniqueTitles: string[];
 }
 
 const CB_S: React.FC<CB_SProps> = ({ createNewChat, handleClickTitle, uniqueTitles }) => {
@@ -55,7 +63,8 @@ const CB_S: React.FC<CB_SProps> = ({ createNewChat, handleClickTitle, uniqueTitl
         </ul>
       </nav>
 
-      <div className="flex flex-col gap-1 mt-4">
+      <section className="flex flex-col">
+      <div className="flex flex-col gap-4">
         {items.map((item, index) => {
           const isActive = pathname === item.route || String.prototype.startsWith(item.route as string);
           return (
@@ -63,7 +72,7 @@ const CB_S: React.FC<CB_SProps> = ({ createNewChat, handleClickTitle, uniqueTitl
               href={item.route as string}
               key={item.label}
               className={cn(
-                "flex gap-2 items-center p-1 rounded-lg justify-start hover:bg-[#00E340]",
+                "flex gap-2 items-center p-4 rounded-lg justify-start hover:bg-[#00E340]",
                 { "bg-[#00E340]": isActive }
               )}
             >
@@ -73,6 +82,25 @@ const CB_S: React.FC<CB_SProps> = ({ createNewChat, handleClickTitle, uniqueTitl
           );
         })}
       </div>
+      <div className=" flex flex-col">
+				<Popover>
+					<PopoverTrigger>
+						<div className="flex flex-row gap-2 hover:cursor-pointer hover:bg-[#00E340] rounded-lg p-4 mt-4">
+							<Settings />
+							<p className="tracking-tight ">Settings</p>
+						</div>
+					</PopoverTrigger>
+					<PopoverContent className="ml-0 mt-1">
+						<div className="flex flex-row gap-4 items-center rounded-lg hover:bg-[#181818] p-3 cursor-pointer" onClick={() => signOut({ callbackUrl: "/login" })}>
+              <LogOut color="white"/>
+							<button className="text-left text-white ">
+								Logout
+							</button>
+						</div>
+					</PopoverContent>
+				</Popover>
+			</div>
+      </section>
     </section>
   );
 };
