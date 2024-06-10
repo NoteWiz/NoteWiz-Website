@@ -64,16 +64,16 @@ const SignInComponent = () => {
 	};
 	return (
 		sessionStatus !== "authenticated" && (
-			<div className="flex flex-row h-screen justify-center items-center bg-[#252525] py-10">
+			<div className="flex flex-row h-screen justify-center items-center bg-[#252525] py-10 ">
 				<div className="bg-[#181818] flex flex-row gap-36 rounded-xl max-sm:w-[80%] max-md:mx-3 max-md:gap-20 max-md:my-20 max-md:h-[90%] h-">
 					<div className="flex max-sm:hidden ">
 						<Image src={LoginImg} alt="" width={500} />
 					</div>
 
 					{loading ? (
-						<Loading loading={loading} />
+						<Loading loading={loading}/>
 					) : (
-						<section className="flex flex-col items-center justify-evenly max-sm:m-auto max-md:w-full">
+						<section className="flex flex-col items-center justify-evenly max-sm:m-auto max-md:w-full z-0">
 							<div className=" rounded-lg p-12 lg:p-18 max-h-screen max-w-xl  mx-auto w-[50vw]  lg:h-[94vh] max-sm:h-fit max-sm:w-full max-md:h-full max-md:w-full max-md:p-6 ">
 								<h3 className="mb-2  font-semibold text-5xl text-white tracking-tighter text-center max-sm:text-3xl">
 									Welcome Back
