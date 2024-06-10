@@ -125,7 +125,7 @@ export const POST = async (request) => {
     // );
   
     // console.log(myThread);
-    const messages = [];
+    const messages =[];
     let combinedResponse = '';
     for await (const event of stream) {
       if (event.data && event.data.content) {
