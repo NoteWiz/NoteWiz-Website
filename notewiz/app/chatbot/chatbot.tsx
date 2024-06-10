@@ -346,7 +346,7 @@ const ChatBot = () => {
                             : "text-[#00E340]"
                         }`}
                       >
-                        {chatMessage.role === "user" ? "" : "Assistant"}
+                        {chatMessage.role === "user" ? "You" : "Assistant"}
                       </span>
                     </div>
                     <p className="leading-loose white-space-pre-wrap">{chatMessage.content.replace(/[#*`~]/g, '')}</p>
