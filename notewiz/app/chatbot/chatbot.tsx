@@ -349,7 +349,16 @@ const ChatBot = () => {
                         {chatMessage.role === "user" ? "You" : "Assistant"}
                       </span>
                     </div>
-                    <p className="leading-loose white-space-pre-wrap">{chatMessage.content.replace(/[#*`~]/g, '')}</p>
+                    <p className="leading-loose white-space-pre-wrap">
+                    {(() => {
+                          if (typeof chatMessage.content === "string") {
+                            return chatMessage.content.replace(/[#*`~]/g, "");
+                          } else {
+                            console.error(`Unexpected content type: ${typeof chatMessage.content}`, chatMessage.content);
+                            return chatMessage.content;
+                          }
+                        })()}
+                    </p>
                   </div>
                 </li>
               ))}
