@@ -28,6 +28,7 @@ import { QuizCreationSchema, QuizCreationType } from "@/lib/schemas/forms/quiz";
 import QuizPlay from "@/app/QuizPlay/QuizPlay";
 import S from "../FuncSidebar/S";
 import { PrismaClient } from "@prisma/client";
+import LoadingQuestions from "../LoadingQuestions";
 
 type QuestionType = {
 	question: string;
@@ -48,6 +49,10 @@ type Props = {
 };
 
 const QuizFormCreate = (props: Props) => {
+	
+	const [isFetching, setIsFetching] = useState(false);
+  	const [showLoader, setShowLoader] = React.useState(false);
+	const [finishedLoading, setFinishedLoading] = React.useState(false);
 	const { data: session, status: sessionStatus } = useSession();	
 	const [prompt, setPrompt] = useState<string>('');
 	const [title, setTitle] = useState<string>('');
@@ -90,6 +95,9 @@ const QuizFormCreate = (props: Props) => {
 	}, [inputType, props.text, props.topic, props.file, form]);
 
 	const onSubmit = async (data: QuizCreationType) => {
+		setShowLoader(true);
+  		setIsFetching(true); // Set isFetching to true before fetching
+
 		// Handle form submission here
 		const formData = new FormData();
 		formData.append("session",JSON.stringify(session))
@@ -120,26 +128,31 @@ const QuizFormCreate = (props: Props) => {
 			}
 
 			const result = await response.json();
+			setFinishedLoading(true);
 			setGeneratedQuestions(result.quizQuestions[0]);
 			setSelectedQuestionType(result.questionType);
 			setQuizSetId(result.quizSetId)
 			setFilename(result.filename);
 			setTitle(result.title);
 
+			setIsFetching(false); // Set isFetching to false after receiving the response
 		} catch (error) {
 			console.error(
 				"Error generating questions or saving to the database:",
 				error
 			);
+			setIsFetching(false); // Set isFetching to false in case of an error
 		}
 	};
 
-	return generatedQuestions.length === 0 ? (
+	return isFetching ? (
+		<LoadingQuestions finished={finishedLoading} />
+	  ) : generatedQuestions.length === 0 ? (
 		// @ts-ignore
 
-		<div className="flex ">
+		<div className="flex">
 			<S />
-			<div className="absolute -translate-x-[30%] -translate-y-1/2 top-1/2 left-1/2 w-[40%] max-sm:w-2/3 max-sm:-translate-x-[50%] max-md:w-3/5  ">
+			<div className="absolute -translate-x-[30%] -translate-y-1/2 top-1/2 left-1/2 w-[40%] max-sm:w-2/3 max-sm:-translate-x-[50%] max-md:w-3/5">
 				<Card className="w-full border-2 border-[#00D93D] bg-black text-white">
 					<CardHeader className="py-2">
 						<CardTitle className="text-2xl font-bold">

@@ -489,7 +489,7 @@ export default function Home() {
 						<div className="flex flex-col">
 							<div className="flex flex-row gap-4 items-center pl-4 pt-4">
 								<Image src={t2} alt="" width={90} />
-								<p className=" text-lg ">Eric Dier</p>
+								<p className=" text-lg ">Joshua</p>
 							</div>
 							<p className="p-4">
 								Lorem ipsum dolor sit amet, consectetur
@@ -509,7 +509,7 @@ export default function Home() {
 						<div className="flex flex-col">
 							<div className="flex flex-row gap-4 items-center pl-4 pt-4">
 								<Image src={t3} alt="" width={90} />
-								<p className=" text-lg ">Eric Dier</p>
+								<p className=" text-lg ">Sarah Hudson</p>
 							</div>
 							<p className="p-4">
 								Lorem ipsum dolor sit amet, consectetur
@@ -524,7 +524,7 @@ export default function Home() {
 						<div className="flex flex-col">
 							<div className="flex flex-row gap-4 items-center pl-4 pt-4">
 								<Image src={t4} alt="" width={90} />
-								<p className=" text-lg ">Eric Dier</p>
+								<p className=" text-lg ">Rohan</p>
 							</div>
 							<p className="p-4">
 								Lorem ipsum dolor sit amet, consectetur

@@ -10,21 +10,23 @@ import { useSession } from "next-auth/react";
 import { Account, User as AuthUser } from "next-auth";
 
 import { Label } from "@radix-ui/react-label";
-import { ChevronsRight } from 'lucide-react';
+import LoadingQuestions from "@/components/LoadingQuestions";
 
 export const InputField = ({ setFlashCards }: any) => {
+  const [isFetching, setIsFetching] = useState(false);
   const formData = new FormData();
   const { data: session, status: sessionStatus } = useSession();
   const [value, setValue] = useState<string>("");
-  const [loading, setLoading] = useState(false);
   const [empty, setEmpty] = useState(false);
+
+
   const handleSubmit = async () => {
     console.log(value);
     console.log(session)
     formData.append("message", value);
     formData.append("session",JSON.stringify(session))
     if (value.trim().length > 0) {
-      setLoading(true);
+      setIsFetching(true); // Set isFetching to true before fetching
       const options = {
         method: "POST",
         body:formData,
@@ -46,6 +48,8 @@ export const InputField = ({ setFlashCards }: any) => {
         
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsFetching(false); // Set isFetching to false after receiving the response or catching an error
       }
     } else {
       setEmpty(true);
@@ -59,32 +63,33 @@ export const InputField = ({ setFlashCards }: any) => {
           draggable: true,
           progress: undefined,
           theme: "dark",
-          // transition: Bounce,
         });
       notify();
     }
   };
   return (
-    <div className="flex flex-col items-center w-[50vw] h-[50vh] gap-2">
-      <Textarea
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder="Type your message here ..."
-        required
-        className="h-96 focus:border-[#00D93D] border-4 rounded-xl"
-      />
-      <Button
-        onClick={handleSubmit}
-        className="hover: bg-[#151515] mt-6 lg:w-1/3 sm:w-1/2 md:w-1/2 rounded-xl items-center text-white border-[#00D93D] border-4 hover:bg-[#00D93D] hover:text-black py-8 text-xl"
-      >
-        Generate <ChevronsRight /> 
-      </Button>
-      {empty ? <ToastContainer /> : null}
-      {loading ? (
-        <div className="flex justify-center pt-4">
-          <CircularProgress color="success" />
-        </div>
-      ) : null}
+    <div className="flex flex-col items-center w-[60vw] h-[60vh] gap-6">
+      {isFetching ? (
+        <LoadingQuestions finished={false} />
+      ) : (
+        <>
+          <Textarea
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="Type your message here ..."
+            required
+            className="h-96 focus:border-[#00D93D] border-4 rounded-xl text-xl"
+          />
+          <Button
+            onClick={handleSubmit}
+            // className="hover: bg-[#151515] mt-6 lg:w-1/3 sm:w-1/2 md:w-1/2 rounded-xl items-center text-white border-[#00D93D] border-4 hover:bg-[#00D93D] hover:text-black py-8 text-xl"
+            className="mt-6 lg:w-1/3 sm:w-1/2 md:w-1/2 bg-[#181818] border-[#00E340] border-2 hover:bg-[#00E340] hover:text-white text-white transition-all duration-300 font-bold text-xl py-8 px-6 rounded-lg"
+          >
+            Generate
+          </Button>
+          {empty ? <ToastContainer /> : null}
+        </>
+      )}
     </div>
   );
 };

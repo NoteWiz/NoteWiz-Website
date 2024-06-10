@@ -168,6 +168,7 @@ const QuizPlay: React.FC<QuizPlayProps> = ({filename, title, prompt,difficulty, 
         return <p>Unsupported question type</p>;
     }
   };
+  
   const saveInfo = async (prompt: string, title: string | undefined, filename: string | undefined, questionType: string, difficulty: string, questions: QuestionData[], score: number, userAnswers: string[], userId:string) => {
     try {
       const response = await fetch("/api/quizResponse", {
@@ -190,8 +191,8 @@ const QuizPlay: React.FC<QuizPlayProps> = ({filename, title, prompt,difficulty, 
     } catch (error) {
       console.log("error saving data")
     }
-    // saveInfo();
   }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#252525]">
       <div className="bg-[#181818] p-8 rounded-lg shadow-xl max-sm:w-4/5 md:w-4/5 lg:w-1/2">

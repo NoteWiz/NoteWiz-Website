@@ -57,7 +57,7 @@ const cb = () => {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   //Toast function
-  const notify = () => toast.success("File successfully uploaded!");
+  const notify = () => toast.success("File uploaded successfully!");
   // Function to reset chat state
   const createNewChat = () => {
     setMessage(null);
@@ -251,7 +251,7 @@ const cb = () => {
     <div className="flex h-screen font-roboto bg-[#252525]">
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={500}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -272,19 +272,21 @@ const cb = () => {
       <div className="flex-1 p-8 flex justify-between overflow-auto bg-[#252525]">
         <div className="bg-[#252525] rounded-lg shadow-lg p-4 w-1/2 mr-4 overflow-y-auto">
           {pdfFile ? (
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
-              <button className="bg-[#FFF67A] hover:bg-[#ffea00] text-black font-bold py-3 px-6 rounded-lg">
-                <i className="fas fa-upload mr-2"></i>
-                Upload Files
-              </button>
-              <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                <Viewer
-                  fileUrl={pdfFile}
-                  plugins={[defaultLayoutPluginInstance]}
-                />
-              </Worker>
-            </div>
+             <>
+             <button
+               {...getRootProps()}
+               className="bg-[#181818] border-[#00E340] border-2 hover:bg-[#00E340] hover:text-white text-white transition-all duration-300 font-bold py-3 px-6 rounded-lg mb-4"
+             >
+               <input {...getInputProps()} />
+               <i className="fas fa-upload mr-2"></i>
+               Upload Files
+             </button>
+             <div>
+               <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                 <Viewer fileUrl={pdfFile} plugins={[defaultLayoutPluginInstance]} />
+               </Worker>
+             </div>
+           </>
           ) : (
             <>
               <h2 className="text-2xl font-semibold mb-4 text-white">
@@ -293,7 +295,6 @@ const cb = () => {
 
               <div
                 className="border-4 border-dashed border-[#00E340] rounded-lg p-8 text-center cursor-pointer"
-                // onClick={notify}
                 {...getRootProps()}
               >
                 <input {...getInputProps()} />
@@ -331,8 +332,8 @@ const cb = () => {
 
           {uploadedFiles.some((file) => file.type === "application/pdf") && (
             <div className="mt-4">
-              <h4 className="text-lg font-bold">Uploaded Files</h4>
-              <ul className="list-disc list-inside">
+              <h4 className="text-lg font-bold text-[#00E340]">Uploaded Files</h4>
+              <ul className="list-disc list-inside text-white">
                 {uploadedFiles.map((file, index) => (
                   <li key={index}>
                     {file.name} - {file.size} bytes
@@ -379,7 +380,7 @@ const cb = () => {
                             : "text-[#00E340]"
                         }`}
                       >
-                        {chatMessage.role === "user" ? "" : "Assistant"}
+                        {chatMessage.role === "user" ? "You" : "Assistant"}
                       </span>
                     </div>
                     <p className="leading-loose  white-space-pre-wrap">{chatMessage.content.replace(/[#*`~]/g, '')}</p>
