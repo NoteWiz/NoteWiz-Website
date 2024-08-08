@@ -554,7 +554,7 @@ import { Session } from "inspector";
 
 
 
- const authOptions: any = {
+ const authOptions = {
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
@@ -564,7 +564,7 @@ import { Session } from "inspector";
         email: { label: "email", type: "email" },
         password: { label: "password", type: "password" },
       },
-      async authorize(credentials: any) {
+      async authorize(credentials) {
         // await connect();
         try {
           const user = await prisma.user.findUnique({
@@ -582,7 +582,7 @@ import { Session } from "inspector";
             }
           }
            return Promise.resolve(null);
-        } catch (err: any) {
+        } catch (err) {
           throw new Error(err);
         }
       },
@@ -613,7 +613,7 @@ import { Session } from "inspector";
     maxAge: 3600, // 1 hour (in seconds)
   },
   callbacks: {
-    async signIn({ user, account }: { user: AuthUser; account: Account }) {
+    async signIn({ user, account }) {
       if (account?.provider === "credentials") {
 
         // if(account.access_token){
@@ -662,13 +662,7 @@ import { Session } from "inspector";
         }
       }
     },
-    async jwt({ token, user, account, profile, isNewUser }:{
-      token: JWT;
-      user?: { id: string; email: string; name:string } | undefined;
-      account?: { provider: string } | undefined;
-      profile?: any;
-      isNewUser?: boolean;
-    }) {
+    async jwt({ token, user, account, profile, isNewUser }) {
       if (account?.provider === "credentials") {
         // Generate a new access token for the "Credentials" provider
         const jwtSecret = process.env.JWT_SECRET;
@@ -707,7 +701,7 @@ import { Session } from "inspector";
     
       return token;
     },
-    async session({ session, token, user }: {session:any,token:JWT,user:AuthUser}) {
+    async session({ session, token, user }) {
       // Customize the session object here if necessary
        // Add custom data to session object
       // console.log(user?.email)
