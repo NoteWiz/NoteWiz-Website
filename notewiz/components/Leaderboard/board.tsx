@@ -34,14 +34,14 @@ const board = () => {
     const previous = new Date(today);
     previous.setDate(previous.getDate() - (between + 1));
 
-    let filter = data.filter(val => {
+    let filter = data.filter((val: { dt: string | number | Date }) => {
         let userDate = new Date(val.dt);
         if (between == 0) return val;
         return previous <= userDate && today >= userDate;
     })
 
     // sort with asending order
-    return filter.sort((a, b) => {
+    return filter.sort((a: { score: number }, b: { score: number }) => {
         if ( a.score === b.score){
             return b.score - a.score;
         } else{

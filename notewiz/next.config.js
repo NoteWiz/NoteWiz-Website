@@ -4,7 +4,9 @@ module.exports = {
     
        return config;
   },
+  output: "export",
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

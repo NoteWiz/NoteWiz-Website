@@ -119,7 +119,9 @@ export const GET = async (request) => {
 		console.log(flashcards);
 		return NextResponse.json(flashcards);
 	} catch (error) {
-		console.error("Error fetching flashcard sets:", error);
-		return [];
+		return new Response(JSON.stringify([]), {
+			status: 500,
+			headers: { 'Content-Type': 'application/json' },
+		  });
 	}
 };

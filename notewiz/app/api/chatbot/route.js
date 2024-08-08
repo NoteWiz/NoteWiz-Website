@@ -67,6 +67,20 @@ export const POST = async (request) => {
   console.log("assistant 1", myAssistant1);
   if (NewFile) {
     console.log("inside if block")
+    if (fileID && vectorStore) {
+      // Remove the existing file and vector store from the assistant
+      myAssistant1 = await openai.beta.assistants.update(myAssistant1.id, {
+        instructions: "Answer the user prompts regarding the file uploaded by the user as quickly and precisely as possible, please give the response in form array of bullet points but in detail and do not contain the name of the file at the end of the response.",
+        name: "Chatbot",
+        tools: [],
+        tool_resources: {},
+        model: "gpt-4o",
+      });
+  
+      // Delete the previous file and vector store
+      await openai.files.del(fileID);
+      await openai.beta.vectorStores.del(vectorStore.id);
+    }
     //upload file to openai
     if (!file) {
 
@@ -269,7 +283,9 @@ export const GET = async (request) => {
 
     return NextResponse.json(groupedChatsObject);
   } catch (error) {
-    console.error("Error fetching flashcard sets:", error);
-    return [];
+    return new Response(JSON.stringify([]), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }

@@ -1,6 +1,6 @@
 import connect from "@/lib/Mongodb";
 import User from "@/models/User";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import prisma from "@/prisma/index"
 import { NextApiRequest, NextApiResponse } from "next";
@@ -42,7 +42,7 @@ export const POST = async (request: any) => {
 
 
 
-export const GET = async (request:NextApiRequest) => {
+export const GET = async (request:NextRequest) => {
   const { searchParams } = new URL(request.url ?? '');
   const email = searchParams.get("email");
   if (!email) {

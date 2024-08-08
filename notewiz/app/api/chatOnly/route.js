@@ -178,7 +178,9 @@ export const GET = async (request) => {
 
     return NextResponse.json(groupedChatsObject);
   } catch (error) {
-    console.error("Error fetching flashcard sets:", error);
-    return [];
+    return new Response(JSON.stringify([]), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }

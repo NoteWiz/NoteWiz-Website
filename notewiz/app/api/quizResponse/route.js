@@ -49,5 +49,6 @@ export const GET = async(request) => {
     })
     console.log(quizQuestions);
     
-    return NextResponse.json(quizQuestions);
+    return NextResponse.json(quizQuestions, { status: 200 });
+
 }

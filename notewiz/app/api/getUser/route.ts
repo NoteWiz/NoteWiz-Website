@@ -34,7 +34,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 //       return res.status(405).json({ message: "Method Not Allowed" });
 //     }
 // }
-export const GET = async (request:NextApiRequest) => {
+export const GET = async (request:NextRequest) => {
   const { searchParams } = new URL(request.url ?? '');
   const email = searchParams.get("email");
   if (!email) {

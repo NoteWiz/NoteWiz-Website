@@ -246,6 +246,7 @@ export const POST = async (request) => {
     console.error("Error:", error);
     NextResponse.status(500).json({ error: "Internal server error" });
 }
-return NextResponse.json(quizQuestions);
+return NextResponse.json(quizQuestions, { status: 200 });
+;
 
 }
