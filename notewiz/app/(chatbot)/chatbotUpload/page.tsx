@@ -1,9 +1,9 @@
 import Upload from "@/components/FileDrag/Drag-Drop";
-import SmallSidebar from "@/components/Sidebar/smallSidebar";
+import S from "@/components/FuncSidebar/S";
 export default function page() {
   return (
     <div>
-      <SmallSidebar />
+      <S />
     <div className="bg-[#90CBFF] w-screen h-screen flex justify-center">
       <div className="bg-[#FFE57D] w-2/3 h-[600px] flex justify-center items-center rounded-md mt-[50px] border-4 border-black ">
         <div className="flex flex-row justify-between mx-7 mb-[300px]">
