@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid()) @map("_id")
+  username      String?
+  password      String?
+  email         String?        @unique
+  emailVerified DateTime?
+  image         String?
+  flashcardsets FlashcardSet[]
+  chatbots      Chatbot[]
+  chatOnlyBot   ChatOnlyBot[]
+  QuizSet       QuizSet[]
+}
+
+model FlashcardSet {
+  id         String      @id @default(cuid()) @map("_id")
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
+  prompt     String
+  createdAt  DateTime
+  flashcards Flashcard[]
+}
+
+model Flashcard {
+  id             String        @id @default(cuid()) @map("_id")
+  flashcardSet   FlashcardSet? @relation(fields: [flashcardSetId], references: [id])
+  flashcardSetId String
+  topic          String
+  front          String
+  back           String
+}
+
+model Chatbot {
+  id          String       @id @default(cuid()) @map("_id")
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime?    @default(now())
+  updatedAt   DateTime?    @updatedAt
+  chatThreads ChatThread[]
+}
+
+model ChatThread {
+  id        String  @id @default(cuid()) @map("_id")
+  title     String
+  chatbotId String
+  chatbot   Chatbot @relation(fields: [chatbotId], references: [id])
+  chats     Chat[]
+}
+
+model Chat {
+  id           String     @id @default(cuid()) @map("_id")
+  chatThread   ChatThread @relation(fields: [chatThreadId], references: [id])
+  chatThreadId String
+  createdAt    DateTime   @default(now())
+  title        String?
+  role         String
+  content      String
+}
+model ChatOnlyBot {
+  id          String       @id @default(cuid()) @map("_id")
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  createdAt   DateTime?    @default(now())
+  updatedAt   DateTime?    @updatedAt
+  chatThreads ChatOnlyThread[]
+}
+
+model ChatOnlyThread {
+  id        String  @id @default(cuid()) @map("_id")
+  title     String
+  chatbotId String
+  chatbot   ChatOnlyBot @relation(fields: [chatbotId], references: [id])
+  chats     ChatOnly[]
+}
+
+model ChatOnly {
+  id           String     @id @default(cuid()) @map("_id")
+  chatThread   ChatOnlyThread @relation(fields: [chatThreadId], references: [id])
+  chatThreadId String
+  createdAt    DateTime   @default(now())
+  title        String?
+  role         String
+  content      String
+}
+
+model QuizSet {
+  id            String         @id @default(cuid()) @map("_id")
+  userId        String
+  user          User           @relation(fields: [userId], references: [id])
+  prompt        String?
+  title         String?
+  filename      String?
+  createdAt     DateTime
+  score         Float
+  difficulty    String
+  quizQuestions Question[]
+  quizResponse  QuizResponse[]
+}
+
+model Question {
+  id            String   @id @default(cuid()) @map("_id")
+  quizSet       QuizSet? @relation(fields: [quizSetId], references: [id])
+  quizSetId     String
+  prompt        String?
+  questionType  String
+  question      String
+  correctAnswer String //for mcq questions //for mcq questions
+  options       Json? // for mcq questions // for true_false questions   // to check if user's answer is correct
+  userAnswer    String
+}
+
+model QuizResponse {
+  id         String   @id @default(cuid()) @map("_id")
+  quizSetId  String
+  quizSet    QuizSet? @relation(fields: [quizSetId], references: [id])
+  userAnswer String
+  score      String
+}
+
+// model Account {
+//   id                 String  @id @default(cuid()) @map("_id")
+//   userId             String
+//   type               String
+//   provider           String
+//   providerAccountId  String
+//   refresh_token      String? @db.String
+//   access_token       String? @db.String
+//   expires_at         Int?
+//   token_type         String?
+//   scope              String?
+//   id_token           String? @db.String
+//   session_state      String?
+//   user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+//   @@unique([provider, providerAccountId])
+//   @@index([userId])
+// }
+
+// model Session {
+//   id           String   @id @default(cuid()) @map("_id")
+//   sessionToken String   @unique
+//   userId       String
+//   expires      DateTime
+//   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+//   @@index([userId])
+// }
+
+// enum QuestionType {
+//   mcq
+//   true_false
+// }
+
+// model Game {
+//   id          String     @id @default(cuid()) @map("_id")
+//   userId      String
+//   questions   Question[]
+//   timeStarted DateTime
+//   topic       String
+//   text        String
+//   timeEnded   DateTime?
+//   gameType    QuestionType
+//   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+//   @@index([userId])
+// }
+
+// model Question {
+//   id              String    @id @default(cuid()) @map("_id")
+//   question        String
+//   answer          String
+//   gameId          String
+//   options         Json?     // for mcq questions
+//   isTrueOrFalse   Boolean?  // for true_false questions
+//   isCorrect       Boolean   // to check if user's answer is correct
+//   difficulty      LevelofDifficulty
+//   questionType    QuestionType
+//   userAnswer      String?
+//   game            Game      @relation(fields: [gameId], references: [id])
+
+//   @@index([gameId])
+// }

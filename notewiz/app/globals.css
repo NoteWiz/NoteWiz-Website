@@ -1,79 +1,83 @@
 @tailwind base;
-@tailwind components;
-@tailwind utilities;
+  @tailwind components;
+  @tailwind utilities;
 
-@layer base {
-  * {
-    font-family: var(--montserrat-font);
-    scroll-behavior: smooth;
-    -ms-overflow-style: none;
+  @layer base {
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 0 0% 3.9%;
+
+      --card: 0 0% 100%;
+      --card-foreground: 0 0% 3.9%;
+
+      --popover: 0 0% 100%;
+      --popover-foreground: 0 0% 3.9%;
+
+      --primary: 0 0% 9%;
+      --primary-foreground: 0 0% 98%;
+
+      --secondary: 0 0% 96.1%;
+      --secondary-foreground: 0 0% 9%;
+
+      --muted: 0 0% 96.1%;
+      --muted-foreground: 0 0% 45.1%;
+
+      --accent: 0 0% 96.1%;
+      --accent-foreground: 0 0% 9%;
+
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 0 0% 98%;
+
+      --border: 0 0% 89.8%;
+      --input: 0 0% 89.8%;
+      --ring: 0 0% 3.9%;
+
+      --radius: 0.5rem;
+    }
+
+    .dark {
+      --background: 0 0% 3.9%;
+      --foreground: 0 0% 98%;
+
+      --card: 0 0% 3.9%;
+      --card-foreground: 0 0% 98%;
+
+      --popover: 0 0% 3.9%;
+      --popover-foreground: 0 0% 98%;
+
+      --primary: 0 0% 98%;
+      --primary-foreground: 0 0% 9%;
+
+      --secondary: 0 0% 14.9%;
+      --secondary-foreground: 0 0% 98%;
+
+      --muted: 0 0% 14.9%;
+      --muted-foreground: 0 0% 63.9%;
+
+      --accent: 0 0% 14.9%;
+      --accent-foreground: 0 0% 98%;
+
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 0 0% 98%;
+
+      --border: 0 0% 14.9%;
+      --input: 0 0% 14.9%;
+      --ring: 0 0% 83.1%;
+    }
   }
 
-  ::-webkit-scrollbar {
+
+  body::-webkit-scrollbar {
     display: none;
-  }
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  input::-ms-reveal,
-  input::-ms-clear {
-    display: none;
-  }
-
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  input:-webkit-autofill:active,
-  textarea:-webkit-autofill,
-  textarea:-webkit-autofill:hover,
-  textarea:-webkit-autofill:focus,
-  textarea:-webkit-autofill:active {
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: #e8e8e8;
-    transition: background-color 5000s ease-in-out 0s;
-    box-shadow: inset 0 0 0 0 #ffffff;
-  }
-
-  input,
-  textarea {
-    @apply bg-transparent focus:outline-none focus-visible:outline-none active:outline-none;
-  }
-
-  img {
-    object-fit: cover;
-  }
-}
-
-@layer components {
-  .font-montserrat {
-    font-family: var(--montserrat-font);
-  }
-  @keyframes animated-gradient {
-    0% {
-      background-position: 0% 50%;
     }
-    50% {
-      background-position: 100% 50%;
+  @layer base {
+    * {
+      @apply border-border;
     }
-    100% {
-      background-position: 0% 50%;
+    body {
+      @apply bg-background text-foreground;
     }
   }
-
-  @keyframes ripple {
-    to {
-      transform: scale(4);
-      opacity: 0;
-    }
+  .white-space-pre-wrap {
+    white-space: pre-wrap;
   }
-
-  @keyframes fill {
-    to {
-      transform: scale(4);
-      opacity: 1;
-    }
-  }
-}

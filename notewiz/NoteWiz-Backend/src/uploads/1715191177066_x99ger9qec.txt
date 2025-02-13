@@ -1,0 +1,3 @@
+My cat’s name is Garfield!
+My dog’s name is Coco!
+I have 3 dogs and 2 cats.
